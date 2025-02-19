@@ -1,0 +1,102 @@
+@import "./fonts.scss";
+
+:root {
+    --bg-color: var(--tg-theme-section-bg-color, #fff);
+    --text-color: var(--tg-theme-text-color, #000);
+    --hint-color: var(--tg-theme-hint-color, #8e8e93);
+    --link-color: var(--tg-theme-link-color, #007aff);
+    --button-color: #007aff;
+    --button-text-color: #fff;
+    --secondary-bg-color: var(--tg-theme-secondary-bg-color, #000000);
+    --destructive-color: var(--tg-theme-destructive-text-color, #ff3b30);
+    --warning-color: #ff9500;
+    --success-color: #34c759;
+    --gray-color: #8e8e93;
+    --separator-color: var(--tg-theme-section-separator-color, #c8c7cb);
+    --grey-40: rgba(0, 0, 0, 0.7);
+
+    --font-family: "SF Pro Text", sans-serif;
+    --second-family: "SF Pro Display", sans-serif;
+    --third-family: "SF Pro Text", sans-serif;
+    --font3: "Sf pro text", sans-serif;
+    --font4: "Manrope", sans-serif;
+    --font5: "Inter", sans-serif;
+    --font6: "SF Pro", sans-serif;
+    --font7: "Visby CF", sans-serif;
+    --font8: "Roboto", sans-serif;
+    --font9: "Lato", sans-serif;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "SF Pro Text", sans-serif;
+    font-weight: 400;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-drag: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+li {
+    list-style: none;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+html,
+body {
+    touch-action: manipulation;
+}
+
+body {
+    background: var(--secondary-bg-color) !important;
+    color: var(--text-color);
+    height: var(--tg-viewport-height);
+}
+
+html {
+    overflow-x: hidden;
+    max-width: 450px;
+    min-width: 290px;
+    margin: auto;
+    position: relative;
+    scroll-behavior: smooth;
+}
+
+#root {
+    position: relative;
+}
+
+.container {
+    padding-left: var(--tg-safe-area-inset-left, 16px);
+    padding-right: var(--tg-safe-area-inset-right, 16px);
+    padding-top: calc(var(--tg-safe-area-inset-top, 50px) + 10px);
+    padding-bottom: var(--tg-safe-area-inset-bottom);
+
+}
+
+.errorText {
+    display: block;
+    text-align: center;
+    color: red;
+    margin: 20px 0;
+}
+
+.noAwailibleText {
+    color: var(--destructive-color) !important;
+}
+
+.warningText {
+    color: var(--warning-color) !important;
+}
