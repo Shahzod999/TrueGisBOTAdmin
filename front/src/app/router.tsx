@@ -3,6 +3,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import { lazy, Suspense } from "react";
 import ProtectedRoute from "./ProtectedRoute";
+import AdminList from "../pages/AdminList/AdminList";
+import Analytics from "../pages/Analytics/Analytics";
+import Settings from "../pages/Settings/Settings";
 
 // Ленивая загрузка страниц (для оптимизации)
 const Login = lazy(() => import("../pages/Login/Login"));
@@ -22,6 +25,9 @@ const Router = () => {
           {/* Защищенные маршруты */}
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/adminList" element={<AdminList />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="/users" element={<Users />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductDetails />} />

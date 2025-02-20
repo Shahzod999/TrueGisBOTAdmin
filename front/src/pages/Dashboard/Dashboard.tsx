@@ -7,7 +7,6 @@ import { useState } from "react";
 
 const Dashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  console.log(menuOpen);
 
   const data = [
     { date: "26 ноя", value: 100 },

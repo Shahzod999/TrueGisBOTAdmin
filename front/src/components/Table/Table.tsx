@@ -7,11 +7,27 @@ interface Props {
   hintText: string;
   mainText: string;
   curency?: string;
+  onClick?: () => void;
 }
 
-const Table = ({ icon, iconText, hintText, mainText, curency }: Props) => {
+const Table = ({
+  icon,
+  iconText,
+  hintText,
+  mainText,
+  curency,
+  onClick,
+}: Props) => {
+  const trimText = mainText.replace(/\s/g, "");
+  const UpperValue = trimText.length / 3;
+  let mainValue = Number(trimText);
+
+  if (UpperValue > 1) {
+    mainValue = Math.round((UpperValue % 1) * 3);
+  }
+
   return (
-    <div className={styles.table}>
+    <div className={styles.table} onClick={onClick}>
       <div className={styles.icon}>
         <ReactSVG src={icon} />
         <span>{iconText}</span>
@@ -20,8 +36,9 @@ const Table = ({ icon, iconText, hintText, mainText, curency }: Props) => {
       <span className={styles.hintText}>{hintText}</span>
 
       <div className={styles.mainText}>
+        <h4>{trimText.slice(0, mainValue)}</h4>
         <strong>
-          {mainText}
+          {trimText.slice(mainValue)}
           <span>{curency}</span>
         </strong>
       </div>

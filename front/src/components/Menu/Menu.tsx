@@ -3,7 +3,7 @@ import styles from "./Menu.module.scss";
 import { ReactSVG } from "react-svg";
 import FotoTextHint from "../FotoTextHint/FotoTextHint";
 import DropDownMenu from "../DropDownMenu/DropDownMenu";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import IconTextArrow from "../IconTextArrow/IconTextArrow";
 
 interface MenuProps {
@@ -36,12 +36,16 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
   ];
 
   const menuItems = [
-    { icon: "./iconsSvg/app.svg", text: "Админы" },
-    { icon: "./iconsSvg/app.svg", text: "Аналитика и отчеты" },
-    { icon: "./iconsSvg/app.svg", text: "Настройки" },
-    { icon: "./iconsSvg/app.svg", text: "Товары и услуги" },
-    { icon: "./iconsSvg/app.svg", text: "Клиентская база" },
-    { icon: "./iconsSvg/app.svg", text: "Скидки" },
+    { icon: "./iconsSvg/app.svg", text: "Админы", link: "/adminList" },
+    {
+      icon: "./iconsSvg/app.svg",
+      text: "Аналитика и отчеты",
+      link: "/analytics",
+    },
+    { icon: "./iconsSvg/app.svg", text: "Настройки", link: "/settings" },
+    { icon: "./iconsSvg/app.svg", text: "Товары и услуги", link: "/adminList" },
+    { icon: "./iconsSvg/app.svg", text: "Клиентская база", link: "/adminList" },
+    { icon: "./iconsSvg/app.svg", text: "Скидки", link: "/adminList" },
   ];
 
   return (
@@ -74,7 +78,9 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
 
         <div className={styles.menuList}>
           {menuItems.map((item, index) => (
-            <IconTextArrow key={index} icon={item.icon} text={item.text} />
+            <Link to={item.link}>
+              <IconTextArrow key={index} icon={item.icon} text={item.text} />
+            </Link>
           ))}
         </div>
 

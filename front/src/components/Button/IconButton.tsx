@@ -3,7 +3,7 @@ import styles from "./Button.module.scss";
 import { classNames } from "../../utils/classNames";
 
 interface IconButtonProps {
-  icon: string;
+  icon?: string;
   text: string;
   styleName?: string; // Позволяет передавать стили от родителя
   style?: React.CSSProperties; // Позволяет передавать inline-стили
@@ -22,7 +22,7 @@ const IconButton = ({
       className={classNames(styles.button, styleName && styles[styleName])}
       style={style}
       onClick={onClick}>
-      <ReactSVG src={icon} />
+      <ReactSVG src={icon || ""} />
       <span>{text}</span>
     </button>
   );

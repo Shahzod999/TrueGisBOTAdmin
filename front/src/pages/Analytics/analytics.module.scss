@@ -1,23 +1,6 @@
-.dashboard {
+.analitiycs {
     background-color: var(--secondary-bg-color);
     min-height: 100vh;
-
-
-    .menu {
-        display: flex;
-        flex-direction: column;
-        gap: 3px;
-        margin-bottom: 18px;
-        cursor: pointer;
-        width: fit-content;
-
-        span {
-            width: 18px;
-            height: 2px;
-            border-radius: 10px;
-            background-color: var(--text-color);
-        }
-    }
 
     .header {
         display: flex;
@@ -33,30 +16,6 @@
             color: var(--text-color);
         }
 
-        .right {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-
-            span {
-                font-family: var(--font-family);
-                font-weight: 400;
-                font-size: 13px;
-                letter-spacing: -0.01em;
-                text-align: right;
-                color: var(--text-color);
-            }
-
-            div {
-                display: flex;
-                font-family: var(--font-family);
-                font-weight: 500;
-                font-size: 17px;
-                letter-spacing: -0.02em;
-                text-align: center;
-                color: var(--link-color);
-            }
-        }
     }
 
     .main {
@@ -103,13 +62,26 @@
                 display: flex;
             }
         }
+    }
 
-        .table {
-            display: grid;
-            grid-template-columns: 49% 49%;
-            gap: 8px;
-            justify-content: space-between;
-            align-content: space-between;
+    .table {
+        display: grid;
+        grid-template-columns: 49% 49%;
+        gap: 8px;
+        justify-content: space-between;
+        align-content: space-between;
+    }
+
+    .moreInfo {
+
+        h3 {
+            font-family: var(--second-family);
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 120%;
+            letter-spacing: 0.02em;
+            color: var(--text-color);
+            padding: 16px;
         }
     }
 }
