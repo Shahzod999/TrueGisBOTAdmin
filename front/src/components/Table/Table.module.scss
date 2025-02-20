@@ -1,0 +1,64 @@
+.table {
+    background: var(--bg-color);
+    border-radius: 10px;
+    padding: 11px 16px;
+
+    .icon {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 8px;
+
+        span {
+            font-family: var(--font-family);
+            font-weight: 400;
+            font-size: 13px;
+            line-height: 138%;
+            color: var(--link-color);
+        }
+
+        svg {
+            fill: var(--link-color);
+            stroke: var(--link-color);
+
+            path {
+                fill: var(--link-color);
+                stroke: var(--link-color);
+            }
+        }
+
+        div {
+            display: flex;
+        }
+    }
+
+    .hintText {
+        font-family: var(--font-family);
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 133%;
+        color: var(--hint-color);
+        margin-bottom: 3px;
+        display: block;
+    }
+
+    .mainText {
+        strong {
+            white-space: nowrap;
+            font-family: var(--second-family);
+            font-weight: 700;
+            font-size: 22px;
+            line-height: 127%;
+            color: var(--text-color);
+
+            span {
+                font-family: var(--font-family);
+                font-weight: 600;
+                font-size: 15px;
+                line-height: 160%;
+                letter-spacing: -0.02em;
+                color: var(--hint-color);
+            }
+        }
+    }
+}

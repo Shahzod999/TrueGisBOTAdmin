@@ -1,0 +1,113 @@
+.dashboard {
+    background-color: var(--secondary-bg-color);
+    min-height: 100vh;
+
+
+    .menu {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        margin-bottom: 18px;
+        cursor: pointer;
+        width: fit-content;
+
+        span {
+            width: 18px;
+            height: 2px;
+            border-radius: 10px;
+            background-color: var(--text-color);
+        }
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 50px;
+
+        h2 {
+            font-family: var(--second-family);
+            font-weight: 700;
+            font-size: 34px;
+            letter-spacing: 0.01em;
+            color: var(--text-color);
+        }
+
+        .right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            span {
+                font-family: var(--font-family);
+                font-weight: 400;
+                font-size: 13px;
+                letter-spacing: -0.01em;
+                text-align: right;
+                color: var(--text-color);
+            }
+
+            div {
+                display: flex;
+                font-family: var(--font-family);
+                font-weight: 500;
+                font-size: 17px;
+                letter-spacing: -0.02em;
+                text-align: center;
+                color: var(--link-color);
+            }
+        }
+    }
+
+    .main {
+        .newAdminActions {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 12px;
+            background: var(--bg-color);
+            border-radius: 10px;
+            margin-top: 22px;
+            margin-bottom: 10px;
+
+            span {
+                text-align: start;
+                font-family: var(--font-family);
+                font-weight: 500;
+                font-size: 17px;
+                line-height: 129%;
+                letter-spacing: -0.02em;
+                color: var(--link-color);
+                flex: 1;
+            }
+
+            strong {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                border-radius: 50%;
+                background-color: var(--link-color);
+                width: 27px;
+                height: 27px;
+
+                font-family: var(--font-family);
+                font-weight: 500;
+                font-size: 12px;
+                line-height: 133%;
+                text-align: center;
+                color: var(--bg-color);
+            }
+
+            div {
+                display: flex;
+            }
+        }
+
+        .table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+    }
+}

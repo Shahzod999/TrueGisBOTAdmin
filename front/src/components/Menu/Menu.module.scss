@@ -1,0 +1,123 @@
+.menu {
+    display: flex;
+    flex-direction: column;
+
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: fit-content;
+    min-height: 100vh;
+    background: white;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    transition: left 0.3s ease-in-out;
+    padding: 20px;
+    z-index: 100;
+    padding: 16px;
+
+    .logo {
+        display: flex;
+        justify-content: space-between;
+
+        img {
+            border-radius: 50px;
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+        }
+
+        .bells {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50px;
+            width: 44px;
+            height: 44px;
+            background: #f4f4f6;
+        }
+
+    }
+
+    .companyName {
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 120%;
+        letter-spacing: -0.01em;
+        color: var(--text-color);
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .dropMenu {
+        &::after {
+            content: "";
+            width: 100%;
+            margin-top: 20px;
+            height: 1px;
+            background-color: var(--separator-color);
+            display: block;
+            border-radius: 10px;
+            opacity: 0.5;
+        }
+
+    }
+
+    .menuList {
+        padding-top: 16px;
+    }
+
+    .logOut {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: auto;
+
+        .logOutIcon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50px;
+            width: 44px;
+            height: 44px;
+            background: #f4f4f6;
+
+            div {
+                display: flex;
+            }
+        }
+
+        span {
+            font-family: var(--font5);
+            font-weight: 500;
+            font-size: 17px;
+            line-height: 118%;
+            letter-spacing: -0.01em;
+            color: var(--text-color);
+        }
+    }
+}
+
+
+
+.open {
+    left: 0 !important;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 99;
+    pointer-events: none;
+}
+
+.overlayVisible {
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 1;
+    pointer-events: unset;
+
+}

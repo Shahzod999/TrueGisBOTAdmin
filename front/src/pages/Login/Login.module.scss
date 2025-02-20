@@ -45,7 +45,7 @@
         flex-direction: column;
         gap: 8px;
 
-        label {
+        .inputWrapper {
             display: flex;
             align-items: center;
             border-radius: 10px;
@@ -102,6 +102,7 @@
     }
 
     .technical {
+        cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -120,5 +121,46 @@
         }
 
         padding-bottom: 50px;
+
+
+
+    }
+
+
+
+
+}
+
+.technicalInfo {
+    h3 {
+        font-family: var(--second-family);
+        font-weight: 700;
+        font-size: 22px;
+        line-height: 127%;
+        letter-spacing: 0.02em;
+        color: var(--text-color);
+    }
+
+    p {
+        font-family: var(--font-family);
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 131%;
+        letter-spacing: -0.02em;
+        text-align: center;
+        color: rgba(60, 60, 67, 0.6);
+        margin-bottom: 40px;
+    }
+
+    .utya {
+        width: 180px;
+        height: 162px;
+        margin: 30px auto 25px auto;
+    }
+
+    .buttons {
+        display: flex;
+        gap: 10px;
+
     }
 }

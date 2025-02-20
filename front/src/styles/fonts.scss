@@ -1,35 +1,41 @@
 @font-face {
-    src: url("../assets/fonts/SFProText-Heavy.ttf");
     font-family: "SF Pro Text";
+    src: url("../assets/fonts/SFProText-Heavy.ttf") format("truetype");
     font-weight: 900;
+    font-display: swap;
 }
 
 @font-face {
-    src: url("../assets/fonts/SFProText-Bold.ttf");
     font-family: "SF Pro Text";
+    src: url("../assets/fonts/SFProText-Bold.ttf") format("truetype");
     font-weight: 700;
+    font-display: swap;
 }
 
 @font-face {
-    src: url("../assets/fonts/SFProText-Semibold.ttf");
     font-family: "SF Pro Text";
+    src: url("../assets/fonts/SFProText-Semibold.ttf") format("truetype");
     font-weight: 600;
+    font-display: swap;
 }
 
 @font-face {
-    src: url("../assets/fonts/SFProText-Medium.ttf");
     font-family: "SF Pro Text";
+    src: url("../assets/fonts/SFProText-Medium.ttf") format("truetype");
     font-weight: 500;
+    font-display: swap;
 }
 
 @font-face {
-    src: url("../assets/fonts/SFProText-Regular.ttf");
     font-family: "SF Pro Text";
+    src: url("../assets/fonts/SFProText-Regular.ttf") format("truetype");
     font-weight: 400;
+    font-display: swap;
 }
 
 @font-face {
-    src: url("../assets/fonts/SFProText-Light.ttf");
     font-family: "SF Pro Text";
+    src: url("../assets/fonts/SFProText-Light.ttf") format("truetype");
     font-weight: 300;
+    font-display: swap;
 }
