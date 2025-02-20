@@ -1,0 +1,17 @@
+.users {
+    .title {
+        font-family: var(--second-family);
+        font-weight: 700;
+        font-size: 34px;
+        line-height: 121%;
+        letter-spacing: 0.01em;
+        color: var(--text-color);
+    }
+
+    .list {
+        display: flex;
+        flex-direction: column;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+}

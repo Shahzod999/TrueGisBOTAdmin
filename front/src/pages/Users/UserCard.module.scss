@@ -1,0 +1,52 @@
+.userCard {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: var(--bg-color);
+    position: relative;
+
+    &:not(:last-child):after {
+        content: "";
+        position: absolute;
+        left: 55px;
+        bottom: 0;
+        width: 100%;
+        margin-top: 5px;
+        height: 1px;
+        background-color: var(--separator-color);
+        display: block;
+        border-radius: 10px;
+        opacity: 0.5;
+    }
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+}
+
+.name {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 129%;
+    letter-spacing: -0.02em;
+    color: var(--text-color);
+}
+
+.score {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 133%;
+    letter-spacing: -0.02em;
+    color: rgba(60, 60, 67, 0.3);
+}

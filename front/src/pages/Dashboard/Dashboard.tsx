@@ -4,6 +4,7 @@ import Table from "../../components/Table/Table";
 import LinearDashboard from "../../components/LinearDashboard/LinearDashboard";
 import Menu from "../../components/Menu/Menu";
 import { useState } from "react";
+import LinkButtonWithNotification from "../../components/Button/LinkButtonWithNotification";
 
 const Dashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -36,12 +37,10 @@ const Dashboard = () => {
       </div>
 
       <div className={styles.main}>
-        <div className={styles.newAdminActions}>
-          <span>Новые действия админов</span>
-
-          <strong>12</strong>
-          <ReactSVG src="./arrows/arrowRight.svg" />
-        </div>
+        <LinkButtonWithNotification
+          text="Новые действия админов"
+          notification={12}
+        />
 
         <div className={styles.table}>
           <Table

@@ -44,7 +44,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
     },
     { icon: "./iconsSvg/app.svg", text: "Настройки", link: "/settings" },
     { icon: "./iconsSvg/app.svg", text: "Товары и услуги", link: "/adminList" },
-    { icon: "./iconsSvg/app.svg", text: "Клиентская база", link: "/adminList" },
+    { icon: "./iconsSvg/app.svg", text: "Клиентская база", link: "/users" },
     { icon: "./iconsSvg/app.svg", text: "Скидки", link: "/adminList" },
   ];
 

@@ -3,10 +3,10 @@ import styles from "./settings.module.scss";
 import { ReactSVG } from "react-svg";
 
 const Lang = () => {
-  const [selectedLang, setSelectedLang] = useState<string>("ru"); // По умолчанию русский
+  const [selectedLang, setSelectedLang] = useState<string>("ru");
 
   const handleChange = (lang: string) => {
-    setSelectedLang(lang); // Устанавливаем выбранный язык
+    setSelectedLang(lang);
   };
 
   return (

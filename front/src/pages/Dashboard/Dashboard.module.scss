@@ -60,50 +60,6 @@
     }
 
     .main {
-        .newAdminActions {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 12px;
-            background: var(--bg-color);
-            border-radius: 10px;
-            margin-top: 22px;
-            margin-bottom: 10px;
-
-            span {
-                text-align: start;
-                font-family: var(--font-family);
-                font-weight: 500;
-                font-size: 17px;
-                line-height: 129%;
-                letter-spacing: -0.02em;
-                color: var(--link-color);
-                flex: 1;
-            }
-
-            strong {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-
-                border-radius: 50%;
-                background-color: var(--link-color);
-                width: 27px;
-                height: 27px;
-
-                font-family: var(--font-family);
-                font-weight: 500;
-                font-size: 12px;
-                line-height: 133%;
-                text-align: center;
-                color: var(--bg-color);
-            }
-
-            div {
-                display: flex;
-            }
-        }
-
         .table {
             display: grid;
             grid-template-columns: 49% 49%;

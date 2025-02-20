@@ -1,4 +1,3 @@
-import { ReactSVG } from "react-svg";
 import LinearDashboard from "../../components/LinearDashboard/LinearDashboard";
 import Table from "../../components/Table/Table";
 import styles from "./analytics.module.scss";
@@ -6,6 +5,7 @@ import OpenFromSide from "../../components/OpenFromSide/OpenFromSide";
 import { useURLState } from "../../hooks/useURLState";
 import Details from "./Details/Details";
 import MoreDetails from "./Details/MoreDetails";
+import LinkButtonWithNotification from "../../components/Button/LinkButtonWithNotification";
 
 const Analytics = () => {
   const { getParam, setParam } = useURLState();
@@ -31,12 +31,10 @@ const Analytics = () => {
         </div>
 
         <div className={styles.main}>
-          <div className={styles.newAdminActions}>
-            <span>Новые действия админов</span>
-
-            <strong>12</strong>
-            <ReactSVG src="./arrows/arrowRight.svg" />
-          </div>
+          <LinkButtonWithNotification
+            text="Новые действия админов"
+            notification={12}
+          />
 
           <div className={styles.table}>
             <Table
