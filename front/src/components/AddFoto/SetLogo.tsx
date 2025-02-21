@@ -15,7 +15,7 @@ const SetLogo = () => {
 
       <div className="fotoLogoEdit">
         <div className="fotoLogoEdit__img">
-          <img src="./imgDefault.png" alt="" />
+          <img src="./logo.png" alt="" />
         </div>
 
         <label htmlFor="addFoto__logo__img">

@@ -20,7 +20,7 @@ const FotoTextHint = ({
 }: FotoTextHintProps) => {
   return (
     <div className={styles.card}>
-      {image && <img src={image} alt={title} className={styles.image} />}
+      {image && <img src={image} className={styles.image} />}
       {svg && <ReactSVG src={svg} className={styles.icon} />}
       <div className={styles[option]}>
         <h3 className={styles.title}>{title}</h3>

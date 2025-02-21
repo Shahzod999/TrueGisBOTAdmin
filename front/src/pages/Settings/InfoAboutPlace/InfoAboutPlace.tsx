@@ -5,6 +5,7 @@ import FotoTextHint from "../../../components/FotoTextHint/FotoTextHint";
 import AddFoto from "../../../components/AddFoto/AddFoto";
 import { PhotosSample } from "../../../types/companyType";
 import SetLogo from "../../../components/AddFoto/SetLogo";
+import IconButton from "../../../components/Button/IconButton";
 
 const options = [
   {
@@ -102,6 +103,14 @@ const InfoAboutPlace = () => {
         id="info"
       />
       <SetLogo />
+
+      <div className={styles.button}>
+        <IconButton
+          styleName="linkColor"
+          text="Отправить на проверку"
+          onClick={() => console.log("")}
+        />
+      </div>
     </div>
   );
 };
