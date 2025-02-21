@@ -2,6 +2,7 @@ import { useState } from "react";
 import IconTextArrow from "../../../components/IconTextArrow/IconTextArrow";
 import styles from "./details.module.scss";
 import { useURLState } from "../../../hooks/useURLState";
+import ToggleTabs from "../../../components/ToggleTabs/ToggleTabs";
 
 const daysData = [
   { date: "Сегодня", amount: "2 083 500 сум" },
@@ -17,27 +18,24 @@ const monthsData = [
   { date: "Сентябрь", amount: "2 083 500 сум" },
 ];
 
+const tabs = [
+  { id: "days", label: "Дни" },
+  { id: "months", label: "Месяцы" },
+];
+
 const Details = () => {
-  const [activeTab, setActiveTab] = useState<"days" | "months">("days");
+  const [activeTab, setActiveTab] = useState("days");
   const data = activeTab === "days" ? daysData : monthsData;
   const { setParam } = useURLState();
 
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId);
+  };
   return (
     <div className={`container ${styles.details}`}>
       <h2 className={styles.title}>Заработок</h2>
 
-      <div className={styles.tabs}>
-        <button
-          className={activeTab === "days" ? styles.active : ""}
-          onClick={() => setActiveTab("days")}>
-          Дни
-        </button>
-        <button
-          className={activeTab === "months" ? styles.active : ""}
-          onClick={() => setActiveTab("months")}>
-          Месяцы
-        </button>
-      </div>
+      <ToggleTabs tabs={tabs}  onTabChange={handleTabChange} />
 
       <div className={styles.list}>
         {data.map((item) => (

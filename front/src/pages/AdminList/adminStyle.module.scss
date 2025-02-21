@@ -140,7 +140,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #ccc;
+        background-color: var(--secondary-bg-color);
         border-radius: 20px;
         transition: 0.4s;
     }
@@ -152,7 +152,7 @@
         height: 30px;
         left: 2px;
         bottom: 2px;
-        background-color: white;
+        background-color: var(--bg-color);
         border-radius: 50%;
         transition: 0.4s;
     }

@@ -6,7 +6,7 @@ const cors = require("cors");
 const TelegramBot = require("node-telegram-bot-api");
 const token = process.env.TELEGRAM_BOT_TOKEN;
 
-const webAppUrl = "";
+const webAppUrl = "https://true-gis-bot-admin.vercel.app/";
 const bot = new TelegramBot(token, { polling: true });
 
 const app = express();

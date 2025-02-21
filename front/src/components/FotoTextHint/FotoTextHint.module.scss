@@ -3,8 +3,22 @@
     align-items: center;
     gap: 12px;
     padding: 16px 0;
-    border-bottom: 1px solid #eee;
-    background: white;
+    background: var(--bg-color);
+    position: relative;
+
+    &:not(:last-child):after {
+        content: "";
+        position: absolute;
+        left: 20%;
+        bottom: 0;
+        width: 150%;
+        margin-top: 5px;
+        height: 1px;
+        background-color: var(--separator-color);
+        display: block;
+        border-radius: 10px;
+        opacity: 0.5;
+    }
 }
 
 .image {

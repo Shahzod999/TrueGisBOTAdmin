@@ -2,6 +2,7 @@ import { useState } from "react";
 import IconTextArrow from "../../../components/IconTextArrow/IconTextArrow";
 import styles from "./details.module.scss";
 import { useNavigate } from "react-router";
+import ToggleTabs from "../../../components/ToggleTabs/ToggleTabs";
 
 const MoreDetails = () => {
   const navigate = useNavigate();
@@ -19,31 +20,25 @@ const MoreDetails = () => {
     { date: "10:27, доставка", amount: "2 083 500 сум" },
   ];
 
-  const [activeTab, setActiveTab] = useState<"type1" | "type2">("type1");
+  const tabs = [
+    { id: "all", label: "Все" },
+    { id: "order", label: "Доставка" },
+  ];
+
+  const [activeTab, setActiveTab] = useState("all");
+
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId);
+  };
 
   return (
     <div className={`container ${styles.details}`}>
       <h2 className={styles.title}>День Дата</h2>
 
-      <div className={styles.tabs}>
-        <button
-          className={`${styles.tabButton} ${
-            activeTab === "type1" ? styles.active : ""
-          }`}
-          onClick={() => setActiveTab("type1")}>
-          Все
-        </button>
-        <button
-          className={`${styles.tabButton} ${
-            activeTab === "type2" ? styles.active : ""
-          }`}
-          onClick={() => setActiveTab("type2")}>
-          Доставка
-        </button>
-      </div>
+      <ToggleTabs tabs={tabs} onTabChange={handleTabChange} />
 
       <div className={styles.list}>
-        {(activeTab === "type1" ? daysData : monthsData).map((item) => (
+        {(activeTab === "all" ? daysData : monthsData).map((item) => (
           <IconTextArrow
             key={`${item.date}-${item.amount}`}
             text={item.date}

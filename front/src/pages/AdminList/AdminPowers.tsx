@@ -30,7 +30,7 @@ const AdminPowers = () => {
         <span>Включите действия, которые разрешаете этому админу.</span>
       </div>
 
-      <div className={styles.permissionsList }>
+      <div className={styles.permissionsList}>
         {PERMISSIONS.map((permission, index) => (
           <div className={styles.permissionItemHolder}>
             <div key={index} className={styles.permissionItem}>
