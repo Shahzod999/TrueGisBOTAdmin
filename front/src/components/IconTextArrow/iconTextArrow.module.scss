@@ -43,6 +43,14 @@
         div {
             display: flex;
         }
+
+        svg {
+            fill: var(--hint-color);
+
+            path {
+                fill: var(--hint-color);
+            }
+        }
     }
 }
 
@@ -52,6 +60,14 @@
 
     .icon {
         padding-right: 12px;
+
+        svg {
+            fill: var(--text-color);
+
+            path {
+                fill: var(--text-color);
+            }
+        }
     }
 }
 

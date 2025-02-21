@@ -33,7 +33,16 @@
             border-radius: 50px;
             width: 44px;
             height: 44px;
-            background: #f4f4f6;
+            background: color-mix(in srgb, var(--hint-color), transparent 90%);
+
+
+            svg {
+                stroke: var(--text-color);
+
+                path {
+                    stroke: var(--text-color);
+                }
+            }
         }
 
     }
@@ -79,7 +88,16 @@
             border-radius: 50px;
             width: 44px;
             height: 44px;
-            background: #f4f4f6;
+            background: color-mix(in srgb, var(--hint-color), transparent 90%);
+
+
+            svg {
+                stroke: var(--text-color);
+
+                path {
+                    stroke: var(--text-color);
+                }
+            }
 
             div {
                 display: flex;

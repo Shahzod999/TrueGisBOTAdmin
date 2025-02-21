@@ -40,4 +40,12 @@
     div {
         display: flex;
     }
+
+    svg {
+        fill: var(--hint-color);
+
+        path {
+            fill: var(--hint-color);
+        }
+    }
 }
