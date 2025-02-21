@@ -21,6 +21,8 @@
     letter-spacing: -0.02em;
     text-align: center;
 
+
+
     div {
         display: flex;
     }
@@ -30,9 +32,25 @@
 .hintColor {
     background: rgba(116, 116, 128, 0.08) !important;
     color: var(--text-color) !important;
+
+    svg {
+        fill: var(--text-color);
+
+        path {
+            fill: var(--text-color);
+        }
+    }
 }
 
 .linkColor {
     background: var(--link-color) !important;
     color: var(--bg-color) !important;
+
+    svg {
+        fill: var(--bg-color);
+
+        path {
+            fill: var(--bg-color);
+        }
+    }
 }

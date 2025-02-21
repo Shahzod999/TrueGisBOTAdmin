@@ -22,16 +22,16 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   const coffeeShops = [
-    { image: "/placeholder.png", title: "Costa coffee - Ц1", address: "Адрес" },
+    { image: "/placeholder.png", title: "Costa coffee - Ц1", smallText: "Адрес" },
     {
       image: "/placeholder.png",
       title: "Costa coffee - Вестминистр центр",
-      address: "Адрес",
+      smallText: "Адрес",
     },
     {
       image: "/placeholder.png",
       title: "Costa coffee - Шевченко улица",
-      address: "Адрес",
+      smallText: "Адрес",
     },
   ];
 
@@ -69,7 +69,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
             menu={
               <>
                 {coffeeShops.map((shop, index) => (
-                  <FotoTextHint key={index} {...shop} />
+                  <FotoTextHint key={index} {...shop} option="infoMenu"/>
                 ))}
               </>
             }

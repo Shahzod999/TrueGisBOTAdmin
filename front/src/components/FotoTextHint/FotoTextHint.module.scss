@@ -1,6 +1,7 @@
 .card {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
     padding: 16px 0;
     background: var(--bg-color);
@@ -9,9 +10,10 @@
     &:not(:last-child):after {
         content: "";
         position: absolute;
-        left: 20%;
+        left: 30px;
+        right: 0;
         bottom: 0;
-        width: 150%;
+        width: 100%;
         margin-top: 5px;
         height: 1px;
         background-color: var(--separator-color);
@@ -19,6 +21,29 @@
         border-radius: 10px;
         opacity: 0.5;
     }
+
+    .icon {
+        svg {
+            width: 22px;
+            height: 22px;
+            fill: var(--text-color);
+
+            path {
+                fill: var(--text-color);
+            }
+        }
+    }
+
+    .arrowRight {
+        svg {
+            fill: var(--hint-color);
+
+            path {
+                fill: var(--hint-color);
+            }
+        }
+    }
+
 }
 
 .image {
@@ -30,22 +55,35 @@
 
 .info {
     display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    gap: 7px;
+    flex: 1;
+
+}
+
+.infoMenu {
+    display: flex;
     flex-direction: column;
     justify-content: center;
+    gap: 7px;
+    flex: 1;
+
 }
+
+
 
 .title {
     font-size: 16px;
     font-weight: 600;
-    color: #000;
+    color: var(--text-color);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 200px;
-    margin-bottom: 2px;
 }
 
-.address {
+.smallText {
     font-size: 14px;
-    color: #888;
+    color: var(--hint-color);
 }

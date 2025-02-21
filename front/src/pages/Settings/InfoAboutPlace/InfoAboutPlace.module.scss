@@ -4,4 +4,56 @@
     min-height: 100vh;
     height: 100%;
     background-color: var(--secondary-bg-color);
+
+    .title {
+        font-family: var(--second-family);
+        font-weight: 700;
+        font-size: 26px;
+        line-height: 123%;
+        letter-spacing: 0.01em;
+        color: var(--text-color);
+        margin-bottom: 16px;
+    }
+
+    .textArea {
+        h3 {
+            font-family: var(--second-family);
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 120%;
+            letter-spacing: 0.02em;
+            color: var(--text-color);
+            margin-top: 10px;
+            margin-bottom: 16px;
+        }
+    }
+
+    .infoBox {
+        background-color: var(--bg-color);
+        border-radius: 16px;
+        padding: 16px 0;
+        margin-bottom: 16px;
+
+        .infoBoxCard {
+            position: relative;
+            padding: 0 16px;
+            overflow: hidden;
+
+
+            &:not(:last-child)::after {
+                content: "";
+                position: absolute;
+                left: 47px;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                margin-top: 5px;
+                height: 1px;
+                background-color: var(--separator-color);
+                display: block;
+                border-radius: 10px;
+                opacity: 0.5;
+            }
+        }
+    }
 }

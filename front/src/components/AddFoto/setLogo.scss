@@ -1,0 +1,58 @@
+.second__title {
+    font-family: var(--second-family);
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 120%;
+    letter-spacing: 0.02em;
+    color: var(--text-color);
+    margin: 16px 0;
+}
+
+.fotoLogoEdit {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+
+    &__img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    label {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        border-radius: 16px;
+        padding: 10px;
+        background: rgba(118, 118, 128, 0.12);
+        text-align: center;
+
+        svg {
+            width: 28px;
+            height: 28px;
+            fill: var(--tg-theme-text-color, #000);
+
+            path {
+                fill: var(--tg-theme-text-color, #000);
+            }
+        }
+
+        span {
+            font-weight: 600;
+            font-size: 13px;
+            line-height: 138%;
+            letter-spacing: -0.01em;
+            color: var(--text-color);
+        }
+    }
+}
