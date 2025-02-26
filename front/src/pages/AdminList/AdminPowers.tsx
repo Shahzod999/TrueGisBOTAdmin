@@ -32,8 +32,8 @@ const AdminPowers = () => {
 
       <div className={styles.permissionsList}>
         {PERMISSIONS.map((permission, index) => (
-          <div className={styles.permissionItemHolder}>
-            <div key={index} className={styles.permissionItem}>
+          <div className={styles.permissionItemHolder} key={index}>
+            <div className={styles.permissionItem}>
               <span>{permission}</span>
               <label className={styles.switch}>
                 <input

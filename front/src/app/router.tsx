@@ -1,5 +1,11 @@
 // # React Router (все маршруты приложения)
-import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useParams,
+} from "react-router";
 import { lazy, Suspense, useEffect } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminList from "../pages/AdminList/AdminList";
@@ -30,7 +36,6 @@ const Router = () => {
   const id = useAppSelector(selectTelegramId);
   console.log(id);
 
-  
   useEffect(() => {
     if (tg) {
       tg.ready();
@@ -51,6 +56,12 @@ const Router = () => {
       dispatch(setTelegramId(userId.toString()));
     }
   }, [dispatch, tg]);
+
+  const params = useParams();
+  
+  console.log(params);
+
+  useEffect(() => {}, []);
 
   return (
     <BrowserRouter>
