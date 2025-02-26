@@ -69,6 +69,7 @@
 
 
             input {
+                color: var(--text-color);
                 background-color: transparent;
                 outline: none;
                 border: none;
@@ -172,7 +173,8 @@
         line-height: 131%;
         letter-spacing: -0.02em;
         text-align: center;
-        color: rgba(60, 60, 67, 0.6);
+
+        color: var(--hint-color);
         margin-bottom: 40px;
     }
 
