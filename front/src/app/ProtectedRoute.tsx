@@ -1,7 +1,9 @@
 import { Navigate, Outlet } from "react-router";
+import { useAppSelector } from "./hooks";
+import { selectIsAuthenticated } from "../features/auth/authSlice";
 
 const ProtectedRoute = () => {
-  const isAuthenticated = true;
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 };

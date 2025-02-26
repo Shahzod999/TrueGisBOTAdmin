@@ -6,6 +6,7 @@ import AddFoto from "../../../components/AddFoto/AddFoto";
 import { PhotosSample } from "../../../types/companyType";
 import SetLogo from "../../../components/AddFoto/SetLogo";
 import IconButton from "../../../components/Button/IconButton";
+import EditableIconTextHint from "../../../components/FotoTextHint/EditableIconTextHint";
 
 const options = [
   {
@@ -86,12 +87,11 @@ const InfoAboutPlace = () => {
       <div className={styles.infoBox}>
         {options.map((item) => (
           <div className={styles.infoBoxCard}>
-            <FotoTextHint
+            <EditableIconTextHint
               svg={item.icon}
               arrowRight={item.arrowRight}
               smallText={item.smallText}
               title={item.title}
-              option="info"
             />
           </div>
         ))}

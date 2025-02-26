@@ -6,6 +6,11 @@ import AdminList from "../pages/AdminList/AdminList";
 import Analytics from "../pages/Analytics/Analytics";
 import Settings from "../pages/Settings/Settings";
 import { Telegram } from "@twa-dev/types";
+import { useAppDispatch, useAppSelector } from "./hooks";
+import {
+  selectTelegramId,
+  setTelegramId,
+} from "../features/telegram/telegramSlice";
 
 const Login = lazy(() => import("../pages/Login/Login"));
 const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard"));
@@ -20,8 +25,12 @@ declare global {
 }
 
 const Router = () => {
+  const dispatch = useAppDispatch();
   const tg = window.Telegram.WebApp;
+  const id = useAppSelector(selectTelegramId);
+  console.log(id);
 
+  
   useEffect(() => {
     if (tg) {
       tg.ready();
@@ -36,7 +45,12 @@ const Router = () => {
         );
       }
     }
-  }, []);
+    const userId =
+      tg.initDataUnsafe?.user?.id || import.meta.env.VITE_TELEGRAMID;
+    if (userId) {
+      dispatch(setTelegramId(userId.toString()));
+    }
+  }, [dispatch, tg]);
 
   return (
     <BrowserRouter>

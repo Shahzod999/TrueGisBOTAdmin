@@ -51,6 +51,7 @@
     height: 56px;
     border-radius: 12px;
     background: #ddd;
+    border: 0.5px solid var(--separator-color);
 }
 
 .info {
@@ -69,6 +70,14 @@
     gap: 7px;
     flex: 1;
 
+    input {
+        outline: none;
+        border: none;
+        background: transparent;
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-color);
+    }
 }
 
 
@@ -86,4 +95,9 @@
 .smallText {
     font-size: 14px;
     color: var(--hint-color);
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }

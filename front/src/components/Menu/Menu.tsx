@@ -5,6 +5,8 @@ import FotoTextHint from "../FotoTextHint/FotoTextHint";
 import DropDownMenu from "../DropDownMenu/DropDownMenu";
 import { Link, useNavigate } from "react-router";
 import IconTextArrow from "../IconTextArrow/IconTextArrow";
+import { useAppSelector } from "../../app/hooks";
+import { selectCurrentUser } from "../../features/auth/authSlice";
 
 interface MenuProps {
   isOpen: boolean;
@@ -12,6 +14,10 @@ interface MenuProps {
 }
 
 const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
+  const user = useAppSelector(selectCurrentUser);
+
+  console.log(user);
+
   const navigate = useNavigate();
   useEffect(() => {
     if (isOpen) {
@@ -20,20 +26,6 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
       document.body.style.overflow = "";
     }
   }, [isOpen]);
-
-  const coffeeShops = [
-    { image: "/placeholder.png", title: "Costa coffee - Ц1", smallText: "Адрес" },
-    {
-      image: "/placeholder.png",
-      title: "Costa coffee - Вестминистр центр",
-      smallText: "Адрес",
-    },
-    {
-      image: "/placeholder.png",
-      title: "Costa coffee - Шевченко улица",
-      smallText: "Адрес",
-    },
-  ];
 
   const menuItems = [
     { icon: "./iconsSvg/app.svg", text: "Админы", link: "/adminList" },
@@ -68,8 +60,14 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
             toggle={<h2 className={styles.companyName}>Costa Coffee - Ц1</h2>}
             menu={
               <>
-                {coffeeShops.map((shop, index) => (
-                  <FotoTextHint key={index} {...shop} option="infoMenu"/>
+                {user?.companies.map((company, index) => (
+                  <FotoTextHint
+                    key={index}
+                    image={company.logo || "./default.jpg"}
+                    title={company.name}
+                    smallText={company.address}
+                    option="infoMenu"
+                  />
                 ))}
               </>
             }
@@ -78,8 +76,8 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
 
         <div className={styles.menuList}>
           {menuItems.map((item, index) => (
-            <Link to={item.link}>
-              <IconTextArrow key={index} icon={item.icon} text={item.text} />
+            <Link to={item.link} key={index}>
+              <IconTextArrow icon={item.icon} text={item.text} />
             </Link>
           ))}
         </div>

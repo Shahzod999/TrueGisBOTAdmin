@@ -6,7 +6,7 @@
     .icon {
         display: flex;
         align-items: center;
-        gap: 5px;
+        gap: 2px;
         margin-bottom: 8px;
 
         span {
@@ -18,11 +18,13 @@
         }
 
         svg {
+            width: 20px;
+            height: 20px;
             fill: var(--link-color);
             stroke: var(--link-color);
 
             path {
-                fill: var(--link-color);
+                // fill: var(--link-color);
                 stroke: var(--link-color);
             }
         }

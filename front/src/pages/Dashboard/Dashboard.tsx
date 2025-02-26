@@ -44,26 +44,26 @@ const Dashboard = () => {
 
         <div className={styles.table}>
           <Table
-            icon="./iconsSvg/message.svg"
+            icon="./iconsSvg/money.svg"
             iconText="Заработок"
             hintText="Сегодня"
             mainText="12 000 000 "
             curency="сум"
           />
           <Table
-            icon="./iconsSvg/message.svg"
+            icon="./iconsSvg/timer.svg"
             iconText="Заказы"
             hintText="Сегодня"
             mainText="147"
           />
           <Table
-            icon="./iconsSvg/message.svg"
+            icon="./iconsSvg/thunder.svg"
             iconText="Звонки"
             hintText="Всего"
             mainText="39"
           />
           <Table
-            icon="./iconsSvg/message.svg"
+            icon="./iconsSvg/location.svg"
             iconText="Посещение"
             hintText="Всего"
             mainText="86"

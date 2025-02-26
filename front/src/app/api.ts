@@ -6,7 +6,7 @@ import { RootState } from "./store";
 const baseQuery = fetchBaseQuery({
   baseUrl: "https://dev.admin13.uz/v1",
   prepareHeaders: (headers, { getState }) => {
-    const tgId = (getState() as RootState).companyId.userTelegramId;
+    const tgId = (getState() as RootState).telegram.telegramId;
     headers.set("telegram-id", tgId);
     return headers;
   },
