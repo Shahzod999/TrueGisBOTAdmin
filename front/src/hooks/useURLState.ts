@@ -7,12 +7,22 @@ export const useURLState = () => {
   const navigate = useNavigate();
   const tg = window.Telegram.WebApp;
   console.log(location, "params");
-  
+
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   useEffect(() => {
     tg.BackButton.show();
     tg.BackButton.onClick(() => {
-      navigate(-1);
+      handleBack();
     });
+
+    return () => {
+      tg.BackButton.offClick(() => {
+        handleBack();
+      });
+    };
   }, [location]);
 
   const setParam = (key: string, value: string | boolean) => {
