@@ -1,7 +1,6 @@
 import styles from "./InfoAboutPlace.module.scss";
 import TextArea from "./TextArea";
 import { useState } from "react";
-import FotoTextHint from "../../../components/FotoTextHint/FotoTextHint";
 import AddFoto from "../../../components/AddFoto/AddFoto";
 import { PhotosSample } from "../../../types/companyType";
 import SetLogo from "../../../components/AddFoto/SetLogo";
