@@ -14,6 +14,7 @@ export const useURLState = () => {
   };
 
   const getParam = (key: string) => searchParams.get(key);
+  const allParams = Object.fromEntries(searchParams.entries());
 
-  return { getParam, setParam };
+  return { getParam, setParam, allParams };
 };

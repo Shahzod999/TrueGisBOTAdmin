@@ -1,16 +1,14 @@
 // # React Router (все маршруты приложения)
-import { Routes, Route, Navigate, useSearchParams } from "react-router";
+import { Routes, Route, Navigate } from "react-router";
 import { lazy, Suspense, useEffect } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminList from "../pages/AdminList/AdminList";
 import Analytics from "../pages/Analytics/Analytics";
 import Settings from "../pages/Settings/Settings";
 import { Telegram } from "@twa-dev/types";
-import { useAppDispatch, useAppSelector } from "./hooks";
-import {
-  selectTelegramId,
-  setTelegramId,
-} from "../features/telegram/telegramSlice";
+import { useAppDispatch } from "./hooks";
+import { setTelegramId } from "../features/telegram/telegramSlice";
+import useTelegramBackButton from "../features/users/useTelegramBackButton";
 
 const Login = lazy(() => import("../pages/Login/Login"));
 const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard"));
@@ -26,22 +24,8 @@ declare global {
 
 const Router = () => {
   const dispatch = useAppDispatch();
+  useTelegramBackButton();
   const tg = window.Telegram.WebApp;
-  const id = useAppSelector(selectTelegramId);
-  console.log(id);
-
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const handleBackButton = () => {
-    const params = new URLSearchParams(searchParams);
-    for (const [key, value] of params.entries()) {
-      if (value === "true") {
-        params.set(key, "false");
-        setSearchParams(params);
-        break; // Exit after setting the first true param to false
-      }
-    }
-  };
 
   useEffect(() => {
     if (tg) {
@@ -63,13 +47,6 @@ const Router = () => {
       dispatch(setTelegramId(userId.toString()));
     }
   }, [dispatch, tg]);
-
-  useEffect(() => {
-    window.addEventListener("popstate", handleBackButton);
-    return () => {
-      window.removeEventListener("popstate", handleBackButton);
-    };
-  }, [searchParams]);
 
   return (
     <Suspense fallback={<div>Загрузка...</div>}>

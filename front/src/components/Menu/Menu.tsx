@@ -16,8 +16,6 @@ interface MenuProps {
 const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
   const user = useAppSelector(selectCurrentUser);
 
-  console.log(user);
-
   const navigate = useNavigate();
   useEffect(() => {
     if (isOpen) {
