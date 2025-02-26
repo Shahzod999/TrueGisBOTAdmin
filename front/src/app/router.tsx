@@ -1,11 +1,5 @@
 // # React Router (все маршруты приложения)
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  useParams,
-} from "react-router";
+import { Routes, Route, Navigate, useSearchParams } from "react-router";
 import { lazy, Suspense, useEffect } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminList from "../pages/AdminList/AdminList";
@@ -36,6 +30,19 @@ const Router = () => {
   const id = useAppSelector(selectTelegramId);
   console.log(id);
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const handleBackButton = () => {
+    const params = new URLSearchParams(searchParams);
+    for (const [key, value] of params.entries()) {
+      if (value === "true") {
+        params.set(key, "false");
+        setSearchParams(params);
+        break; // Exit after setting the first true param to false
+      }
+    }
+  };
+
   useEffect(() => {
     if (tg) {
       tg.ready();
@@ -57,35 +64,34 @@ const Router = () => {
     }
   }, [dispatch, tg]);
 
-  const params = useParams();
-  
-  console.log(params);
-
-  useEffect(() => {}, []);
+  useEffect(() => {
+    window.addEventListener("popstate", handleBackButton);
+    return () => {
+      window.removeEventListener("popstate", handleBackButton);
+    };
+  }, [searchParams]);
 
   return (
-    <BrowserRouter>
-      <Suspense fallback={<div>Загрузка...</div>}>
-        <Routes>
-          {/* Публичные страницы */}
-          <Route path="/login" element={<Login />} />
+    <Suspense fallback={<div>Загрузка...</div>}>
+      <Routes>
+        {/* Публичные страницы */}
+        <Route path="/login" element={<Login />} />
 
-          {/* Защищенные маршруты */}
-          <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/adminList" element={<AdminList />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/users" element={<Users />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/:id" element={<ProductDetails />} />
-          </Route>
+        {/* Защищенные маршруты */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/adminList" element={<AdminList />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/products/:id" element={<ProductDetails />} />
+        </Route>
 
-          {/* Перенаправление на главную, если маршрут не найден */}
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+        {/* Перенаправление на главную, если маршрут не найден */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Suspense>
   );
 };
 
