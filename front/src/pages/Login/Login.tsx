@@ -5,7 +5,7 @@ import { FormEvent, MouseEvent, useState } from "react";
 import IconButton from "../../components/Button/IconButton";
 import Lottie from "lottie-react";
 import utya from "../../../public/utya/technical.json";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useLoginUserMutation } from "../../features/auth/authApi";
 import { useAppDispatch } from "../../app/hooks";
 import { setCredentials } from "../../features/auth/authSlice";
@@ -45,7 +45,7 @@ const Login = () => {
 
   const validateForm = () => {
     const newErrors: typeof errors = {};
-    
+
     if (!formData.username.trim()) {
       newErrors.username = "Введите имя пользователя";
     }
@@ -62,19 +62,21 @@ const Login = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     try {
       const response = await loginUser({ data: formData }).unwrap();
-      
+
       if (response.status === "success") {
-        dispatch(setCredentials({
-          data: response.data,
-          token: response.token
-        }));
+        dispatch(
+          setCredentials({
+            data: response.data,
+            token: response.token,
+          }),
+        );
         navigate("/");
       } else {
         setErrors({ general: "Ошибка входа в систему" });
@@ -82,7 +84,7 @@ const Login = () => {
     } catch (err: any) {
       console.error("Failed to login:", err);
       setErrors({
-        general: err.data?.message || "Произошла ошибка при входе в систему"
+        general: err.data?.message || "Произошла ошибка при входе в систему",
       });
     }
   };
@@ -164,6 +166,8 @@ const Login = () => {
           <ReactSVG src="./Other/blueWarning.svg" />
           <span>Техническая поддержка</span>
         </div>
+
+        <Link to="/">Dalee</Link>
       </div>
 
       {/* Модальное окно технической поддержки */}
