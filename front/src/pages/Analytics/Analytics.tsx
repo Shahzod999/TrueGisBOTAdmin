@@ -38,30 +38,17 @@ const Analytics = () => {
 
           <div className={styles.table}>
             <Table
-              icon="./iconsSvg/message.svg"
+              icon="./iconsSvg/money.svg"
               iconText="Заработок"
               hintText="Сегодня"
               mainText="12 000 000 "
               curency="сум"
-              onClick={() => setParam("details", true)}
             />
             <Table
-              icon="./iconsSvg/message.svg"
+              icon="./iconsSvg/timer.svg"
               iconText="Заказы"
               hintText="Сегодня"
               mainText="147"
-            />
-            <Table
-              icon="./iconsSvg/message.svg"
-              iconText="Звонки"
-              hintText="Всего"
-              mainText="39"
-            />
-            <Table
-              icon="./iconsSvg/message.svg"
-              iconText="Посещение"
-              hintText="Всего"
-              mainText="86"
             />
           </div>
 
@@ -70,76 +57,88 @@ const Analytics = () => {
 
             <div className={styles.table}>
               <Table
-                icon="./iconsSvg/message.svg"
+                icon="./iconsSvg/thunder.svg"
+                iconText="Звонки"
+                hintText="Всего"
+                mainText="39"
+              />
+              <Table
+                icon="./iconsSvg/location.svg"
+                iconText="Посещение"
+                hintText="Всего"
+                mainText="86"
+              />
+              <Table
+                icon="./iconsSvg/location.svg"
                 iconText="Звонки"
                 hintText="Сегодня"
                 mainText="12 000 000 "
                 curency="сум"
               />
               <Table
-                icon="./iconsSvg/message.svg"
+                icon="./iconsSvg/location.svg"
                 iconText="Посещение"
                 hintText="Сегодня"
                 mainText="147"
               />
               <Table
-                icon="./iconsSvg/message.svg"
+                icon="./iconsSvg/location.svg"
                 iconText="Позвонить"
                 hintText="Всего нажатий"
                 mainText="39"
               />
               <Table
-                icon="./iconsSvg/message.svg"
+                icon="./iconsSvg/location.svg"
                 iconText="Заказать"
                 hintText="Всего нажатий"
                 mainText="86"
               />
               <Table
-                icon="./iconsSvg/message.svg"
+                icon="./iconsSvg/location.svg"
                 iconText="Маршрут"
                 hintText="Сегодня"
                 mainText="12 000 000 "
                 curency="сум"
               />
               <Table
-                icon="./iconsSvg/message.svg"
+                icon="./iconsSvg/location.svg"
                 iconText="Поделиться"
                 hintText="Сегодня"
                 mainText="147"
               />
               <Table
-                icon="./iconsSvg/message.svg"
+                icon="./iconsSvg/location.svg"
                 iconText="Поиск"
                 hintText="Всего нажатий"
                 mainText="39"
               />
               <Table
-                icon="./iconsSvg/message.svg"
+                icon="./iconsSvg/location.svg"
                 iconText="Такси"
                 hintText="Всего нажатий"
                 mainText="86"
               />
               <Table
-                icon="./iconsSvg/message.svg"
+                icon="./iconsSvg/location.svg"
                 iconText="Переслано в чате"
                 hintText="Сегодня"
                 mainText="12 000 000 "
                 curency="сум"
               />
               <Table
-                icon="./iconsSvg/message.svg"
+                icon="./iconsSvg/location.svg"
                 iconText="Переход на сайт"
                 hintText="Сегодня"
                 mainText="147"
               />
               <Table
-                icon="./iconsSvg/message.svg"
+                icon="./iconsSvg/location.svg"
                 iconText="Моб. приложение"
                 hintText="Всего нажатий"
                 mainText="39"
               />
               <Table
-                icon="./iconsSvg/message.svg"
+                icon="./iconsSvg/location.svg"
                 iconText="Рабочее время"
                 hintText="Всего нажатий"
                 mainText="86"
