@@ -8,6 +8,7 @@ interface FotoTextHintProps {
   smallText: string;
   arrowRight?: boolean;
   option: string;
+  onClick?: () => void;
 }
 
 const FotoTextHint = ({
@@ -17,9 +18,10 @@ const FotoTextHint = ({
   smallText,
   arrowRight,
   option,
+  onClick,
 }: FotoTextHintProps) => {
   return (
-    <div className={styles.card}>
+    <div className={styles.card} onClick={onClick}>
       {image && <img src={image} className={styles.image} />}
       {svg && <ReactSVG src={svg} className={styles.icon} />}
       <div className={styles[option]}>

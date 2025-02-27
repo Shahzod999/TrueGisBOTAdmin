@@ -3,33 +3,18 @@ import styles from "./UserCard.module.scss";
 
 interface UserCardProps {
   name: string;
-  score: number;
-  icon?: "like" | "crown" | "star" | string;
+  children?: React.ReactNode;
 }
 
-const UserCard = ({ name, score, icon }: UserCardProps) => {
-  const getIcon = () => {
-    switch (icon) {
-      case "like":
-        return "👍"; // Можно заменить на иконку
-      case "crown":
-        return "👑";
-      case "star":
-        return "⭐";
-      default:
-        return null;
-    }
-  };
-
+const UserCard = ({ name, children }: UserCardProps) => {
   return (
     <div className={styles.userCard}>
-      <ReactSVG src="./Other/defaultUser.svg" className={styles.avatar} />
       <div className={styles.info}>
+        <ReactSVG src="./Other/defaultUser.svg" className={styles.avatar} />
         <span className={styles.name}>{name}</span>
-        <span className={styles.score}>
-          {getIcon()} {score}
-        </span>
       </div>
+
+      {children}
     </div>
   );
 };

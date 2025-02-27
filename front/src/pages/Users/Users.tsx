@@ -1,6 +1,7 @@
 import styles from "./Users.module.scss";
 import LinkButtonWithNotification from "../../components/Button/LinkButtonWithNotification";
 import UserCard from "./UserCard";
+import Likes from "./Likes";
 
 const usersData = [
   { name: "Andrew Parker", score: 30, icon: "like" },
@@ -19,7 +20,9 @@ const Users = () => {
 
       <div className={styles.list}>
         {usersData.map((user, index) => (
-          <UserCard key={index} {...user} />
+          <UserCard key={index} {...user}>
+            <Likes score={user.score} icon={user.icon} />
+          </UserCard>
         ))}
       </div>
     </div>

@@ -7,7 +7,7 @@ const baseQuery = fetchBaseQuery({
   baseUrl: "https://dev.admin13.uz/v1",
   prepareHeaders: (headers, { getState }) => {
     const tgId = (getState() as RootState).telegram.telegramId;
-    const token = (getState() as RootState).auth.token;
+    const token = (getState() as RootState).company.token;
     headers.set("telegram-id", tgId);
     headers.set("Authorization", `Bearer ${token}`);
     return headers;

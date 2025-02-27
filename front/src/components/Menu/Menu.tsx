@@ -5,8 +5,15 @@ import FotoTextHint from "../FotoTextHint/FotoTextHint";
 import DropDownMenu from "../DropDownMenu/DropDownMenu";
 import { Link, useNavigate } from "react-router";
 import IconTextArrow from "../IconTextArrow/IconTextArrow";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { selectCurrentUser } from "../../features/auth/authSlice";
+import { useSwitchCompanyMutation } from "../../features/auth/authApi";
+import {
+  selectedCompany,
+  selectedCompanyToken,
+  setCompany,
+  setCompanyToken,
+} from "../../features/company/companySlice";
 
 interface MenuProps {
   isOpen: boolean;
@@ -14,7 +21,11 @@ interface MenuProps {
 }
 
 const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
+  const dispatch = useAppDispatch();
   const user = useAppSelector(selectCurrentUser);
+  const token = useAppSelector(selectedCompanyToken);
+  const company = useAppSelector(selectedCompany);
+  const [switchCompany] = useSwitchCompanyMutation();
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -38,6 +49,21 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
     { icon: "./iconsSvg/app.svg", text: "Скидки", link: "/adminList" },
   ];
 
+  const handleSwitchCompany = async (companyId: string) => {
+    try {
+      let res = await switchCompany({
+        company_id: companyId,
+        token: token,
+      }).unwrap();
+      console.log(res.token);
+      dispatch(setCompanyToken(res.token));
+      dispatch(setCompany(res.data.company));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  console.log(company, "suka");
+  console.log(token, "suka");
   return (
     <>
       <div
@@ -55,7 +81,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
 
         <div className={styles.dropMenu}>
           <DropDownMenu
-            toggle={<h2 className={styles.companyName}>Costa Coffee - Ц1</h2>}
+            toggle={<h2 className={styles.companyName}>{company?.name}</h2>}
             menu={
               <>
                 {user?.companies.map((company, index) => (
@@ -65,6 +91,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
                     title={company.name}
                     smallText={company.address}
                     option="infoMenu"
+                    onClick={() => handleSwitchCompany(company._id)}
                   />
                 ))}
               </>

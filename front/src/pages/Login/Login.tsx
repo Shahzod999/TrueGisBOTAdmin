@@ -5,10 +5,14 @@ import { FormEvent, MouseEvent, useState } from "react";
 import IconButton from "../../components/Button/IconButton";
 import Lottie from "lottie-react";
 import utya from "../../../public/utya/technical.json";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useLoginUserMutation } from "../../features/auth/authApi";
 import { useAppDispatch } from "../../app/hooks";
 import { setCredentials } from "../../features/auth/authSlice";
+import {
+  setCompany,
+  setCompanyToken,
+} from "../../features/company/companySlice";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -77,6 +81,8 @@ const Login = () => {
             token: response.token,
           }),
         );
+        dispatch(setCompany(response.selected_company));
+        dispatch(setCompanyToken(response.selected_company.token));
         navigate("/");
       } else {
         setErrors({ general: "Ошибка входа в систему" });
@@ -166,8 +172,6 @@ const Login = () => {
           <ReactSVG src="./Other/blueWarning.svg" />
           <span>Техническая поддержка</span>
         </div>
-
-        <Link to="/">Dalee</Link>
       </div>
 
       {/* Модальное окно технической поддержки */}
