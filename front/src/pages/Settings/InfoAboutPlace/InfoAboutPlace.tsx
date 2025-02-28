@@ -1,5 +1,5 @@
 import styles from "./InfoAboutPlace.module.scss";
-import TextArea from "./TextArea";
+import TextArea from "../../../components/TextArea/TextArea";
 import { useState } from "react";
 import AddFoto from "../../../components/AddFoto/AddFoto";
 import { PhotosSample } from "../../../types/companyType";
@@ -80,7 +80,7 @@ const InfoAboutPlace = () => {
 
       <div className={styles.textArea}>
         <h3>Короткая информация</h3>
-        <TextArea text={text} setText={setText} />
+        <TextArea text={text} setText={setText} progressBar />
       </div>
 
       <div className={styles.infoBox}>

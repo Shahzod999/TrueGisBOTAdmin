@@ -44,7 +44,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
       link: "/analytics",
     },
     { icon: "./iconsSvg/app.svg", text: "Настройки", link: "/settings" },
-    { icon: "./iconsSvg/app.svg", text: "Товары и услуги", link: "/adminList" },
+    { icon: "./iconsSvg/app.svg", text: "Товары и услуги", link: "/products" },
     { icon: "./iconsSvg/app.svg", text: "Клиентская база", link: "/users" },
     { icon: "./iconsSvg/app.svg", text: "Скидки", link: "/adminList" },
   ];
@@ -62,8 +62,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
       console.log(error);
     }
   };
-  console.log(company, "suka");
-  console.log(token, "suka");
+
   return (
     <>
       <div

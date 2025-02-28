@@ -15,14 +15,12 @@ const AdminList = () => {
   const adminPowerState = Boolean(getParam("adminPower"));
   const { data: admins } = useGetAdminsQuery({});
 
-  console.log(admins);
-
   return (
     <>
       <div className="container adminList">
         <h2>Админы</h2>
 
-        {admins.data.length > 0 ? (
+        {admins?.data.length > 0 ? (
           <div>
             {admins.data?.map((admin: any) => (
               <UserCard key={admin.id} {...admin} />

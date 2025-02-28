@@ -6,8 +6,11 @@ import Menu from "../../components/Menu/Menu";
 import { useState } from "react";
 import LinkButtonWithNotification from "../../components/Button/LinkButtonWithNotification";
 
+
 const Dashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+
+
 
   const data = [
     { date: "26 ноя", value: 100 },

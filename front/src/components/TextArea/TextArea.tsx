@@ -3,9 +3,10 @@ import "./textArea.scss";
 interface TextProps {
   text: string;
   setText: (e: string) => void;
+  progressBar: boolean;
 }
 
-const TextArea = ({ text, setText }: TextProps) => {
+const TextArea = ({ text, setText, progressBar }: TextProps) => {
   const maxLength = 120;
 
   const getProgressState = () => {
@@ -43,14 +44,16 @@ const TextArea = ({ text, setText }: TextProps) => {
         value={text}
         onChange={(e) => setText(e.target.value)}></textarea>
 
-      <div className="addComment__textArea__progress">
-        <div className="progress-indicator">
-          <div
-            className={`progress-bar ${progress.state}`}
-            style={{ width: `${progress.width}%` }}></div>
+      {progressBar && (
+        <div className="addComment__textArea__progress">
+          <div className="progress-indicator">
+            <div
+              className={`progress-bar ${progress.state}`}
+              style={{ width: `${progress.width}%` }}></div>
+          </div>
+          <p className="progress-message">{progress.state}</p>
         </div>
-        <p className="progress-message">{progress.state}</p>
-      </div>
+      )}
     </div>
   );
 };

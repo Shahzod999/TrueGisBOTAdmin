@@ -13,11 +13,12 @@ interface selectedCompanyType {
   token: string | null;
 }
 
-const storedCompany = JSON.parse(localStorage.getItem("company") || "");
+const storedCompany = JSON.parse(localStorage.getItem("company") || "{}");
+const storedCompanyToken = localStorage.getItem("companyToken") || null;
 
-const initialState: selectedCompanyType = storedCompany || {
-  company: null,
-  token: null,
+const initialState: selectedCompanyType = {
+  company: storedCompany,
+  token: storedCompanyToken,
 };
 
 export const companySlice = createSlice({
@@ -35,13 +36,7 @@ export const companySlice = createSlice({
     },
     setCompanyToken: (state, action) => {
       state.token = action.payload;
-      localStorage.setItem(
-        "company",
-        JSON.stringify({
-          company: state.company,
-          token: action.payload,
-        }),
-      );
+      localStorage.setItem("companyToken", action.payload);
     },
   },
 });

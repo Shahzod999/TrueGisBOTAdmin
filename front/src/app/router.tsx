@@ -9,6 +9,7 @@ import { Telegram } from "@twa-dev/types";
 import { useAppDispatch } from "./hooks";
 import { setTelegramId } from "../features/telegram/telegramSlice";
 import useTelegramBackButton from "../features/users/useTelegramBackButton";
+import CategoryDetails from "../pages/Products/CategoryDetails";
 
 const Login = lazy(() => import("../pages/Login/Login"));
 const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard"));
@@ -63,6 +64,7 @@ const Router = () => {
           <Route path="/users" element={<Users />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetails />} />
+          <Route path="/category/:categoryId" element={<CategoryDetails />} />
         </Route>
 
         {/* Перенаправление на главную, если маршрут не найден */}
