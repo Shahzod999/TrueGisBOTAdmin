@@ -11,6 +11,8 @@ const Password = () => {
   const navigate = useNavigate();
   const { getParam, setParam } = useURLState();
   const initialPage = Boolean(getParam("setPassword"));
+
+  
   return (
     <>
       <div className={`container ${styles.password}`}>

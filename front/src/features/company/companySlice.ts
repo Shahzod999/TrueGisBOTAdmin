@@ -9,6 +9,9 @@ interface selectedCompanyType {
     name: string;
     address: string;
     logo: string;
+    permissions: {
+      [key: string]: boolean;
+    };
   } | null;
   token: string | null;
 }

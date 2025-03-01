@@ -9,13 +9,11 @@ import {
 } from "../../features/admins/adminApi";
 import { useSelector } from "react-redux";
 import { selectedCompany } from "../../features/company/companySlice";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppDispatch } from "../../app/hooks";
 import { errorToast, succesToast } from "../../features/Toast/toastSlice";
 import Loading from "../../components/Loading/Loading";
 import UserCard from "../Users/UserCard";
 import "./adminList.scss";
-import { selectCurrentUser } from "../../features/auth/authSlice";
-
 // Массив названий разрешений для отображения в интерфейсе
 const PERMISSION_LABELS = [
   "Управление администраторами",
@@ -48,12 +46,9 @@ const AdminPowers = () => {
     { skip: !newAdminId },
   );
 
-  const userLogedInd = useAppSelector(selectCurrentUser);
-  const { data: logedInADmin, isLoading: isLoadingLoggedAdmin } =
-    useGetAdminByIdQuery(userLogedInd?._id);
+  // Состояние для отслеживания, какая подсказка активна
+  const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
 
-  console.log(logedInADmin, "logedInADmin");
-    
   const [deleteAdmin, { isLoading: isDeleting }] = useDeleteAdminMutation();
 
   // Состояние для хранения разрешений текущего администратора
@@ -66,15 +61,15 @@ const AdminPowers = () => {
     PERMISSION_LABELS.map(() => true),
   );
 
-  // Загружаем разрешения авторизованного администратора
+  // Загружаем разрешения авторизованного администратора из company.permissions
   useEffect(() => {
-    if (logedInADmin?.data?.permissions) {
+    if (company?.permissions) {
       const permissionsArray = PERMISSION_KEYS.map(
-        (key) => logedInADmin.data.permissions[key] ?? false,
+        (key) => company.permissions[key] ?? false,
       );
       setLoggedAdminPermissions(permissionsArray);
     }
-  }, [logedInADmin]);
+  }, [company]);
 
   // Загружаем разрешения редактируемого администратора
   useEffect(() => {
@@ -85,6 +80,28 @@ const AdminPowers = () => {
       setPermissions(permissionsArray);
     }
   }, [admin]);
+
+  // Обработчик клика для показа/скрытия подсказки
+  const handleTooltipToggle = (index: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (activeTooltip === index) {
+      setActiveTooltip(null);
+    } else {
+      setActiveTooltip(index);
+    }
+  };
+
+  // Закрытие подсказки при клике вне компонента
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setActiveTooltip(null);
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   const [assignAdminPower, { isLoading }] = useAssignAdminPowerMutation();
 
@@ -143,14 +160,16 @@ const AdminPowers = () => {
     }
   };
 
+  console.log(admin, "admin");
+
   return (
     <div className={`container ${styles.adminPowers}`}>
-      {(isLoading || isDeleting || isLoadingAdmin || isLoadingLoggedAdmin) && (
-        <Loading />
-      )}
+      {(isLoading || isDeleting || isLoadingAdmin) && <Loading />}
 
-      <div className="adminList__list-main">
-        <UserCard name={admin?.data?.full_name} />
+      <div className="adminList__list">
+        <div className="adminList__list-main">
+          <UserCard name={admin?.data?.full_name} />
+        </div>
       </div>
 
       <div className={styles.titleOneAdmin}>
@@ -166,9 +185,7 @@ const AdminPowers = () => {
                 <label
                   className={`${styles.switch} ${
                     !loggedAdminPermissions[index] ? styles.disabledSwitch : ""
-                  }`}
-                  title={!loggedAdminPermissions[index] ? "Недостаточно доступа" : ""}
-                >
+                  }`}>
                   <input
                     type="checkbox"
                     checked={permissions[index]}
@@ -178,7 +195,19 @@ const AdminPowers = () => {
                   <span className={styles.slider}></span>
                 </label>
                 {!loggedAdminPermissions[index] && (
-                  <div className={styles.tooltipText}>Недостаточно доступа</div>
+                  <div
+                    className={`${styles.tooltipText} ${
+                      activeTooltip === index ? styles.active : ""
+                    }`}>
+                    Недостаточно доступа
+                  </div>
+                )}
+                {!loggedAdminPermissions[index] && (
+                  <button
+                    className={styles.infoButton}
+                    onClick={(e) => handleTooltipToggle(index, e)}>
+                    i
+                  </button>
                 )}
               </div>
             </div>

@@ -64,7 +64,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  console.log(company, "sss");
+  console.log(user, "sss");
 
   return (
     <>

@@ -125,12 +125,10 @@
 
 }
 
-.permissionsList {
-    margin-bottom: 70px;
-}
 
 .adminPowers {
     .permissionsList {
+        margin-bottom: 70px;
         display: flex;
         flex-direction: column;
         gap: 12px;
@@ -247,11 +245,50 @@
         margin-right: 10px;
         opacity: 0;
         transition: opacity 0.3s;
+
+        @media (max-width: 768px) {
+            right: auto;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 100%;
+            margin-bottom: 10px;
+            margin-right: 0;
+
+            &:after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: rgba(0, 0, 0, 0.7) transparent transparent transparent;
+            }
+        }
+
+        &.active {
+            visibility: visible;
+            opacity: 1;
+        }
     }
 
-    &:active .tooltipText,
-    &:hover .tooltipText {
-        visibility: visible;
-        opacity: 1;
+    .infoButton {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        font-size: 12px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 8px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #0056b3;
+        }
     }
 }
