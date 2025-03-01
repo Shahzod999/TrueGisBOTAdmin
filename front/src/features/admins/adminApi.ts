@@ -15,7 +15,34 @@ export const adminApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Admin"],
     }),
+
+    assignAdminPower: builder.mutation({
+      query: (data) => ({
+        url: "/delivery/admin/admin/assign-company",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Admin"],
+    }),
+
+    getAdminById: builder.query({
+      query: (id) => `/delivery/admin/admin/${id}`,
+      providesTags: ["Admin"],
+    }),
+    deleteAdmin: builder.mutation({
+      query: (id) => ({
+        url: `/delivery/admin/admin/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Admin"],
+    }),
   }),
 });
 
-export const { useGetAdminsQuery, useAddNewAdminMutation } = adminApiSlice;
+export const {
+  useGetAdminsQuery,
+  useAddNewAdminMutation,
+  useAssignAdminPowerMutation,
+  useGetAdminByIdQuery,
+  useDeleteAdminMutation,
+} = adminApiSlice;

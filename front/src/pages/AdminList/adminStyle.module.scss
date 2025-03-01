@@ -25,6 +25,14 @@
             margin-bottom: 24px;
             display: block;
         }
+
+        &oneAdmin {
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 24px;
+            letter-spacing: 0.38px;
+            color: var(--text-color);
+        }
     }
 
 
@@ -203,5 +211,47 @@
 
     input:checked+.slider:before {
         transform: translateX(20px);
+    }
+}
+
+.disabledSwitch {
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    input {
+        cursor: not-allowed;
+    }
+
+    .slider {
+        background-color: #ccc;
+    }
+}
+
+.switchWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .tooltipText {
+        visibility: hidden;
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 10px;
+        font-size: 12px;
+        white-space: nowrap;
+        z-index: 1;
+        right: 100%;
+        margin-right: 10px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    &:active .tooltipText,
+    &:hover .tooltipText {
+        visibility: visible;
+        opacity: 1;
     }
 }

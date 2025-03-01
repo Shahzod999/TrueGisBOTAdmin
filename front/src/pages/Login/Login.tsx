@@ -73,7 +73,6 @@ const Login = () => {
 
     try {
       const response = await loginUser({ data: formData }).unwrap();
-
       if (response.status === "success") {
         dispatch(
           setCredentials({

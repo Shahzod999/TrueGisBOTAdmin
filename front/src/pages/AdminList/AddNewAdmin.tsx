@@ -5,17 +5,13 @@ import IconButton from "../../components/Button/IconButton";
 import { useURLState } from "../../hooks/useURLState";
 import { useAddNewAdminMutation } from "../../features/admins/adminApi";
 import Loading from "../../components/Loading/Loading";
-import DropDownMenu from "../../components/DropDownMenu/DropDownMenu";
 import { useAppDispatch } from "../../app/hooks";
 import { errorToast, succesToast } from "../../features/Toast/toastSlice";
-
-type AdminRole = "admin" | "moder" | "finance";
 
 interface AdminFormData {
   full_name: string;
   password: string;
   username: string;
-  admin_role: AdminRole;
 }
 
 const AddNewAdmin = () => {
@@ -32,7 +28,6 @@ const AddNewAdmin = () => {
     full_name: "",
     password: "",
     username: "",
-    admin_role: "moder",
   });
 
   const handleVisible = (key: "password" | "id") => (e: MouseEvent) => {
@@ -48,38 +43,26 @@ const AddNewAdmin = () => {
     }));
   };
 
-  const handleRoleChange = (role: AdminRole) => {
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
-    }
-    setFormData((prev) => ({
-      ...prev,
-      admin_role: role,
-    }));
-  };
-
-  const handleNext = () => {
-    setParam("adminPower", "true");
-  };
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await addNewAdmin(formData).unwrap();
-      dispatch(succesToast("Админ успешно создан"));
+      // Токен будет добавлен автоматически через baseQuery
+      const res = await addNewAdmin(formData).unwrap();
+      console.log(res);
+
       setParam("addNewAdmin", "false");
-      handleNext();
+      dispatch(succesToast("Администратор успешно создан"));
+      setParam("adminPower", res.id);
       // Можно добавить уведомление об успешном создании
     } catch (error) {
       console.error("Ошибка при создании администратора:", error);
-      dispatch(errorToast((error as any).data.message || "Админ не создан"));
       // Можно добавить уведомление об ошибке
+      dispatch(
+        errorToast(
+          (error as any).data.message || "Администратор успешно создан",
+        ),
+      );
     }
-  };
-
-  const roleLabels = {
-    admin: "Администратор",
-    moder: "Модератор",
-    finance: "Финансист",
   };
 
   return (
@@ -130,39 +113,10 @@ const AddNewAdmin = () => {
               onClick={handleVisible("password")}
             />
           </div>
-
-          <div className={styles.inputWrapperDropDown}>
-            <DropDownMenu
-              toggle={
-                <div className={styles.roleToggle}>
-                  {roleLabels[formData.admin_role]}
-                </div>
-              }
-              menu={
-                <div className={styles.roleMenu}>
-                  <div
-                    className={styles.roleItem}
-                    onClick={() => handleRoleChange("admin")}>
-                    Администратор
-                  </div>
-                  <div
-                    className={styles.roleItem}
-                    onClick={() => handleRoleChange("moder")}>
-                    Модератор
-                  </div>
-                  <div
-                    className={styles.roleItem}
-                    onClick={() => handleRoleChange("finance")}>
-                    Финансист
-                  </div>
-                </div>
-              }
-            />
-          </div>
         </form>
 
         <IconButton
-          text="Создать"
+          text="Далее"
           styleName="linkColor"
           onClick={() => handleSubmit({ preventDefault: () => {} } as any)}
         />

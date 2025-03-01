@@ -42,6 +42,19 @@
     }
 }
 
+.deleteButton {
+    background: var(--bg-color) !important;
+    color: var(--destructive-color) !important;
+
+    svg {
+        fill: var(--destructive-color);
+
+        path {
+            fill: var(--destructive-color);
+        }
+    }
+}
+
 .linkColor {
     background: var(--link-color) !important;
     color: var(--bg-color) !important;

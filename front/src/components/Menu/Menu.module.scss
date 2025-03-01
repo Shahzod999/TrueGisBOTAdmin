@@ -48,14 +48,33 @@
 
     }
 
-    .companyName {
-        font-weight: 500;
-        font-size: 20px;
-        line-height: 120%;
-        letter-spacing: -0.01em;
-        color: var(--text-color);
+    .companyInfo {
         padding-top: 20px;
         padding-bottom: 20px;
+
+        .companyName {
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 120%;
+            letter-spacing: -0.01em;
+            color: var(--text-color);
+
+        }
+
+        span {
+            font-family: var(--font5);
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 118%;
+            letter-spacing: -0.01em;
+            color: var(--hint-color);
+            padding-top: 5px;
+
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
     }
 
     .dropMenu {

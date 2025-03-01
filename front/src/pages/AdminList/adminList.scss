@@ -13,6 +13,17 @@
         color: var(--text-color);
     }
 
+    &__list {
+        flex: 1;
+
+        &-main {
+            border-radius: 16px;
+            background-color: var(--bg-color);
+            margin: 16px 0;
+            overflow: hidden;
+        }
+    }
+
     &__main {
         width: 180px;
         height: 180px;

@@ -14,6 +14,7 @@ import {
   setCompany,
   setCompanyToken,
 } from "../../features/company/companySlice";
+import Loading from "../Loading/Loading";
 
 interface MenuProps {
   isOpen: boolean;
@@ -25,7 +26,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
   const user = useAppSelector(selectCurrentUser);
   const token = useAppSelector(selectedCompanyToken);
   const company = useAppSelector(selectedCompany);
-  const [switchCompany] = useSwitchCompanyMutation();
+  const [switchCompany, { isLoading }] = useSwitchCompanyMutation();
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -63,8 +64,11 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
     }
   };
 
+  console.log(company, "sss");
+
   return (
     <>
+      {isLoading && <Loading />}
       <div
         className={`${styles.overlay} ${
           isOpen ? styles.overlayVisible : ""
@@ -80,7 +84,12 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
 
         <div className={styles.dropMenu}>
           <DropDownMenu
-            toggle={<h2 className={styles.companyName}>{company?.name}</h2>}
+            toggle={
+              <div className={styles.companyInfo}>
+                <h2 className={styles.companyName}>{company?.name}</h2>
+                <span>{company?.address}</span>
+              </div>
+            }
             menu={
               <>
                 {user?.companies.map((company, index) => (

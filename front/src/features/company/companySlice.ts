@@ -27,12 +27,7 @@ export const companySlice = createSlice({
   reducers: {
     setCompany: (state, action) => {
       state.company = action.payload;
-      localStorage.setItem(
-        "company",
-        JSON.stringify({
-          company: action.payload,
-        }),
-      );
+      localStorage.setItem("company", JSON.stringify(action.payload));
     },
     setCompanyToken: (state, action) => {
       state.token = action.payload;

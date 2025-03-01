@@ -21,10 +21,16 @@ const AdminList = () => {
         <h2>Админы</h2>
 
         {admins?.data.length > 0 ? (
-          <div>
-            {admins.data?.map((admin: any) => (
-              <UserCard key={admin.id} {...admin} />
-            ))}
+          <div className="adminList__list">
+            <div className="adminList__list-main">
+              {admins.data?.map((admin: any) => (
+                <UserCard
+                  key={admin._id}
+                  name={admin.full_name}
+                  onClick={() => setParam("adminPower", admin._id)}
+                />
+              ))}
+            </div>
           </div>
         ) : (
           <div className="adminList__main">
@@ -33,7 +39,7 @@ const AdminList = () => {
         )}
 
         <IconButton
-          text="Добавить роль"
+          text="Добавить админа"
           styleName="linkColor"
           onClick={() => setParam("addNewAdmin", true)}
         />
