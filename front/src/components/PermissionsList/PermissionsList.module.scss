@@ -1,0 +1,202 @@
+.permissionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: var(--bg-color);
+    border-radius: 10px;
+}
+
+.permissionItemHolder {
+    &:not(:last-child):after {
+        content: "";
+        width: 100%;
+        margin-top: 5px;
+        height: 1px;
+        background-color: var(--separator-color);
+        display: block;
+        border-radius: 10px;
+        opacity: 0.5;
+    }
+}
+
+.permissionItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+
+    span {
+        font-family: var(--font-family);
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 131%;
+        letter-spacing: -0.02em;
+        color: var(--text-color);
+    }
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 55px;
+    height: 35px;
+
+    input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+
+        &:checked+.slider {
+            background-color: var(--link-color);
+        }
+
+        &:checked+.slider:before {
+            transform: translateX(20px);
+            background-color: white;
+        }
+
+        &:focus+.slider {
+            box-shadow: 0 0 1px #4CAF50;
+        }
+
+        &:disabled+.slider {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+
+        &:before {
+            position: absolute;
+            content: "";
+            height: 27px;
+            width: 27px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        &:hover {
+            background-color: #aaa;
+        }
+    }
+}
+
+.disabledSwitch {
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    input {
+        cursor: not-allowed;
+    }
+
+    .slider {
+        background-color: #ccc;
+    }
+}
+
+.switchWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .tooltipText {
+        visibility: hidden;
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 10px;
+        font-size: 12px;
+        white-space: nowrap;
+        z-index: 1;
+        right: 100%;
+        opacity: 0;
+        transition: opacity 0.3s;
+
+        @media (max-width: 768px) {
+            right: auto;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 100%;
+            margin-bottom: 10px;
+            margin-right: 0;
+
+            &:after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: rgba(0, 0, 0, 0.7) transparent transparent transparent;
+            }
+        }
+
+        &.active {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+
+    .infoButton {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: var(--link-color);
+        color: white;
+        border: none;
+        font-size: 12px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 8px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #0056b3;
+        }
+    }
+}
+
+.saveButtonWrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+
+.saveButton {
+    background-color: var(--link-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: #0056b3;
+    }
+
+    &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+} 

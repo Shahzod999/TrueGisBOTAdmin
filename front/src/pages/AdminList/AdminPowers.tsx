@@ -28,16 +28,9 @@ import {
 } from "../../features/users/usersApi";
 import FotoTextHint from "../../components/FotoTextHint/FotoTextHint";
 import { AssignedCompanyType } from "../../features/company/types";
-
-// Словарь для отображения названий разрешений
-const PERMISSION_NAMES: Record<string, string> = {
-  admins: "Управление администраторами",
-  analytics: "Аналитика",
-  category: "Управление категориями",
-  products: "Управление продуктами",
-  comments: "Управление комментариями",
-  discounts: "Управление скидками",
-};
+import PermissionsList, {
+  PERMISSION_NAMES,
+} from "../../components/PermissionsList";
 
 interface AdminFormData {
   full_name: string;
@@ -559,8 +552,6 @@ const AdminPowers = () => {
 
   const handleUnAssignAdminPower = async (companyId: string) => {
     try {
-      console.log({ admin_id: newAdminId, company_id: companyId });
-
       await unAssignAdminPower({
         admin_id: newAdminId,
         company_id: companyId,
@@ -570,46 +561,7 @@ const AdminPowers = () => {
       console.log(error);
     }
   };
-
-  // Функция для проверки значения разрешения
-  const getPermissionValue = (
-    companyId: string,
-    permissionKey: string,
-  ): boolean => {
-    // Проверяем, есть ли компания в объекте разрешений
-    if (!companyPermissions[companyId]) {
-      console.log(`Компания ${companyId} не найдена в объекте разрешений`);
-      return false;
-    }
-
-    // Проверяем, есть ли такое разрешение для компании
-    if (companyPermissions[companyId][permissionKey] === undefined) {
-      console.log(
-        `Разрешение ${permissionKey} не найдено для компании ${companyId}`,
-      );
-      return false;
-    }
-
-    // Находим компанию в assignedCompanies для проверки ограничений
-    const assignedCompany = assignedCompanies?.data?.find(
-      (company: AssignedCompanyType) => company._id === companyId,
-    );
-
-    // Проверяем, разрешено ли это разрешение в assignedCompanies
-    const assignedPermissionValue = assignedCompany?.permissions
-      ? Boolean(
-          (assignedCompany.permissions as unknown as Record<string, any>)[
-            permissionKey
-          ],
-        )
-      : false;
-
-    // Текущее значение разрешения
-    const currentValue = Boolean(companyPermissions[companyId][permissionKey]);
-
-    // Если в assignedCompanies разрешение выключено, то оно должно быть выключено и здесь
-    return assignedPermissionValue ? currentValue : false;
-  };
+  console.log(isChangingAdmin || isUnAssigning);
 
   return (
     <div className={`container ${styles.adminPowers}`}>
@@ -711,135 +663,53 @@ const AdminPowers = () => {
                             />
                           }
                           menu={
-                            <div className={styles.permissionsList}>
-                              {Object.keys(company?.permissions || {}).map(
-                                (permission, index) => (
-                                  <div
-                                    className={styles.permissionItemHolder}
-                                    key={index}>
-                                    <div className={styles.permissionItem}>
-                                      <span>
-                                        {PERMISSION_NAMES[permission]}
-                                      </span>
-                                      <div className={styles.switchWrapper}>
-                                        <span
-                                          style={{
-                                            fontSize: "10px",
-                                            color: "#999",
-                                            marginRight: "5px",
-                                          }}>
-                                          {getPermissionValue(
-                                            company._id,
-                                            permission,
-                                          )
-                                            ? "Вкл"
-                                            : "Выкл"}
-                                        </span>
-                                        <label className={styles.switch}>
-                                          <input
-                                            type="checkbox"
-                                            checked={getPermissionValue(
-                                              company._id,
-                                              permission,
-                                            )}
-                                            onChange={() =>
-                                              handleToggleCompanyPermission(
-                                                company._id,
-                                                permission,
-                                              )
-                                            }
-                                            disabled={
-                                              // Проверяем ограничения из assignedCompanies
-                                              !assignedCompanies?.data?.find(
-                                                (ac: AssignedCompanyType) =>
-                                                  ac._id === company._id,
-                                              )?.permissions ||
-                                              !(
-                                                assignedCompanies?.data?.find(
-                                                  (ac: AssignedCompanyType) =>
-                                                    ac._id === company._id,
-                                                )
-                                                  ?.permissions as unknown as Record<
-                                                  string,
-                                                  boolean
-                                                >
-                                              )[permission]
-                                            }
-                                          />
-                                          <span
-                                            className={styles.slider}></span>
-                                        </label>
-                                        {/* Показываем подсказку, если разрешение ограничено в assignedCompanies */}
-                                        {assignedCompanies?.data?.find(
-                                          (ac: AssignedCompanyType) =>
-                                            ac._id === company._id,
-                                        )?.permissions &&
-                                          !(
-                                            assignedCompanies?.data?.find(
-                                              (ac: AssignedCompanyType) =>
-                                                ac._id === company._id,
-                                            )?.permissions as unknown as Record<
-                                              string,
-                                              boolean
-                                            >
-                                          )[permission] && (
-                                            <div
-                                              className={`${
-                                                styles.tooltipText
-                                              } ${
-                                                activeTooltip === index
-                                                  ? styles.active
-                                                  : ""
-                                              }`}>
-                                              Ограничено настройками компании
-                                            </div>
-                                          )}
-                                        {/* Показываем кнопку информации для ограничений */}
-                                        {assignedCompanies?.data?.find(
-                                          (ac: AssignedCompanyType) =>
-                                            ac._id === company._id,
-                                        )?.permissions &&
-                                          !(
-                                            assignedCompanies?.data?.find(
-                                              (ac: AssignedCompanyType) =>
-                                                ac._id === company._id,
-                                            )?.permissions as unknown as Record<
-                                              string,
-                                              boolean
-                                            >
-                                          )[permission] && (
-                                            <button
-                                              className={styles.infoButton}
-                                              style={{ color: "#ff9800" }}
-                                              onClick={(e) =>
-                                                handleTooltipToggle(index, e)
-                                              }>
-                                              !
-                                            </button>
-                                          )}
-                                      </div>
-                                    </div>
-                                  </div>
-                                ),
-                              )}
-                              <div className={styles.saveButtonWrapper}>
-                                <IconButton
-                                  isLoading={isLoading || isUnAssigning}
-                                  text="Развязать"
-                                  styleName="deleteButton"
-                                  onClick={() =>
-                                    handleUnAssignAdminPower(company._id)
-                                  }
-                                />
-                                <IconButton
-                                  isLoading={isLoading}
-                                  text="Cохранить"
-                                  styleName="linkColor"
-                                  onClick={() =>
-                                    handleSaveCompanyPermissions(company._id)
-                                  }
-                                />
-                              </div>
+                            <div>
+                              <PermissionsList
+                                permissions={
+                                  companyPermissions[company._id] || {}
+                                }
+                                onTogglePermission={(permissionKey) =>
+                                  handleToggleCompanyPermission(
+                                    company._id,
+                                    permissionKey,
+                                  )
+                                }
+                                isPermissionDisabled={(permissionKey) => {
+                                  // Проверяем ограничения из assignedCompanies
+                                  const assignedCompany =
+                                    assignedCompanies?.data?.find(
+                                      (ac: AssignedCompanyType) =>
+                                        ac._id === company._id,
+                                    );
+
+                                  if (!assignedCompany?.permissions)
+                                    return true;
+
+                                  return !(
+                                    assignedCompany.permissions as unknown as Record<
+                                      string,
+                                      boolean
+                                    >
+                                  )[permissionKey];
+                                }}
+                                onTooltipToggle={handleTooltipToggle}
+                                activeTooltip={activeTooltip}
+                                disabledTooltipText="Ограничено настройками компании"
+                                showSaveButton={true}
+                                showUnAssignButton={true}
+                                onSave={() =>
+                                  handleSaveCompanyPermissions(company._id)
+                                }
+                                isSaving={
+                                  isChangingAdmin || isUnAssigning || isLoading
+                                }
+                                hasChanges={hasCompanyPermissionsChanged(
+                                  company._id,
+                                )}
+                                handleUnAssignAdminPower={() =>
+                                  handleUnAssignAdminPower(company._id)
+                                }
+                              />
                             </div>
                           }
                         />
@@ -872,126 +742,48 @@ const AdminPowers = () => {
                       />
                     }
                     menu={
-                      <div className={styles.permissionsList}>
-                        {Object.keys(company?.permissions || {}).map(
-                          (permission, index) => (
-                            <div
-                              className={styles.permissionItemHolder}
-                              key={index}>
-                              <div className={styles.permissionItem}>
-                                <span>{PERMISSION_NAMES[permission]}</span>
-                                <div className={styles.switchWrapper}>
-                                  <span
-                                    style={{
-                                      fontSize: "10px",
-                                      color: "#999",
-                                      marginRight: "5px",
-                                    }}>
-                                    {getPermissionValue(company._id, permission)
-                                      ? "Вкл"
-                                      : "Выкл"}
-                                  </span>
-                                  <label className={styles.switch}>
-                                    <input
-                                      type="checkbox"
-                                      checked={getPermissionValue(
-                                        company._id,
-                                        permission,
-                                      )}
-                                      onChange={() =>
-                                        handleToggleCompanyPermission(
-                                          company._id,
-                                          permission,
-                                        )
-                                      }
-                                      disabled={
-                                        // Проверяем ограничения из assignedCompanies
-                                        !assignedCompanies?.data?.find(
-                                          (ac: AssignedCompanyType) =>
-                                            ac._id === company._id,
-                                        )?.permissions ||
-                                        !(
-                                          assignedCompanies?.data?.find(
-                                            (ac: AssignedCompanyType) =>
-                                              ac._id === company._id,
-                                          )?.permissions as unknown as Record<
-                                            string,
-                                            boolean
-                                          >
-                                        )[permission]
-                                      }
-                                    />
-                                    <span className={styles.slider}></span>
-                                  </label>
-                                  {/* Показываем подсказку, если разрешение ограничено в assignedCompanies */}
-                                  {assignedCompanies?.data?.find(
-                                    (ac: AssignedCompanyType) =>
-                                      ac._id === company._id,
-                                  )?.permissions &&
-                                    !(
-                                      assignedCompanies?.data?.find(
-                                        (ac: AssignedCompanyType) =>
-                                          ac._id === company._id,
-                                      )?.permissions as unknown as Record<
-                                        string,
-                                        boolean
-                                      >
-                                    )[permission] && (
-                                      <div
-                                        className={`${styles.tooltipText} ${
-                                          activeTooltip === index
-                                            ? styles.active
-                                            : ""
-                                        }`}>
-                                        Ограничено настройками компании
-                                      </div>
-                                    )}
-                                  {/* Показываем кнопку информации для ограничений */}
-                                  {assignedCompanies?.data?.find(
-                                    (ac: AssignedCompanyType) =>
-                                      ac._id === company._id,
-                                  )?.permissions &&
-                                    !(
-                                      assignedCompanies?.data?.find(
-                                        (ac: AssignedCompanyType) =>
-                                          ac._id === company._id,
-                                      )?.permissions as unknown as Record<
-                                        string,
-                                        boolean
-                                      >
-                                    )[permission] && (
-                                      <button
-                                        className={styles.infoButton}
-                                        style={{ color: "#ff9800" }}
-                                        onClick={(e) =>
-                                          handleTooltipToggle(index, e)
-                                        }>
-                                        !
-                                      </button>
-                                    )}
-                                </div>
-                              </div>
-                            </div>
-                          ),
-                        )}
-                        <div className={styles.saveButtonWrapper}>
-                          <IconButton
-                            isLoading={isLoading || isUnAssigning}
-                            text="Развязать"
-                            styleName="deleteButton"
-                            onClick={() =>
-                              handleUnAssignAdminPower(company._id)
-                            }
-                          />
-                          <IconButton
-                            isLoading={isLoading}
-                            text="Cохранить"
-                            styleName="linkColor"
-                            onClick={() =>
-                              handleSaveCompanyPermissions(company._id)
-                            }
-                          />
-                        </div>
+                      <div>
+                        <PermissionsList
+                          permissions={companyPermissions[company._id] || {}}
+                          onTogglePermission={(permissionKey) =>
+                            handleToggleCompanyPermission(
+                              company._id,
+                              permissionKey,
+                            )
+                          }
+                          isPermissionDisabled={(permissionKey) => {
+                            // Проверяем ограничения из assignedCompanies
+                            const assignedCompany =
+                              assignedCompanies?.data?.find(
+                                (ac: AssignedCompanyType) =>
+                                  ac._id === company._id,
+                              );
+
+                            if (!assignedCompany?.permissions) return true;
+
+                            return !(
+                              assignedCompany.permissions as unknown as Record<
+                                string,
+                                boolean
+                              >
+                            )[permissionKey];
+                          }}
+                          onTooltipToggle={handleTooltipToggle}
+                          activeTooltip={activeTooltip}
+                          disabledTooltipText="Ограничено настройками компании"
+                          showSaveButton={true}
+                          showUnAssignButton={false}
+                          onSave={() =>
+                            handleSaveCompanyPermissions(company._id)
+                          }
+                          isSaving={
+                            isChangingAdmin || isUnAssigning || isLoading
+                          }
+                          hasChanges={hasCompanyPermissionsChanged(company._id)}
+                          handleUnAssignAdminPower={() =>
+                            handleUnAssignAdminPower(company._id)
+                          }
+                        />
                       </div>
                     }
                   />
