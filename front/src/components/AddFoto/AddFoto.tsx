@@ -126,7 +126,7 @@ const AddFoto = ({
         )}
 
         <label htmlFor={id}>
-          <ReactSVG src="./iconsSvg/camera.fill.svg" />
+          <ReactSVG src="/iconsSvg/camera.fill.svg" />
           <span>Добавить фотографию</span>
         </label>
       </div>

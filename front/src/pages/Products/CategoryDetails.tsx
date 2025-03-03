@@ -4,47 +4,71 @@ import { useURLState } from "../../hooks/useURLState";
 import styles from "./Products.module.scss";
 import Loading from "../../components/Loading/Loading";
 import { useParams } from "react-router";
-import { useGetOneCategoryQuery } from "../../features/products/productsApi";
+import {
+  useGetAllProductsQuery,
+  useGetOneCategoryQuery,
+} from "../../features/products/productsApi";
 import OpenFromSide from "../../components/OpenFromSide/OpenFromSide";
 import AddNewProdMain from "./AddNewProdMain";
+import { useAppSelector } from "../../app/hooks";
+import { selectedCompany } from "../../features/company/companySlice";
+import FoodBox from "./FoodBox";
+import { FoodBoxType } from "../../types/foodType";
 
 const CategoryDetails = () => {
   const { categoryId } = useParams();
   const { setParam, getParam } = useURLState();
+  const company = useAppSelector(selectedCompany);
 
   const initialPage = Boolean(getParam("addNewProductByCategory"));
 
+  const { data, isLoading, isFetching } = useGetAllProductsQuery(
+    {
+      page: initialPage.toString(),
+      limit: "15",
+      category_id: categoryId,
+      company_id: company?._id || "",
+    },
+    { skip: !company?._id },
+  );
+
   const { data: category } = useGetOneCategoryQuery(categoryId);
 
+  if (!company) return <Loading />;
   return (
     <>
-      {false && <Loading />}
-      <div className="container adminList">
+      {(isLoading || isFetching) && <Loading />}
+      <div className={`container ${styles.categoryDetails}`}>
         <div className={styles.productsHeader}>
           <h2>{category?.data?.name}</h2>
           <div
             className={styles.addCategory}
             onClick={() => setParam("addNewProductByCategory", true)}>
-            <div>+</div>
+            <span>+</span>
           </div>
         </div>
 
-        {-1 > 0 ? (
-          <div>Nice</div>
+        {data?.data.length > 0 ? (
+          <div className={styles.foodBoxContainer}>
+            {data?.data.map((food: FoodBoxType) => (
+              <FoodBox key={food._id} food={food} />
+            ))}
+          </div>
         ) : (
-          <div className="adminList__main">
+          <div className={styles.main}>
             <Lottie animationData={search} />
           </div>
         )}
       </div>
 
-      <div>
-        <OpenFromSide
-          isOpen={initialPage}
-          onClose={() => setParam("addNewProductByCategory", false)}>
-          <AddNewProdMain />
-        </OpenFromSide>
-      </div>
+      <OpenFromSide
+        isOpen={initialPage}
+        onClose={() => setParam("addNewProductByCategory", false)}>
+        <AddNewProdMain
+          category={category?.data}
+          companyId={company?._id || ""}
+        />
+      </OpenFromSide>
     </>
   );
 };

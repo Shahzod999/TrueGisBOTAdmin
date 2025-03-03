@@ -9,14 +9,16 @@ import AdminPowers from "./AdminPowers";
 import { useURLState } from "../../hooks/useURLState";
 import { useGetAdminsQuery } from "../../features/admins/adminApi";
 import UserCard from "../Users/UserCard";
+import Loading from "../../components/Loading/Loading";
 const AdminList = () => {
   const { getParam, setParam } = useURLState();
   const initialPage = Boolean(getParam("addNewAdmin"));
   const adminPowerState = Boolean(getParam("adminPower"));
-  const { data: admins } = useGetAdminsQuery({});
+  const { data: admins, isLoading } = useGetAdminsQuery({});
 
   return (
     <>
+      {isLoading && <Loading />}
       <div className="container adminList">
         <h2>Админы</h2>
 

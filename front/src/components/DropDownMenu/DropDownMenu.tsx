@@ -60,7 +60,7 @@ const DropDownMenu = ({ toggle, menu, notAwalible }: DropDownMenuProps) => {
           <span
             className={`dropdown__icon ${open ? "dropdown__icon--open" : ""}`}>
             <ReactSVG
-              src="./arrows/arrowDown.svg"
+              src="/arrows/arrowDown.svg"
               className="actions__arrowRight"
             />
           </span>

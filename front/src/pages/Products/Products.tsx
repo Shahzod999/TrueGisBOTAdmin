@@ -9,14 +9,19 @@ import {
 } from "../../features/products/productsApi";
 import Loading from "../../components/Loading/Loading";
 import { errorToast, succesToast } from "../../features/Toast/toastSlice";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import IconTextArrow from "../../components/IconTextArrow/IconTextArrow";
 import { useNavigate } from "react-router";
 import AddNewCategory from "./AddNewCategory";
+import { singleCategoryType } from "../../types/categoryTypes";
+import { selectedCompany } from "../../features/company/companySlice";
 const Products = () => {
   const navigate = useNavigate();
   const { setParam } = useURLState();
-  const { data: category } = useGetCategoryQuery({});
+  const company = useAppSelector(selectedCompany);
+  const { data: category } = useGetCategoryQuery({
+    company_id: company?._id,
+  });
   const [addNewCategory, { isLoading }] = useAddNewCategoryMutation();
   const dispatch = useAppDispatch();
 
@@ -38,8 +43,6 @@ const Products = () => {
     navigate(`/category/${categoryId}`);
   };
 
-  console.log(category);
-
   return (
     <>
       {isLoading && <Loading />}
@@ -50,17 +53,18 @@ const Products = () => {
             <div
               className={styles.addCategory}
               onClick={() => setParam("addNewCategory", true)}>
-              <div>+</div>
+              <span>+</span>
             </div>
           )}
         </div>
 
         {category?.data.length > 0 ? (
           <div className={styles.categoryList}>
-            {category.data?.map((admin: any) => (
+            {category.data?.map((category: singleCategoryType) => (
               <IconTextArrow
-                text={admin.name}
-                onClick={() => handleCategoryInside(admin._id)}
+                key={category._id}
+                text={category.name}
+                onClick={() => handleCategoryInside(category._id)}
               />
             ))}
           </div>
