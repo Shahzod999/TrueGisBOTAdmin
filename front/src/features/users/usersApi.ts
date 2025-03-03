@@ -7,8 +7,19 @@ export const userApiSlice = apiSlice.injectEndpoints({
         url: "/delivery/admin/admin/assigned-companies",
         method: "GET",
       }),
+      providesTags: ["Admin"],
+    }),
+    getCurrentAdminAssignedCompanys: builder.query({
+      query: (id) => ({
+        url: `/delivery/admin/admin/assigned-companies?admin_id=${id}`,
+        method: "GET",
+      }),
+      providesTags: ["Admin"],
     }),
   }),
 });
 
-export const { useGetAssignedCompanyQuery } = userApiSlice;
+export const {
+  useGetAssignedCompanyQuery,
+  useGetCurrentAdminAssignedCompanysQuery,
+} = userApiSlice;

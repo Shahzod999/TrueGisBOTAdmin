@@ -8,6 +8,7 @@ interface IconButtonProps {
   styleName?: string; // Позволяет передавать стили от родителя
   style?: React.CSSProperties; // Позволяет передавать inline-стили
   onClick?: () => void;
+  isLoading?: boolean;
 }
 
 const IconButton = ({
@@ -16,11 +17,17 @@ const IconButton = ({
   styleName,
   style,
   onClick,
+  isLoading,
 }: IconButtonProps) => {
   return (
     <button
-      className={classNames(styles.button, styleName && styles[styleName])}
+      className={classNames(
+        styles.button,
+        styleName && styles[styleName],
+        isLoading && styles.loading,
+      )}
       style={style}
+      disabled={isLoading}
       onClick={onClick}>
       <ReactSVG src={icon || ""} />
       <span>{text}</span>

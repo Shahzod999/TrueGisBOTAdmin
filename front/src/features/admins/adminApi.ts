@@ -24,6 +24,14 @@ export const adminApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Admin"],
     }),
+    unAssignAdminPower: builder.mutation({
+      query: ({ admin_id, company_id }) => ({
+        url: "/delivery/admin/admin/unassign-company",
+        method: "DELETE",
+        body: { admin_id, company_id },
+      }),
+      invalidatesTags: ["Admin"],
+    }),
 
     getAdminById: builder.query({
       query: (id) => `/delivery/admin/admin/${id}`,
@@ -36,12 +44,13 @@ export const adminApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Admin"],
     }),
-    changeAdminPassword: builder.mutation({
+    changeAdmin: builder.mutation({
       query: ({ data, id }) => ({
         url: `/delivery/admin/admin/${id}`,
         method: "PUT",
         body: data,
       }),
+      invalidatesTags: ["Admin"],
     }),
   }),
 });
@@ -52,5 +61,6 @@ export const {
   useAssignAdminPowerMutation,
   useGetAdminByIdQuery,
   useDeleteAdminMutation,
-  useChangeAdminPasswordMutation,
+  useChangeAdminMutation,
+  useUnAssignAdminPowerMutation,
 } = adminApiSlice;

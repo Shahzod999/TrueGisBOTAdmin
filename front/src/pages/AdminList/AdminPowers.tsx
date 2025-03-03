@@ -6,33 +6,44 @@ import {
   useAssignAdminPowerMutation,
   useDeleteAdminMutation,
   useGetAdminByIdQuery,
+  useChangeAdminMutation,
+  useUnAssignAdminPowerMutation,
 } from "../../features/admins/adminApi";
 import { useSelector } from "react-redux";
 import { selectedCompany } from "../../features/company/companySlice";
 import { useAppDispatch } from "../../app/hooks";
-import { errorToast, succesToast } from "../../features/Toast/toastSlice";
+import {
+  errorToast,
+  infoToast,
+  succesToast,
+} from "../../features/Toast/toastSlice";
 import Loading from "../../components/Loading/Loading";
 import UserCard from "../Users/UserCard";
 import "./adminList.scss";
-// Массив названий разрешений для отображения в интерфейсе
-const PERMISSION_LABELS = [
-  "Управление администраторами",
-  "Аналитика",
-  "Управление категориями",
-  "Управление продуктами",
-  "Управление комментариями",
-  "Управление скидками",
-];
+import { ReactSVG } from "react-svg";
+import DropDownMenu from "../../components/DropDownMenu/DropDownMenu";
+import {
+  useGetAssignedCompanyQuery,
+  useGetCurrentAdminAssignedCompanysQuery,
+} from "../../features/users/usersApi";
+import FotoTextHint from "../../components/FotoTextHint/FotoTextHint";
+import { AssignedCompanyType } from "../../features/company/types";
 
-// Ключи разрешений для отправки на сервер
-const PERMISSION_KEYS = [
-  "admins",
-  "analytics",
-  "category",
-  "products",
-  "comments",
-  "discounts",
-];
+// Словарь для отображения названий разрешений
+const PERMISSION_NAMES: Record<string, string> = {
+  admins: "Управление администраторами",
+  analytics: "Аналитика",
+  category: "Управление категориями",
+  products: "Управление продуктами",
+  comments: "Управление комментариями",
+  discounts: "Управление скидками",
+};
+
+interface AdminFormData {
+  full_name: string;
+  password: string;
+  username: string;
+}
 
 const AdminPowers = () => {
   const navigate = useNavigate();
@@ -41,47 +52,195 @@ const AdminPowers = () => {
   const [searchParams] = useSearchParams();
   const newAdminId = searchParams.get("adminPower");
   const company = useSelector(selectedCompany);
+  const [changeAdmin, { isLoading: isChangingAdmin }] =
+    useChangeAdminMutation();
   const { data: admin, isLoading: isLoadingAdmin } = useGetAdminByIdQuery(
     newAdminId,
     { skip: !newAdminId },
   );
-
-  // Состояние для отслеживания, какая подсказка активна
-  const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
-
   const [deleteAdmin, { isLoading: isDeleting }] = useDeleteAdminMutation();
 
-  // Состояние для хранения разрешений текущего администратора
-  const [loggedAdminPermissions, setLoggedAdminPermissions] = useState<
-    boolean[]
-  >([]);
+  const { data: assignedCompanies } = useGetAssignedCompanyQuery({});
+  const { data: currentAdminAssignedCompanys } =
+    useGetCurrentAdminAssignedCompanysQuery(newAdminId);
+  const [unAssignAdminPower, { isLoading: isUnAssigning }] =
+    useUnAssignAdminPowerMutation();
 
-  // Состояние для хранения разрешений редактируемого администратора
-  const [permissions, setPermissions] = useState(
-    PERMISSION_LABELS.map(() => true),
+  const totalCompanies = assignedCompanies?.data?.filter(
+    (company: AssignedCompanyType) =>
+      !currentAdminAssignedCompanys?.data?.some(
+        (assignedCompany: AssignedCompanyType) =>
+          assignedCompany._id === company._id,
+      ),
   );
 
-  // Загружаем разрешения авторизованного администратора из company.permissions
-  useEffect(() => {
-    if (company?.permissions) {
-      const permissionsArray = PERMISSION_KEYS.map(
-        (key) => company.permissions[key] ?? false,
-      );
-      setLoggedAdminPermissions(permissionsArray);
-    }
-  }, [company]);
+  console.log(assignedCompanies, "все тут");
+  console.log(currentAdminAssignedCompanys, "currentAdminAssignedCompanys");
 
-  // Загружаем разрешения редактируемого администратора
+  const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [adminFormData, setAdminFormData] = useState<AdminFormData>({
+    full_name: "",
+    password: "",
+    username: "",
+  });
+
+  const [permissions, setPermissions] = useState<boolean[]>([]);
+
+  const [companyPermissions, setCompanyPermissions] = useState<
+    Record<string, Record<string, boolean>>
+  >({});
+  const [originalCompanyPermissions, setOriginalCompanyPermissions] = useState<
+    Record<string, Record<string, boolean>>
+  >({});
+
   useEffect(() => {
     if (admin?.data?.permissions) {
-      const permissionsArray = PERMISSION_KEYS.map(
+      const permissionsArray = Object.keys(admin.data.permissions).map(
         (key) => admin.data.permissions[key] ?? false,
       );
       setPermissions(permissionsArray);
     }
+
+    if (admin?.data) {
+      setAdminFormData({
+        full_name: admin.data.full_name || "",
+        username: admin.data.username || "",
+        password: "",
+      });
+    }
   }, [admin]);
 
-  // Обработчик клика для показа/скрытия подсказки
+  useEffect(() => {
+    if (assignedCompanies?.data && currentAdminAssignedCompanys?.data) {
+      console.log(
+        "Доступные компании (assignedCompanies):",
+        assignedCompanies.data,
+      );
+      console.log(
+        "Текущие компании администратора (currentAdminAssignedCompanys):",
+        currentAdminAssignedCompanys.data,
+      );
+
+      const permissionsMap: Record<string, Record<string, boolean>> = {};
+      const originalMap: Record<string, Record<string, boolean>> = {};
+
+      // Сначала обрабатываем текущие назначенные компании администратора
+      currentAdminAssignedCompanys.data.forEach(
+        (company: AssignedCompanyType) => {
+          console.log(
+            `Обработка компании ${company.name} (${company._id}) из currentAdminAssignedCompanys`,
+          );
+
+          if (company.permissions && typeof company.permissions === "object") {
+            const permissions: Record<string, boolean> = {};
+
+            // Находим соответствующую компанию в assignedCompanies для проверки ограничений
+            const assignedCompany = assignedCompanies.data.find(
+              (ac: AssignedCompanyType) => ac._id === company._id,
+            );
+
+            console.log(
+              `Найдена соответствующая компания в assignedCompanies:`,
+              assignedCompany,
+            );
+
+            Object.keys(company.permissions).forEach((key) => {
+              if (
+                company.permissions &&
+                typeof company.permissions === "object"
+              ) {
+                // Проверяем, что разрешение не превышает ограничение из assignedCompanies
+                const assignedPermissionValue = assignedCompany?.permissions
+                  ? Boolean(
+                      (
+                        assignedCompany.permissions as unknown as Record<
+                          string,
+                          any
+                        >
+                      )[key],
+                    )
+                  : false;
+
+                const currentPermissionValue = Boolean(
+                  (company.permissions as Record<string, any>)[key],
+                );
+
+                // Разрешение не может быть true, если в assignedCompanies оно false
+                permissions[key] = assignedPermissionValue
+                  ? currentPermissionValue
+                  : false;
+
+                console.log(
+                  `Разрешение ${key} для ${company.name}: assigned=${assignedPermissionValue}, current=${currentPermissionValue}, result=${permissions[key]}`,
+                );
+              } else {
+                permissions[key] = false;
+              }
+            });
+
+            permissionsMap[company._id] = permissions;
+            originalMap[company._id] = { ...permissions };
+          } else {
+            console.log(`Нет разрешений для компании ${company.name}`);
+            const defaultPermissions = Object.keys(PERMISSION_NAMES).reduce(
+              (obj, key) => {
+                obj[key] = false;
+                return obj;
+              },
+              {} as Record<string, boolean>,
+            );
+
+            permissionsMap[company._id] = defaultPermissions;
+            originalMap[company._id] = { ...defaultPermissions };
+          }
+        },
+      );
+
+      // Добавляем компании из assignedCompanies, которых нет в currentAdminAssignedCompanys
+      assignedCompanies.data.forEach((company: AssignedCompanyType) => {
+        if (
+          !permissionsMap[company._id] &&
+          company.permissions &&
+          typeof company.permissions === "object"
+        ) {
+          console.log(
+            `Добавление новой компании ${company.name} (${company._id}) из assignedCompanies`,
+          );
+
+          const permissions: Record<string, boolean> = {};
+
+          Object.keys(company.permissions).forEach((key) => {
+            // По умолчанию все разрешения выключены
+            permissions[key] = false;
+            console.log(
+              `Разрешение ${key} для новой компании ${company.name} установлено в false`,
+            );
+          });
+
+          permissionsMap[company._id] = permissions;
+          originalMap[company._id] = { ...permissions };
+        }
+      });
+
+      console.log("Инициализированные разрешения:", permissionsMap);
+      console.log("Оригинальные разрешения:", originalMap);
+
+      setCompanyPermissions(permissionsMap);
+      setOriginalCompanyPermissions(originalMap);
+    }
+  }, [assignedCompanies, currentAdminAssignedCompanys]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setAdminFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const handleTooltipToggle = (index: number, e: React.MouseEvent) => {
     e.stopPropagation();
     if (activeTooltip === index) {
@@ -91,7 +250,6 @@ const AdminPowers = () => {
     }
   };
 
-  // Закрытие подсказки при клике вне компонента
   useEffect(() => {
     const handleClickOutside = () => {
       setActiveTooltip(null);
@@ -105,47 +263,286 @@ const AdminPowers = () => {
 
   const [assignAdminPower, { isLoading }] = useAssignAdminPowerMutation();
 
-  // Обновленная функция переключения разрешений с проверкой
-  const togglePermission = (index: number) => {
-    setPermissions((prev) => {
-      const newValue = !prev[index];
-
-      // Если пытаемся включить разрешение, которого нет у текущего админа, запрещаем
-      if (newValue && !loggedAdminPermissions[index]) {
-        dispatch(errorToast("У вас нет прав для назначения этого разрешения"));
-        return prev;
-      }
-
-      return prev.map((value, i) => (i === index ? newValue : value));
-    });
-  };
-
-  const handleSubmit = async () => {
-    // Проверяем, что не пытаемся установить разрешения выше, чем у текущего админа
-    const hasInvalidPermissions = permissions.some(
-      (permission, index) => permission && !loggedAdminPermissions[index],
-    );
-
-    if (hasInvalidPermissions) {
-      dispatch(errorToast("Нельзя назначить разрешения выше, чем у вас"));
+  const handleToggleCompanyPermission = (
+    companyId: string,
+    permissionKey: string,
+  ) => {
+    if (!Object.keys(PERMISSION_NAMES).includes(permissionKey)) {
+      console.log(`Неизвестный ключ разрешения: ${permissionKey}`);
       return;
     }
 
-    const permissionsObject = PERMISSION_KEYS.reduce((obj, key, index) => {
-      obj[key] = permissions[index];
-      return obj;
-    }, {} as Record<string, boolean>);
+    // Находим компанию в assignedCompanies для проверки ограничений
+    const assignedCompany = assignedCompanies?.data?.find(
+      (company: AssignedCompanyType) => company._id === companyId,
+    );
 
+    // Проверяем, разрешено ли включение этого разрешения
+    const assignedPermissionValue = assignedCompany?.permissions
+      ? Boolean(
+          (assignedCompany.permissions as unknown as Record<string, any>)[
+            permissionKey
+          ],
+        )
+      : false;
+
+    console.log(
+      `Переключение разрешения ${permissionKey} для компании ${companyId}`,
+    );
+    console.log(`Ограничение из assignedCompanies: ${assignedPermissionValue}`);
+    console.log(
+      `Текущее значение:`,
+      companyPermissions[companyId]?.[permissionKey],
+    );
+
+    // Если текущее значение false и мы пытаемся его включить, проверяем ограничения
+    const currentValue =
+      companyPermissions[companyId]?.[permissionKey] || false;
+
+    if (!currentValue && !assignedPermissionValue) {
+      console.log(
+        `Разрешение ${permissionKey} ограничено для компании ${companyId} и не может быть включено`,
+      );
+      dispatch(
+        errorToast("Это разрешение не может быть включено из-за ограничений"),
+      );
+      return;
+    }
+
+    setCompanyPermissions((prev) => {
+      if (!prev[companyId]) {
+        console.log(
+          `Компания ${companyId} не найдена в объекте разрешений, создаем новый объект`,
+        );
+
+        const defaultPermissions = Object.keys(PERMISSION_NAMES).reduce(
+          (obj, key) => {
+            // Устанавливаем разрешения в соответствии с ограничениями
+            const canEnable = assignedCompany?.permissions
+              ? Boolean(
+                  (
+                    assignedCompany.permissions as unknown as Record<
+                      string,
+                      any
+                    >
+                  )[key],
+                )
+              : false;
+
+            obj[key] = key === permissionKey && canEnable ? true : false;
+            return obj;
+          },
+          {} as Record<string, boolean>,
+        );
+
+        return {
+          ...prev,
+          [companyId]: defaultPermissions,
+        };
+      }
+
+      const companyPerms = { ...prev[companyId] };
+
+      // Если текущее значение false и мы пытаемся его включить, проверяем ограничения
+      if (!companyPerms[permissionKey]) {
+        // Можем включить только если это разрешено в assignedCompanies
+        companyPerms[permissionKey] = assignedPermissionValue;
+      } else {
+        // Выключить разрешение можно всегда
+        companyPerms[permissionKey] = false;
+      }
+
+      console.log(`Новое значение:`, companyPerms[permissionKey]);
+
+      return {
+        ...prev,
+        [companyId]: companyPerms,
+      };
+    });
+  };
+
+  const hasCompanyPermissionsChanged = (companyId: string) => {
+    if (
+      !originalCompanyPermissions[companyId] ||
+      !companyPermissions[companyId]
+    ) {
+      console.log(
+        `Нет оригинальных или текущих разрешений для компании ${companyId}`,
+      );
+      return false;
+    }
+
+    const original = originalCompanyPermissions[companyId];
+    const current = companyPermissions[companyId];
+
+    // Находим компанию в assignedCompanies для проверки ограничений
+    const assignedCompany = assignedCompanies?.data?.find(
+      (company: AssignedCompanyType) => company._id === companyId,
+    );
+
+    const hasChanges = Object.keys(original).some((key) => {
+      const originalValue = Boolean(original[key]);
+      const currentValue = Boolean(current[key]);
+
+      // Проверяем, разрешено ли это разрешение в assignedCompanies
+      const assignedPermissionValue = assignedCompany?.permissions
+        ? Boolean(
+            (assignedCompany.permissions as unknown as Record<string, any>)[
+              key
+            ],
+          )
+        : false;
+
+      // Если разрешение ограничено в assignedCompanies, то оно должно быть false
+      const validCurrentValue = assignedPermissionValue ? currentValue : false;
+
+      const changed = originalValue !== validCurrentValue;
+
+      if (changed) {
+        console.log(
+          `Разрешение ${key} изменено: ${originalValue} -> ${validCurrentValue} (ограничение: ${assignedPermissionValue})`,
+        );
+      }
+
+      return changed;
+    });
+
+    console.log(`Компания ${companyId} имеет изменения: ${hasChanges}`);
+    return hasChanges;
+  };
+
+  const handleSaveCompanyPermissions = async (companyId: string) => {
+    if (!hasCompanyPermissionsChanged(companyId)) {
+      dispatch(infoToast("Полномочия не изменены"));
+      return;
+    }
+
+    try {
+      // Находим компанию в assignedCompanies для проверки ограничений
+      const assignedCompany = assignedCompanies?.data?.find(
+        (company: AssignedCompanyType) => company._id === companyId,
+      );
+
+      // Применяем ограничения перед сохранением
+      const permissionsToSave = { ...companyPermissions[companyId] };
+
+      // Проверяем каждое разрешение на соответствие ограничениям
+      Object.keys(permissionsToSave).forEach((key) => {
+        const assignedPermissionValue = assignedCompany?.permissions
+          ? Boolean(
+              (assignedCompany.permissions as unknown as Record<string, any>)[
+                key
+              ],
+            )
+          : false;
+
+        // Если разрешение ограничено в assignedCompanies, то оно должно быть false
+        if (!assignedPermissionValue) {
+          permissionsToSave[key] = false;
+        }
+      });
+
+      console.log(
+        {
+          company_id: companyId,
+          admin_id: newAdminId,
+          permissions: permissionsToSave,
+        },
+        "Сохраняемые разрешения",
+      );
+
+      // Проверяем, что все необходимые данные присутствуют
+      if (!companyId || !newAdminId) {
+        console.error("Отсутствуют необходимые данные для сохранения:", {
+          companyId,
+          newAdminId,
+        });
+        dispatch(errorToast("Ошибка: отсутствуют необходимые данные"));
+        return;
+      }
+
+      // Используем try-catch внутри основного try блока для обработки ошибок unwrap()
+      try {
+        await assignAdminPower({
+          company_id: companyId,
+          admin_id: newAdminId,
+          permissions: permissionsToSave,
+        }).unwrap();
+
+        dispatch(succesToast("Разрешения успешно обновлены"));
+      } catch (unwrapError: any) {
+        console.error("Ошибка при unwrap:", unwrapError);
+
+        // Проверяем, есть ли сообщение об ошибке в ответе API
+        if (unwrapError.data && unwrapError.data.message) {
+          dispatch(errorToast(unwrapError.data.message));
+        } else if (unwrapError.message) {
+          dispatch(errorToast(unwrapError.message));
+        } else {
+          dispatch(errorToast("Ошибка при сохранении разрешений"));
+        }
+
+        // Не пробрасываем ошибку дальше, чтобы не вызвать внешний catch блок
+        return;
+      }
+    } catch (error: any) {
+      console.error("Общая ошибка при сохранении разрешений:", error);
+
+      // Проверяем, есть ли сообщение об ошибке
+      if (error.message) {
+        dispatch(errorToast(error.message));
+      } else {
+        dispatch(errorToast("Неизвестная ошибка при сохранении разрешений"));
+      }
+    }
+  };
+
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
+
+    const permissionsObject = Object.keys(company?.permissions || {}).reduce(
+      (obj, key, index) => {
+        obj[key] = permissions[index];
+        return obj;
+      },
+      {} as Record<string, boolean>,
+    );
     try {
       await assignAdminPower({
         company_id: company?._id,
         admin_id: newAdminId,
         permissions: permissionsObject,
       }).unwrap();
-      dispatch(succesToast("Полномочия успешно назначены"));
+      // Проверяем, были ли внесены изменения в данные администратора
+      const isDataChanged =
+        admin?.data?.full_name !== adminFormData.full_name ||
+        admin?.data?.username !== adminFormData.username ||
+        adminFormData.password.length > 0;
+
+      // Отправляем запрос на изменение данных только если были внесены изменения
+      if (isDataChanged) {
+        if (Object.keys(adminFormData).length > 0) {
+          console.log(adminFormData);
+
+          await changeAdmin({
+            id: newAdminId,
+            data: adminFormData,
+          }).unwrap();
+        }
+      }
+
+      dispatch(succesToast("Данные администратора успешно обновлены"));
       navigate("/adminList");
     } catch (error) {
-      dispatch(errorToast("Ошибка при назначении разрешений"));
+      console.log(error);
+      dispatch(
+        errorToast(
+          (error as any).data.message ||
+            "Ошибка при обновлении данных администратора",
+        ),
+      );
     }
   };
 
@@ -160,59 +557,449 @@ const AdminPowers = () => {
     }
   };
 
-  console.log(admin, "admin");
+  const handleUnAssignAdminPower = async (companyId: string) => {
+    try {
+      console.log({ admin_id: newAdminId, company_id: companyId });
+
+      await unAssignAdminPower({
+        admin_id: newAdminId,
+        company_id: companyId,
+      }).unwrap();
+      dispatch(succesToast("Разрешения успешно удалены"));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Функция для проверки значения разрешения
+  const getPermissionValue = (
+    companyId: string,
+    permissionKey: string,
+  ): boolean => {
+    // Проверяем, есть ли компания в объекте разрешений
+    if (!companyPermissions[companyId]) {
+      console.log(`Компания ${companyId} не найдена в объекте разрешений`);
+      return false;
+    }
+
+    // Проверяем, есть ли такое разрешение для компании
+    if (companyPermissions[companyId][permissionKey] === undefined) {
+      console.log(
+        `Разрешение ${permissionKey} не найдено для компании ${companyId}`,
+      );
+      return false;
+    }
+
+    // Находим компанию в assignedCompanies для проверки ограничений
+    const assignedCompany = assignedCompanies?.data?.find(
+      (company: AssignedCompanyType) => company._id === companyId,
+    );
+
+    // Проверяем, разрешено ли это разрешение в assignedCompanies
+    const assignedPermissionValue = assignedCompany?.permissions
+      ? Boolean(
+          (assignedCompany.permissions as unknown as Record<string, any>)[
+            permissionKey
+          ],
+        )
+      : false;
+
+    // Текущее значение разрешения
+    const currentValue = Boolean(companyPermissions[companyId][permissionKey]);
+
+    // Если в assignedCompanies разрешение выключено, то оно должно быть выключено и здесь
+    return assignedPermissionValue ? currentValue : false;
+  };
 
   return (
     <div className={`container ${styles.adminPowers}`}>
-      {(isLoading || isDeleting || isLoadingAdmin) && <Loading />}
-
-      <div className="adminList__list">
+      {(isLoading || isDeleting || isLoadingAdmin || isChangingAdmin) && (
+        <Loading />
+      )}
+      <div className="adminList__List">
         <div className="adminList__list-main">
           <UserCard name={admin?.data?.full_name} />
         </div>
       </div>
 
-      <div className={styles.titleOneAdmin}>
-        <h2>Полномочия админа</h2>
-      </div>
-
-      <div className={styles.permissionsList}>
-        {PERMISSION_LABELS.map((permission, index) => (
-          <div className={styles.permissionItemHolder} key={index}>
-            <div className={styles.permissionItem}>
-              <span>{permission}</span>
-              <div className={styles.switchWrapper}>
-                <label
-                  className={`${styles.switch} ${
-                    !loggedAdminPermissions[index] ? styles.disabledSwitch : ""
-                  }`}>
+      <div className={styles.adminPowers__holder}>
+        <DropDownMenu
+          toggle={
+            <div className={styles.titleOneAdmin}>
+              <ReactSVG src="./iconsSvg/settings.svg" />
+              <h2>Изменение данных</h2>
+            </div>
+          }
+          menu={
+            <div className={styles.editAdminForm}>
+              <form className={styles.form} onSubmit={handleSubmit}>
+                <div className={styles.inputWrapper}>
                   <input
-                    type="checkbox"
-                    checked={permissions[index]}
-                    onChange={() => togglePermission(index)}
-                    disabled={!loggedAdminPermissions[index]}
+                    type="text"
+                    placeholder="ФИО"
+                    name="full_name"
+                    value={adminFormData.full_name}
+                    onChange={handleInputChange}
+                    required
                   />
-                  <span className={styles.slider}></span>
-                </label>
-                {!loggedAdminPermissions[index] && (
-                  <div
-                    className={`${styles.tooltipText} ${
-                      activeTooltip === index ? styles.active : ""
-                    }`}>
-                    Недостаточно доступа
+                </div>
+
+                <div className={styles.inputWrapper}>
+                  <input
+                    type="text"
+                    placeholder="Имя пользователя"
+                    name="username"
+                    value={adminFormData.username}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+
+                <div className={styles.inputWrapper}>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Новый пароль (оставьте пустым, чтобы не менять)"
+                    name="password"
+                    value={adminFormData.password}
+                    onChange={handleInputChange}
+                  />
+
+                  <ReactSVG
+                    src={
+                      showPassword
+                        ? "./Other/unVisible.svg"
+                        : "./Other/visible.svg"
+                    }
+                    onClick={() => setShowPassword(!showPassword)}
+                  />
+                </div>
+              </form>
+            </div>
+          }
+        />
+
+        <DropDownMenu
+          toggle={
+            <div className={styles.titleOneAdmin}>
+              <ReactSVG src="./iconsSvg/connect.svg" />
+              <h2>Назначенные компании</h2>
+            </div>
+          }
+          menu={
+            <div className={styles.companiesList}>
+              <div className={styles.connectedCompanies}>
+                <h4>Назначенные компании</h4>
+                {currentAdminAssignedCompanys?.data?.length > 0 ? (
+                  <>
+                    {currentAdminAssignedCompanys.data.map(
+                      (company: AssignedCompanyType) => (
+                        <DropDownMenu
+                          key={company._id}
+                          toggle={
+                            <FotoTextHint
+                              image={company.logo || "./default.jpg"}
+                              title={company.name}
+                              smallText={company.address || ""}
+                              option="infoMenu"
+                              onClick={() =>
+                                console.log(
+                                  company,
+                                  "Компания с разрешениями:",
+                                  companyPermissions[company._id],
+                                )
+                              }
+                            />
+                          }
+                          menu={
+                            <div className={styles.permissionsList}>
+                              {Object.keys(company?.permissions || {}).map(
+                                (permission, index) => (
+                                  <div
+                                    className={styles.permissionItemHolder}
+                                    key={index}>
+                                    <div className={styles.permissionItem}>
+                                      <span>
+                                        {PERMISSION_NAMES[permission]}
+                                      </span>
+                                      <div className={styles.switchWrapper}>
+                                        <span
+                                          style={{
+                                            fontSize: "10px",
+                                            color: "#999",
+                                            marginRight: "5px",
+                                          }}>
+                                          {getPermissionValue(
+                                            company._id,
+                                            permission,
+                                          )
+                                            ? "Вкл"
+                                            : "Выкл"}
+                                        </span>
+                                        <label className={styles.switch}>
+                                          <input
+                                            type="checkbox"
+                                            checked={getPermissionValue(
+                                              company._id,
+                                              permission,
+                                            )}
+                                            onChange={() =>
+                                              handleToggleCompanyPermission(
+                                                company._id,
+                                                permission,
+                                              )
+                                            }
+                                            disabled={
+                                              // Проверяем ограничения из assignedCompanies
+                                              !assignedCompanies?.data?.find(
+                                                (ac: AssignedCompanyType) =>
+                                                  ac._id === company._id,
+                                              )?.permissions ||
+                                              !(
+                                                assignedCompanies?.data?.find(
+                                                  (ac: AssignedCompanyType) =>
+                                                    ac._id === company._id,
+                                                )
+                                                  ?.permissions as unknown as Record<
+                                                  string,
+                                                  boolean
+                                                >
+                                              )[permission]
+                                            }
+                                          />
+                                          <span
+                                            className={styles.slider}></span>
+                                        </label>
+                                        {/* Показываем подсказку, если разрешение ограничено в assignedCompanies */}
+                                        {assignedCompanies?.data?.find(
+                                          (ac: AssignedCompanyType) =>
+                                            ac._id === company._id,
+                                        )?.permissions &&
+                                          !(
+                                            assignedCompanies?.data?.find(
+                                              (ac: AssignedCompanyType) =>
+                                                ac._id === company._id,
+                                            )?.permissions as unknown as Record<
+                                              string,
+                                              boolean
+                                            >
+                                          )[permission] && (
+                                            <div
+                                              className={`${
+                                                styles.tooltipText
+                                              } ${
+                                                activeTooltip === index
+                                                  ? styles.active
+                                                  : ""
+                                              }`}>
+                                              Ограничено настройками компании
+                                            </div>
+                                          )}
+                                        {/* Показываем кнопку информации для ограничений */}
+                                        {assignedCompanies?.data?.find(
+                                          (ac: AssignedCompanyType) =>
+                                            ac._id === company._id,
+                                        )?.permissions &&
+                                          !(
+                                            assignedCompanies?.data?.find(
+                                              (ac: AssignedCompanyType) =>
+                                                ac._id === company._id,
+                                            )?.permissions as unknown as Record<
+                                              string,
+                                              boolean
+                                            >
+                                          )[permission] && (
+                                            <button
+                                              className={styles.infoButton}
+                                              style={{ color: "#ff9800" }}
+                                              onClick={(e) =>
+                                                handleTooltipToggle(index, e)
+                                              }>
+                                              !
+                                            </button>
+                                          )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ),
+                              )}
+                              <div className={styles.saveButtonWrapper}>
+                                <IconButton
+                                  isLoading={isLoading || isUnAssigning}
+                                  text="Развязать"
+                                  styleName="deleteButton"
+                                  onClick={() =>
+                                    handleUnAssignAdminPower(company._id)
+                                  }
+                                />
+                                <IconButton
+                                  isLoading={isLoading}
+                                  text="Cохранить"
+                                  styleName="linkColor"
+                                  onClick={() =>
+                                    handleSaveCompanyPermissions(company._id)
+                                  }
+                                />
+                              </div>
+                            </div>
+                          }
+                        />
+                      ),
+                    )}
+                  </>
+                ) : (
+                  <div className={styles.noCompanies}>
+                    Нет доступных компаний
                   </div>
                 )}
-                {!loggedAdminPermissions[index] && (
-                  <button
-                    className={styles.infoButton}
-                    onClick={(e) => handleTooltipToggle(index, e)}>
-                    i
-                  </button>
-                )}
+
+                <h4>Все компании</h4>
+                {totalCompanies?.map((company: AssignedCompanyType) => (
+                  <DropDownMenu
+                    key={company._id}
+                    toggle={
+                      <FotoTextHint
+                        image={company.logo || "./default.jpg"}
+                        title={company.name}
+                        smallText={company.address || ""}
+                        option="infoMenu"
+                        onClick={() =>
+                          console.log(
+                            company,
+                            "Компания с разрешениями:",
+                            companyPermissions[company._id],
+                          )
+                        }
+                      />
+                    }
+                    menu={
+                      <div className={styles.permissionsList}>
+                        {Object.keys(company?.permissions || {}).map(
+                          (permission, index) => (
+                            <div
+                              className={styles.permissionItemHolder}
+                              key={index}>
+                              <div className={styles.permissionItem}>
+                                <span>{PERMISSION_NAMES[permission]}</span>
+                                <div className={styles.switchWrapper}>
+                                  <span
+                                    style={{
+                                      fontSize: "10px",
+                                      color: "#999",
+                                      marginRight: "5px",
+                                    }}>
+                                    {getPermissionValue(company._id, permission)
+                                      ? "Вкл"
+                                      : "Выкл"}
+                                  </span>
+                                  <label className={styles.switch}>
+                                    <input
+                                      type="checkbox"
+                                      checked={getPermissionValue(
+                                        company._id,
+                                        permission,
+                                      )}
+                                      onChange={() =>
+                                        handleToggleCompanyPermission(
+                                          company._id,
+                                          permission,
+                                        )
+                                      }
+                                      disabled={
+                                        // Проверяем ограничения из assignedCompanies
+                                        !assignedCompanies?.data?.find(
+                                          (ac: AssignedCompanyType) =>
+                                            ac._id === company._id,
+                                        )?.permissions ||
+                                        !(
+                                          assignedCompanies?.data?.find(
+                                            (ac: AssignedCompanyType) =>
+                                              ac._id === company._id,
+                                          )?.permissions as unknown as Record<
+                                            string,
+                                            boolean
+                                          >
+                                        )[permission]
+                                      }
+                                    />
+                                    <span className={styles.slider}></span>
+                                  </label>
+                                  {/* Показываем подсказку, если разрешение ограничено в assignedCompanies */}
+                                  {assignedCompanies?.data?.find(
+                                    (ac: AssignedCompanyType) =>
+                                      ac._id === company._id,
+                                  )?.permissions &&
+                                    !(
+                                      assignedCompanies?.data?.find(
+                                        (ac: AssignedCompanyType) =>
+                                          ac._id === company._id,
+                                      )?.permissions as unknown as Record<
+                                        string,
+                                        boolean
+                                      >
+                                    )[permission] && (
+                                      <div
+                                        className={`${styles.tooltipText} ${
+                                          activeTooltip === index
+                                            ? styles.active
+                                            : ""
+                                        }`}>
+                                        Ограничено настройками компании
+                                      </div>
+                                    )}
+                                  {/* Показываем кнопку информации для ограничений */}
+                                  {assignedCompanies?.data?.find(
+                                    (ac: AssignedCompanyType) =>
+                                      ac._id === company._id,
+                                  )?.permissions &&
+                                    !(
+                                      assignedCompanies?.data?.find(
+                                        (ac: AssignedCompanyType) =>
+                                          ac._id === company._id,
+                                      )?.permissions as unknown as Record<
+                                        string,
+                                        boolean
+                                      >
+                                    )[permission] && (
+                                      <button
+                                        className={styles.infoButton}
+                                        style={{ color: "#ff9800" }}
+                                        onClick={(e) =>
+                                          handleTooltipToggle(index, e)
+                                        }>
+                                        !
+                                      </button>
+                                    )}
+                                </div>
+                              </div>
+                            </div>
+                          ),
+                        )}
+                        <div className={styles.saveButtonWrapper}>
+                          <IconButton
+                            isLoading={isLoading || isUnAssigning}
+                            text="Развязать"
+                            styleName="deleteButton"
+                            onClick={() =>
+                              handleUnAssignAdminPower(company._id)
+                            }
+                          />
+                          <IconButton
+                            isLoading={isLoading}
+                            text="Cохранить"
+                            styleName="linkColor"
+                            onClick={() =>
+                              handleSaveCompanyPermissions(company._id)
+                            }
+                          />
+                        </div>
+                      </div>
+                    }
+                  />
+                ))}
               </div>
             </div>
-          </div>
-        ))}
+          }
+        />
       </div>
 
       <IconButton
@@ -220,11 +1007,10 @@ const AdminPowers = () => {
         styleName="deleteButton"
         onClick={handleDeleteAdmin}
       />
-      <br />
       <IconButton
         text="Подтвердить"
         styleName="linkColor"
-        onClick={handleSubmit}
+        onClick={() => handleSubmit()}
       />
     </div>
   );

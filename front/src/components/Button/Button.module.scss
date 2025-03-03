@@ -28,6 +28,10 @@
     }
 }
 
+.loading {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 
 .hintColor {
     background: rgba(116, 116, 128, 0.08) !important;

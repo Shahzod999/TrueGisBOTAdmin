@@ -11,6 +11,7 @@
         line-height: 121%;
         letter-spacing: 0.01em;
         color: var(--text-color);
+        margin-bottom: 20px;
     }
 
     &__list {
@@ -19,7 +20,6 @@
         &-main {
             border-radius: 16px;
             background-color: var(--bg-color);
-            margin: 16px 0;
             overflow: hidden;
         }
     }
