@@ -57,8 +57,6 @@
 }
 
 .categoryList {
-    margin-top: 50px;
-    margin-bottom: 50px;
     flex: 1;
 }
 
@@ -161,44 +159,28 @@
             }
         }
 
-        .discountToggle {
-            margin-bottom: 10px;
-            
-            label {
-                display: flex;
-                align-items: center;
-                font-size: 14px;
-                color: var(--text-color);
-                cursor: pointer;
-                
-                input[type="checkbox"] {
-                    width: auto;
-                    margin-right: 8px;
-                }
-            }
-        }
-        
+
         .discountForm {
-            background-color: rgba(118, 118, 128, 0.05);
+            background-color: color-mix(in srgb, var(--hint-color), transparent 80%);
             border-radius: 10px;
             padding: 12px;
             margin-top: 10px;
-            
+
             .formGroup {
                 margin-bottom: 15px;
-                
+
                 &:last-child {
                     margin-bottom: 0;
                 }
-                
+
                 &::after {
                     display: none;
                 }
-                
-                input[type="date"] {
-                    background-color: rgba(255, 255, 255, 0.8);
-                    border-radius: 8px;
+
+                input {
                     padding: 10px;
+                    border-radius: 8px;
+                    background-color: var(--bg-color);
                 }
             }
         }
@@ -276,7 +258,7 @@
 }
 
 .textAreaProd {
-    margin-top: 24px;
+    margin-top: 0px;
     margin-bottom: auto;
 
     textarea {
@@ -285,15 +267,13 @@
         border: none;
         outline: none;
         color: var(--text-color);
-        background-color: rgba(118, 118, 128, 0.12);
-
+        background-color: color-mix(in srgb, var(--hint-color), transparent 85%);
         resize: none;
         border-radius: 16px;
-        background: rgba(118, 118, 128, 0.12);
         min-width: 105px;
         min-height: 100px;
 
-        margin: 16px 0;
+        margin: 4px 0;
 
         &::placeholder {
             font-family: var(--font-family);

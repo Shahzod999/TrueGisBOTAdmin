@@ -15,6 +15,7 @@ import { useNavigate } from "react-router";
 import AddNewCategory from "./AddNewCategory";
 import { singleCategoryType } from "../../types/categoryTypes";
 import { selectedCompany } from "../../features/company/companySlice";
+import { ReactSVG } from "react-svg";
 const Products = () => {
   const navigate = useNavigate();
   const { setParam } = useURLState();
@@ -49,12 +50,14 @@ const Products = () => {
       <div className="container adminList">
         <div className={styles.productsHeader}>
           <h2>Категории</h2>
-          {category?.data.length == 0 && (
+          {category?.data.length == 0 ? (
             <div
               className={styles.addCategory}
               onClick={() => setParam("addNewCategory", true)}>
               <span>+</span>
             </div>
+          ) : (
+            <ReactSVG src="/iconsSvg/edit.svg" className={styles.editIcon} />
           )}
         </div>
 

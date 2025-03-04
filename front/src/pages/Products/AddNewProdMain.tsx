@@ -10,6 +10,7 @@ import useUploadImage from "../../hooks/useUploadImage";
 import { useAppDispatch } from "../../app/hooks";
 import { errorToast, succesToast } from "../../features/Toast/toastSlice";
 import Loading from "../../components/Loading/Loading";
+import { useURLState } from "../../hooks/useURLState";
 
 interface ProductFormData {
   name: string;
@@ -32,6 +33,7 @@ const AddNewProdMain = ({
   category: singleCategoryType;
   companyId: string;
 }) => {
+  const { setParam } = useURLState();
   const dispatch = useAppDispatch();
   const [imagesArray, setimagesArray] = useState<
     (PhotosSample & { file?: File })[]
@@ -39,11 +41,10 @@ const AddNewProdMain = ({
   const [addNewProduct, { isLoading }] = useAddNewProductsMutation();
   const { handleImagesUpload, isLoading: loadingUploadImg } = useUploadImage();
   const [choosenCurrency, setChoosenCurrency] = useState<string>("");
-  const [hasDiscount, setHasDiscount] = useState<boolean>(false);
   const [discount, setDiscount] = useState<DiscountType>({
     price: "",
     start_date: "",
-    end_date: ""
+    end_date: "",
   });
 
   const [productData, setProductData] = useState<ProductFormData>({
@@ -64,30 +65,12 @@ const AddNewProdMain = ({
     }));
   };
 
-  const handleDiscountChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleDiscountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setDiscount((prev) => ({
       ...prev,
       [name]: value,
     }));
-  };
-
-  const toggleDiscount = () => {
-    setHasDiscount(!hasDiscount);
-    if (!hasDiscount) {
-      // Установить текущую дату как начальную и дату через неделю как конечную
-      const today = new Date();
-      const nextWeek = new Date();
-      nextWeek.setDate(today.getDate() + 7);
-      
-      setDiscount({
-        price: "",
-        start_date: today.toISOString().split('T')[0],
-        end_date: nextWeek.toISOString().split('T')[0]
-      });
-    }
   };
 
   const handleSubmit = async () => {
@@ -102,19 +85,19 @@ const AddNewProdMain = ({
           data: { message: "Выберите валюту" },
         };
       }
-      
+
       if (!productData.name.trim()) {
         throw {
           data: { message: "Введите название продукта" },
         };
       }
-      
+
       if (!productData.price || parseFloat(productData.price) <= 0) {
         throw {
           data: { message: "Укажите корректную цену продукта" },
         };
       }
-      
+
       if (!productData.description.trim()) {
         throw {
           data: { message: "Добавьте описание продукта" },
@@ -140,38 +123,42 @@ const AddNewProdMain = ({
 
       // Проверка валидности дат скидки
       let discountData = undefined;
-      if (hasDiscount) {
+      if (discount.price) {
         if (!discount.price || parseFloat(discount.price) <= 0) {
           throw {
             data: { message: "Укажите корректную цену со скидкой" },
           };
         }
-        
+
         if (parseFloat(discount.price) >= parseFloat(productData.price)) {
           throw {
-            data: { message: "Цена со скидкой должна быть меньше обычной цены" },
+            data: {
+              message: "Цена со скидкой должна быть меньше обычной цены",
+            },
           };
         }
-        
+
         if (!discount.start_date || !discount.end_date) {
           throw {
             data: { message: "Укажите даты начала и окончания скидки" },
           };
         }
-        
+
         const startDate = new Date(discount.start_date);
         const endDate = new Date(discount.end_date);
-        
+
         if (startDate > endDate) {
           throw {
-            data: { message: "Дата начала скидки не может быть позже даты окончания" },
+            data: {
+              message: "Дата начала скидки не может быть позже даты окончания",
+            },
           };
         }
-        
+
         discountData = {
           price: discount.price,
           start_date: discount.start_date,
-          end_date: discount.end_date
+          end_date: discount.end_date,
         };
       }
 
@@ -204,13 +191,13 @@ const AddNewProdMain = ({
         description: "",
         active: "true",
       });
-      setHasDiscount(false);
       setDiscount({
         price: "",
         start_date: "",
-        end_date: ""
+        end_date: "",
       });
       setChoosenCurrency("");
+      setParam("addNewProductByCategory", false);
     } catch (error) {
       console.error("Error submitting product:", error);
       const errorResponse = error as any;
@@ -294,55 +281,47 @@ const AddNewProdMain = ({
                 }
               />
             </div>
-            
+
             <div className={styles.formGroup}>
-              <div className={styles.discountToggle}>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={hasDiscount}
-                    onChange={toggleDiscount}
-                  />
-                  Добавить скидку
-                </label>
-              </div>
-              
-              {hasDiscount && (
-                <div className={styles.discountForm}>
-                  <div className={styles.formGroup}>
-                    <label>Цена со скидкой</label>
-                    <input
-                      type="number"
-                      name="price"
-                      value={discount.price}
-                      onChange={handleDiscountChange}
-                      placeholder="Цена со скидкой"
-                      min={0}
-                      inputMode="numeric"
-                    />
+              <DropDownMenu
+                toggle={<h5>Скидка на продукт</h5>}
+                menu={
+                  <div className={styles.discountForm}>
+                    <div className={styles.formGroup}>
+                      <label>Цена со скидкой</label>
+                      <input
+                        type="number"
+                        name="price"
+                        value={discount.price}
+                        onChange={handleDiscountChange}
+                        placeholder="Цена со скидкой"
+                        min={0}
+                        inputMode="numeric"
+                      />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                      <label>Дата начала скидки</label>
+                      <input
+                        type="date"
+                        name="start_date"
+                        value={discount.start_date}
+                        onChange={handleDiscountChange}
+                      />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                      <label>Дата окончания скидки</label>
+                      <input
+                        type="date"
+                        name="end_date"
+                        value={discount.end_date}
+                        onChange={handleDiscountChange}
+                      />
+                    </div>
                   </div>
-                  
-                  <div className={styles.formGroup}>
-                    <label>Дата начала скидки</label>
-                    <input
-                      type="date"
-                      name="start_date"
-                      value={discount.start_date}
-                      onChange={handleDiscountChange}
-                    />
-                  </div>
-                  
-                  <div className={styles.formGroup}>
-                    <label>Дата окончания скидки</label>
-                    <input
-                      type="date"
-                      name="end_date"
-                      value={discount.end_date}
-                      onChange={handleDiscountChange}
-                    />
-                  </div>
-                </div>
-              )}
+                }
+              />
             </div>
           </div>
         }
