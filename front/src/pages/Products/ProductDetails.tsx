@@ -95,12 +95,12 @@ const ProductDetails = () => {
       {/* Кнопки для редактирования и удаления */}
       <div className="singleMenu__actions">
         <IconButton
-          text="Изменить продукт"
+          text="Изменить"
           onClick={() => setParam("editProduct", true)}
           styleName="linkColor"
         />
         <IconButton
-          text="Удалить продукт"
+          text="Удалить"
           onClick={() => setDeleteModalOpen(true)}
           styleName="deleteButton"
         />
