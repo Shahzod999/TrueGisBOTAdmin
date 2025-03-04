@@ -67,6 +67,16 @@
                 display: flex;
             }
 
+            svg {
+                fill: var(--text-color);
+                stroke: var(--text-color);
+
+                path {
+                    fill: var(--text-color);
+                    stroke: var(--text-color);
+                }
+            }
+
 
             input {
                 color: var(--text-color);

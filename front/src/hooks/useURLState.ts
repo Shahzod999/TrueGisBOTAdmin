@@ -13,8 +13,14 @@ export const useURLState = () => {
     setSearchParams(newParams);
   };
 
+  const deleteParam = (key: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete(key);
+    setSearchParams(newParams);
+  };
+
   const getParam = (key: string) => searchParams.get(key);
   const allParams = Object.fromEntries(searchParams.entries());
 
-  return { getParam, setParam, allParams };
+  return { getParam, setParam, allParams, deleteParam };
 };

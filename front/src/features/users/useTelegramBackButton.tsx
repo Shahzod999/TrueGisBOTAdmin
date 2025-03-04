@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import { useURLState } from "../../hooks/useURLState";
 
 const useTelegramBackButton = () => {
-  const { allParams, setParam } = useURLState();
+  const { allParams, deleteParam } = useURLState();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   //   const prevParamsRef = useRef(allParams); // Отслеживаем предыдущее состояние
@@ -20,7 +20,6 @@ const useTelegramBackButton = () => {
     backButton.show();
 
     const keys = Object.keys(allParams).reverse();
-    console.log(keys);
 
     const handleBack = () => {
       if (keys.length === 0) {
@@ -28,10 +27,9 @@ const useTelegramBackButton = () => {
         return;
       }
 
-      const lastKey = keys.find((key) => allParams[key] === "true");
-
+      const lastKey = keys[0];
       if (lastKey) {
-        setParam(lastKey, false);
+        deleteParam(lastKey);
       }
     };
 
@@ -41,21 +39,7 @@ const useTelegramBackButton = () => {
       backButton.hide();
       backButton.offClick(handleBack);
     };
-  }, [allParams, navigate, setParam]);
-
-  //   useEffect(() => {
-  //     const backButton = window.Telegram.WebApp.BackButton;
-
-  //     // Проверяем, был ли параметр удален и не добавился ли снова
-  //     if (
-  //       Object.keys(allParams).length === 0 &&
-  //       Object.keys(prevParamsRef.current).length > 0
-  //     ) {
-  //       backButton.hide();
-  //     }
-
-  //     prevParamsRef.current = allParams; // Обновляем предыдущее состояние
-  //   }, [allParams]);
+  }, [allParams, navigate, deleteParam]);
 };
 
 export default useTelegramBackButton;

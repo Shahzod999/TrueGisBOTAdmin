@@ -52,8 +52,6 @@ const PermissionsList: React.FC<PermissionsListProps> = ({
   showUnAssignButton,
   handleUnAssignAdminPower,
 }) => {
-  console.log(permissions, "222");
-
   return (
     <div className={styles.permissionsList}>
       {Object.keys(permissions).map((permission, index) => (
