@@ -20,7 +20,21 @@ export const productsApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Category"],
     }),
-
+    deleteCategory: builder.mutation({
+      query: ({ category_id }) => ({
+        url: `/delivery/admin/category/${category_id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Category"],
+    }),
+    updateCategory: builder.mutation({
+      query: ({ category_id, data }) => ({
+        url: `/delivery/admin/category/${category_id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Category"],
+    }),
     getOneCategory: builder.query({
       query: (categoryId) => `/delivery/admin/category/${categoryId}`,
       providesTags: ["Category"],
@@ -37,10 +51,29 @@ export const productsApi = apiSlice.injectEndpoints({
       }),
       providesTags: ["Products", "Category"],
     }),
+    getSingleProduct: builder.query({
+      query: (productId) => `/delivery/admin/product/${productId}`,
+      providesTags: ["Products"],
+    }),
     addNewProducts: builder.mutation({
       query: ({ data }) => ({
         url: "/delivery/admin/product",
         method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Products"],
+    }),
+    deleteProduct: builder.mutation({
+      query: ({ productId }) => ({
+        url: `/delivery/admin/product/${productId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Products"],
+    }),
+    updateProduct: builder.mutation({
+      query: ({ productId, data }) => ({
+        url: `/delivery/admin/product/${productId}`,
+        method: "PUT",
         body: data,
       }),
       invalidatesTags: ["Products"],
@@ -54,4 +87,9 @@ export const {
   useGetOneCategoryQuery,
   useGetAllProductsQuery,
   useAddNewProductsMutation,
+  useDeleteCategoryMutation,
+  useUpdateCategoryMutation,
+  useGetSingleProductQuery,
+  useDeleteProductMutation,
+  useUpdateProductMutation,
 } = productsApi;
