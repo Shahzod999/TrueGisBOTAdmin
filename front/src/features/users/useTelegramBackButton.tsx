@@ -20,16 +20,20 @@ const useTelegramBackButton = () => {
     backButton.show();
 
     const keys = Object.keys(allParams).reverse();
+    const pathSegments = pathname.split("/").filter(Boolean);
 
     const handleBack = () => {
-      if (keys.length === 0) {
-        navigate("/");
-        return;
-      }
-
-      const lastKey = keys[0];
-      if (lastKey) {
+      if (keys.length > 0) {
+        const lastKey = keys[0];
+        console.log(lastKey, "lastKey (удаляем параметр)");
         deleteParam(lastKey);
+      } else if (pathSegments.length > 1) {
+        // Убираем последний сегмент из пути
+        const newPath = "/" + pathSegments.slice(0, -1).join("/");
+        console.log(newPath, "newPath (удаляем часть пути)");
+        navigate(newPath);
+      } else {
+        navigate("/");
       }
     };
 
