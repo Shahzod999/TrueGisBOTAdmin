@@ -100,3 +100,11 @@ html {
 .warningText {
     color: var(--warning-color) !important;
 }
+
+input {
+    color: var(--text-color);
+}
+
+textarea {
+    color: var(--text-color);
+}
