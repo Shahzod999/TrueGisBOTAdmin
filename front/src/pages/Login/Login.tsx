@@ -13,6 +13,7 @@ import {
   setCompany,
   setCompanyToken,
 } from "../../features/company/companySlice";
+import CustomError from "../../utils/customError";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -73,11 +74,14 @@ const Login = () => {
 
     try {
       const response = await loginUser({ data: formData }).unwrap();
+      if (!response.selected_company) {
+        throw new CustomError({ message: "У вас нет связанных компании" });
+      }
+
       if (response.status === "success") {
         dispatch(
           setCredentials({
             data: response.data,
-            token: response.token,
           }),
         );
         dispatch(setCompany(response.selected_company));

@@ -15,6 +15,8 @@ import {
   setCompanyToken,
 } from "../../features/company/companySlice";
 import Loading from "../Loading/Loading";
+import { useGetCurrentAdminAssignedCompanysQuery } from "../../features/users/usersApi";
+import { getValidatedUrl } from "../../utils/imgGetValidatedUrl";
 
 interface MenuProps {
   isOpen: boolean;
@@ -27,6 +29,9 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
   const token = useAppSelector(selectedCompanyToken);
   const company = useAppSelector(selectedCompany);
   const [switchCompany, { isLoading }] = useSwitchCompanyMutation();
+
+  const { data: currentAdminAssignedCompanys } =
+    useGetCurrentAdminAssignedCompanysQuery(user?._id, { skip: !user?._id });
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -56,7 +61,6 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
         company_id: companyId,
         token: token,
       }).unwrap();
-      console.log(res.token);
       dispatch(setCompanyToken(res.token));
       dispatch(setCompany(res.data.company));
     } catch (error) {
@@ -64,8 +68,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  console.log(user, "sss");
-
+  if (!company) return <Loading />;
   return (
     <>
       {isLoading && <Loading />}
@@ -77,35 +80,50 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
 
       <div className={`${styles.menu} ${isOpen ? styles.open : ""}`}>
         <div className={styles.logo}>
-          <img src="logo.png" />
+          <img
+            src={company?.logo ? getValidatedUrl(company?.logo) : "logo.png"}
+            alt=""
+            loading="lazy"
+          />
 
           <ReactSVG src="./iconsSvg/bells.svg" className={styles.bells} />
         </div>
 
-        <div className={styles.dropMenu}>
-          <DropDownMenu
-            toggle={
-              <div className={styles.companyInfo}>
-                <h2 className={styles.companyName}>{company?.name}</h2>
-                <span>{company?.address}</span>
-              </div>
-            }
-            menu={
-              <>
-                {user?.companies.map((company, index) => (
-                  <FotoTextHint
-                    key={index}
-                    image={company.logo || "./default.jpg"}
-                    title={company.name}
-                    smallText={company.address}
-                    option="infoMenu"
-                    onClick={() => handleSwitchCompany(company._id)}
-                  />
-                ))}
-              </>
-            }
-          />
-        </div>
+        {company?._id ? (
+          <div className={styles.dropMenu}>
+            <DropDownMenu
+              toggle={
+                <div className={styles.companyInfo}>
+                  <h2 className={styles.companyName}>{company?.name}</h2>
+                  <span>{company?.address}</span>
+                </div>
+              }
+              menu={
+                <>
+                  {currentAdminAssignedCompanys?.data.map((company, index) => (
+                    <FotoTextHint
+                      key={index}
+                      image={
+                        company?.logo
+                          ? getValidatedUrl(company?.logo)
+                          : "./default.jpg"
+                      }
+                      title={company.name}
+                      smallText={company.address}
+                      option="infoMenu"
+                      onClick={() => handleSwitchCompany(company._id)}
+                    />
+                  ))}
+                </>
+              }
+            />
+          </div>
+        ) : (
+          <div className={styles.companyInfo}>
+            <h2 className={styles.companyName}>{user?.full_name}</h2>
+            <span>Нет связанных компаний</span>
+          </div>
+        )}
 
         <div className={styles.menuList}>
           {menuItems.map((item, index) => (

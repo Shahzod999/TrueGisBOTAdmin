@@ -8,8 +8,6 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers, { getState }) => {
     const tgId = (getState() as RootState).telegram.telegramId;
     const token = (getState() as RootState).company.token;
-    console.log(token, "token");
-
     headers.set("telegram-id", tgId);
     headers.set("Authorization", `Bearer ${token}`);
     return headers;

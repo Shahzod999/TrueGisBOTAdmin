@@ -31,6 +31,7 @@ import { AssignedCompanyType } from "../../features/company/types";
 import PermissionsList, {
   PERMISSION_NAMES,
 } from "../../components/PermissionsList";
+import { getValidatedUrl } from "../../utils/imgGetValidatedUrl";
 
 interface AdminFormData {
   full_name: string;
@@ -55,20 +56,17 @@ const AdminPowers = () => {
 
   const { data: assignedCompanies } = useGetAssignedCompanyQuery({});
   const { data: currentAdminAssignedCompanys } =
-    useGetCurrentAdminAssignedCompanysQuery(newAdminId);
+    useGetCurrentAdminAssignedCompanysQuery(newAdminId, { skip: !newAdminId });
   const [unAssignAdminPower, { isLoading: isUnAssigning }] =
     useUnAssignAdminPowerMutation();
 
   const totalCompanies = assignedCompanies?.data?.filter(
     (company: AssignedCompanyType) =>
-      !currentAdminAssignedCompanys?.data?.some(
+      currentAdminAssignedCompanys?.data?.some(
         (assignedCompany: AssignedCompanyType) =>
           assignedCompany._id === company._id,
       ),
   );
-
-  console.log(assignedCompanies, "все тут");
-  console.log(currentAdminAssignedCompanys, "currentAdminAssignedCompanys");
 
   const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
 
@@ -108,36 +106,18 @@ const AdminPowers = () => {
 
   useEffect(() => {
     if (assignedCompanies?.data && currentAdminAssignedCompanys?.data) {
-      console.log(
-        "Доступные компании (assignedCompanies):",
-        assignedCompanies.data,
-      );
-      console.log(
-        "Текущие компании администратора (currentAdminAssignedCompanys):",
-        currentAdminAssignedCompanys.data,
-      );
-
       const permissionsMap: Record<string, Record<string, boolean>> = {};
       const originalMap: Record<string, Record<string, boolean>> = {};
 
       // Сначала обрабатываем текущие назначенные компании администратора
       currentAdminAssignedCompanys.data.forEach(
         (company: AssignedCompanyType) => {
-          console.log(
-            `Обработка компании ${company.name} (${company._id}) из currentAdminAssignedCompanys`,
-          );
-
           if (company.permissions && typeof company.permissions === "object") {
             const permissions: Record<string, boolean> = {};
 
             // Находим соответствующую компанию в assignedCompanies для проверки ограничений
             const assignedCompany = assignedCompanies.data.find(
               (ac: AssignedCompanyType) => ac._id === company._id,
-            );
-
-            console.log(
-              `Найдена соответствующая компания в assignedCompanies:`,
-              assignedCompany,
             );
 
             Object.keys(company.permissions).forEach((key) => {
@@ -165,10 +145,6 @@ const AdminPowers = () => {
                 permissions[key] = assignedPermissionValue
                   ? currentPermissionValue
                   : false;
-
-                console.log(
-                  `Разрешение ${key} для ${company.name}: assigned=${assignedPermissionValue}, current=${currentPermissionValue}, result=${permissions[key]}`,
-                );
               } else {
                 permissions[key] = false;
               }
@@ -177,7 +153,6 @@ const AdminPowers = () => {
             permissionsMap[company._id] = permissions;
             originalMap[company._id] = { ...permissions };
           } else {
-            console.log(`Нет разрешений для компании ${company.name}`);
             const defaultPermissions = Object.keys(PERMISSION_NAMES).reduce(
               (obj, key) => {
                 obj[key] = false;
@@ -199,27 +174,17 @@ const AdminPowers = () => {
           company.permissions &&
           typeof company.permissions === "object"
         ) {
-          console.log(
-            `Добавление новой компании ${company.name} (${company._id}) из assignedCompanies`,
-          );
-
           const permissions: Record<string, boolean> = {};
 
           Object.keys(company.permissions).forEach((key) => {
             // По умолчанию все разрешения выключены
             permissions[key] = false;
-            console.log(
-              `Разрешение ${key} для новой компании ${company.name} установлено в false`,
-            );
           });
 
           permissionsMap[company._id] = permissions;
           originalMap[company._id] = { ...permissions };
         }
       });
-
-      console.log("Инициализированные разрешения:", permissionsMap);
-      console.log("Оригинальные разрешения:", originalMap);
 
       setCompanyPermissions(permissionsMap);
       setOriginalCompanyPermissions(originalMap);
@@ -279,23 +244,11 @@ const AdminPowers = () => {
         )
       : false;
 
-    console.log(
-      `Переключение разрешения ${permissionKey} для компании ${companyId}`,
-    );
-    console.log(`Ограничение из assignedCompanies: ${assignedPermissionValue}`);
-    console.log(
-      `Текущее значение:`,
-      companyPermissions[companyId]?.[permissionKey],
-    );
-
     // Если текущее значение false и мы пытаемся его включить, проверяем ограничения
     const currentValue =
       companyPermissions[companyId]?.[permissionKey] || false;
 
     if (!currentValue && !assignedPermissionValue) {
-      console.log(
-        `Разрешение ${permissionKey} ограничено для компании ${companyId} и не может быть включено`,
-      );
       dispatch(
         errorToast("Это разрешение не может быть включено из-за ограничений"),
       );
@@ -304,10 +257,6 @@ const AdminPowers = () => {
 
     setCompanyPermissions((prev) => {
       if (!prev[companyId]) {
-        console.log(
-          `Компания ${companyId} не найдена в объекте разрешений, создаем новый объект`,
-        );
-
         const defaultPermissions = Object.keys(PERMISSION_NAMES).reduce(
           (obj, key) => {
             // Устанавливаем разрешения в соответствии с ограничениями
@@ -345,8 +294,6 @@ const AdminPowers = () => {
         companyPerms[permissionKey] = false;
       }
 
-      console.log(`Новое значение:`, companyPerms[permissionKey]);
-
       return {
         ...prev,
         [companyId]: companyPerms,
@@ -359,9 +306,6 @@ const AdminPowers = () => {
       !originalCompanyPermissions[companyId] ||
       !companyPermissions[companyId]
     ) {
-      console.log(
-        `Нет оригинальных или текущих разрешений для компании ${companyId}`,
-      );
       return false;
     }
 
@@ -391,16 +335,9 @@ const AdminPowers = () => {
 
       const changed = originalValue !== validCurrentValue;
 
-      if (changed) {
-        console.log(
-          `Разрешение ${key} изменено: ${originalValue} -> ${validCurrentValue} (ограничение: ${assignedPermissionValue})`,
-        );
-      }
-
       return changed;
     });
 
-    console.log(`Компания ${companyId} имеет изменения: ${hasChanges}`);
     return hasChanges;
   };
 
@@ -434,15 +371,6 @@ const AdminPowers = () => {
           permissionsToSave[key] = false;
         }
       });
-
-      console.log(
-        {
-          company_id: companyId,
-          admin_id: newAdminId,
-          permissions: permissionsToSave,
-        },
-        "Сохраняемые разрешения",
-      );
 
       // Проверяем, что все необходимые данные присутствуют
       if (!companyId || !newAdminId) {
@@ -517,8 +445,6 @@ const AdminPowers = () => {
       // Отправляем запрос на изменение данных только если были внесены изменения
       if (isDataChanged) {
         if (Object.keys(adminFormData).length > 0) {
-          console.log(adminFormData);
-
           await changeAdmin({
             id: newAdminId,
             data: adminFormData,
@@ -529,7 +455,6 @@ const AdminPowers = () => {
       dispatch(succesToast("Данные администратора успешно обновлены"));
       navigate("/adminList");
     } catch (error) {
-      console.log(error);
       dispatch(
         errorToast(
           (error as any).data.message ||
@@ -561,7 +486,6 @@ const AdminPowers = () => {
       console.log(error);
     }
   };
-  console.log(isChangingAdmin || isUnAssigning);
 
   return (
     <div className={`container ${styles.adminPowers}`}>
@@ -649,17 +573,14 @@ const AdminPowers = () => {
                           key={company._id}
                           toggle={
                             <FotoTextHint
-                              image={company.logo || "./default.jpg"}
+                              image={
+                                company.logo
+                                  ? getValidatedUrl(company.logo)
+                                  : "./default.jpg"
+                              }
                               title={company.name}
                               smallText={company.address || ""}
                               option="infoMenu"
-                              onClick={() =>
-                                console.log(
-                                  company,
-                                  "Компания с разрешениями:",
-                                  companyPermissions[company._id],
-                                )
-                              }
                             />
                           }
                           menu={
@@ -732,13 +653,6 @@ const AdminPowers = () => {
                         title={company.name}
                         smallText={company.address || ""}
                         option="infoMenu"
-                        onClick={() =>
-                          console.log(
-                            company,
-                            "Компания с разрешениями:",
-                            companyPermissions[company._id],
-                          )
-                        }
                       />
                     }
                     menu={

@@ -17,7 +17,7 @@ interface selectedCompanyType {
 }
 
 const storedCompany = JSON.parse(localStorage.getItem("company") || "{}");
-const storedCompanyToken = localStorage.getItem("companyToken") || null;
+const storedCompanyToken = localStorage.getItem("companyToken") || "";
 
 const initialState: selectedCompanyType = {
   company: storedCompany,
