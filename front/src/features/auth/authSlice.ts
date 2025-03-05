@@ -55,9 +55,7 @@ export const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       // Очищаем localStorage
-      localStorage.removeItem("auth");
-      localStorage.removeItem("company");
-      localStorage.removeItem("companyToken");
+      localStorage.clear();
     },
   },
 });

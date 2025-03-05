@@ -17,6 +17,7 @@ import {
 import Loading from "../Loading/Loading";
 import { useGetCurrentAdminAssignedCompanysQuery } from "../../features/users/usersApi";
 import { getValidatedUrl } from "../../utils/imgGetValidatedUrl";
+import { apiSlice } from "../../app/api";
 
 interface MenuProps {
   isOpen: boolean;
@@ -74,6 +75,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
 
   const handleLogOut = () => {
     dispatch(logout());
+    dispatch(apiSlice.util.resetApiState());
   };
 
   if (!company) return <Loading />;
