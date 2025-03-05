@@ -76,6 +76,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
   const handleLogOut = () => {
     dispatch(logout());
     dispatch(apiSlice.util.resetApiState());
+    window.location.href = "/login";
   };
 
   if (!company) return <Loading />;
