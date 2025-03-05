@@ -14,6 +14,7 @@ import {
   setCompanyToken,
 } from "../../features/company/companySlice";
 import CustomError from "../../utils/customError";
+import Loading from "../../components/Loading/Loading";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -100,6 +101,7 @@ const Login = () => {
 
   return (
     <>
+      {isLoading && <Loading />}
       <div className={`container ${styles.login}`}>
         <div className={styles.logo}>
           <ReactSVG src="./Company/logo.svg" />
