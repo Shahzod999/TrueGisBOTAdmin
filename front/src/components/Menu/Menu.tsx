@@ -6,7 +6,7 @@ import DropDownMenu from "../DropDownMenu/DropDownMenu";
 import { Link, useNavigate } from "react-router";
 import IconTextArrow from "../IconTextArrow/IconTextArrow";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectCurrentUser } from "../../features/auth/authSlice";
+import { logout, selectCurrentUser } from "../../features/auth/authSlice";
 import { useSwitchCompanyMutation } from "../../features/auth/authApi";
 import {
   selectedCompany,
@@ -70,6 +70,10 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleLogOut = () => {
+    dispatch(logout());
   };
 
   if (!company) return <Loading />;
@@ -139,7 +143,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
 
         <div className={styles.logOut} onClick={() => navigate("/login")}>
           <ReactSVG src="./iconsSvg/logOut.svg" className={styles.logOutIcon} />
-          <span>Выйти</span>
+          <span onClick={handleLogOut}>Выйти</span>
         </div>
       </div>
     </>

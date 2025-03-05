@@ -56,6 +56,8 @@ export const authSlice = createSlice({
       state.user = null;
       // Очищаем localStorage
       localStorage.removeItem("auth");
+      localStorage.removeItem("company");
+      localStorage.removeItem("companyToken");
     },
   },
 });
