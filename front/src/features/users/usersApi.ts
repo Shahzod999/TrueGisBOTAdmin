@@ -19,7 +19,6 @@ export const userApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
       providesTags: ["Admin"],
-      keepUnusedDataFor: 300,
     }),
   }),
 });
