@@ -489,7 +489,6 @@ const AdminPowers = () => {
     }
   };
 
-  if (!currentAdminAssignedCompanys) return <Loading />;
   return (
     <div className={`container ${styles.adminPowers}`}>
       {(isLoading || isDeleting || isLoadingAdmin || isChangingAdmin) && (
@@ -565,148 +564,156 @@ const AdminPowers = () => {
             </div>
           }
           menu={
-            <div className={styles.companiesList}>
-              <div className={styles.connectedCompanies}>
-                <h4>Назначенные компании</h4>
-                {currentAdminAssignedCompanys?.data?.length > 0 ? (
-                  <>
-                    {currentAdminAssignedCompanys?.data.map(
-                      (company: AssignedCompanyType) => (
-                        <DropDownMenu
-                          key={company._id}
-                          toggle={
-                            <FotoTextHint
-                              image={
-                                company.logo
-                                  ? getValidatedUrl(company.logo)
-                                  : "./default.jpg"
-                              }
-                              title={company.name}
-                              smallText={company.address || ""}
-                              option="infoMenu"
-                            />
-                          }
-                          menu={
-                            <div>
-                              <PermissionsList
-                                permissions={
-                                  companyPermissions[company._id] || {}
+            currentAdminAssignedCompanys ? (
+              <div className={styles.companiesList}>
+                <div className={styles.connectedCompanies}>
+                  <h4>Назначенные компании</h4>
+                  {currentAdminAssignedCompanys?.data?.length > 0 ? (
+                    <>
+                      {currentAdminAssignedCompanys?.data.map(
+                        (company: AssignedCompanyType) => (
+                          <DropDownMenu
+                            key={company._id}
+                            toggle={
+                              <FotoTextHint
+                                image={
+                                  company.logo
+                                    ? getValidatedUrl(company.logo)
+                                    : "./default.jpg"
                                 }
-                                onTogglePermission={(permissionKey) =>
-                                  handleToggleCompanyPermission(
-                                    company._id,
-                                    permissionKey,
-                                  )
-                                }
-                                isPermissionDisabled={(permissionKey) => {
-                                  // Проверяем ограничения из assignedCompanies
-                                  const assignedCompany =
-                                    assignedCompanies?.data?.find(
-                                      (ac: AssignedCompanyType) =>
-                                        ac._id === company._id,
-                                    );
-
-                                  if (!assignedCompany?.permissions)
-                                    return true;
-
-                                  return !(
-                                    assignedCompany.permissions as unknown as Record<
-                                      string,
-                                      boolean
-                                    >
-                                  )[permissionKey];
-                                }}
-                                onTooltipToggle={handleTooltipToggle}
-                                activeTooltip={activeTooltip}
-                                disabledTooltipText="Ограничено настройками компании"
-                                showSaveButton={true}
-                                showUnAssignButton={true}
-                                onSave={() =>
-                                  handleSaveCompanyPermissions(company._id)
-                                }
-                                isSaving={
-                                  isChangingAdmin || isUnAssigning || isLoading
-                                }
-                                hasChanges={hasCompanyPermissionsChanged(
-                                  company._id,
-                                )}
-                                handleUnAssignAdminPower={() =>
-                                  handleUnAssignAdminPower(company._id)
-                                }
+                                title={company.name}
+                                smallText={company.address || ""}
+                                option="infoMenu"
                               />
-                            </div>
-                          }
-                        />
-                      ),
-                    )}
-                  </>
-                ) : (
-                  <div className={styles.noCompanies}>
-                    Нет доступных компаний
-                  </div>
-                )}
+                            }
+                            menu={
+                              <div>
+                                <PermissionsList
+                                  permissions={
+                                    companyPermissions[company._id] || {}
+                                  }
+                                  onTogglePermission={(permissionKey) =>
+                                    handleToggleCompanyPermission(
+                                      company._id,
+                                      permissionKey,
+                                    )
+                                  }
+                                  isPermissionDisabled={(permissionKey) => {
+                                    // Проверяем ограничения из assignedCompanies
+                                    const assignedCompany =
+                                      assignedCompanies?.data?.find(
+                                        (ac: AssignedCompanyType) =>
+                                          ac._id === company._id,
+                                      );
 
-                <h4>Все компании</h4>
-                {totalCompanies?.map((company: AssignedCompanyType) => (
-                  <DropDownMenu
-                    key={company._id}
-                    toggle={
-                      <FotoTextHint
-                        image={company.logo || "./default.jpg"}
-                        title={company.name}
-                        smallText={company.address || ""}
-                        option="infoMenu"
-                      />
-                    }
-                    menu={
-                      <div>
-                        <PermissionsList
-                          permissions={companyPermissions[company._id] || {}}
-                          onTogglePermission={(permissionKey) =>
-                            handleToggleCompanyPermission(
+                                    if (!assignedCompany?.permissions)
+                                      return true;
+
+                                    return !(
+                                      assignedCompany.permissions as unknown as Record<
+                                        string,
+                                        boolean
+                                      >
+                                    )[permissionKey];
+                                  }}
+                                  onTooltipToggle={handleTooltipToggle}
+                                  activeTooltip={activeTooltip}
+                                  disabledTooltipText="Ограничено настройками компании"
+                                  showSaveButton={true}
+                                  showUnAssignButton={true}
+                                  onSave={() =>
+                                    handleSaveCompanyPermissions(company._id)
+                                  }
+                                  isSaving={
+                                    isChangingAdmin ||
+                                    isUnAssigning ||
+                                    isLoading
+                                  }
+                                  hasChanges={hasCompanyPermissionsChanged(
+                                    company._id,
+                                  )}
+                                  handleUnAssignAdminPower={() =>
+                                    handleUnAssignAdminPower(company._id)
+                                  }
+                                />
+                              </div>
+                            }
+                          />
+                        ),
+                      )}
+                    </>
+                  ) : (
+                    <div className={styles.noCompanies}>
+                      Нет доступных компаний
+                    </div>
+                  )}
+
+                  <h4>Все компании</h4>
+                  {totalCompanies?.map((company: AssignedCompanyType) => (
+                    <DropDownMenu
+                      key={company._id}
+                      toggle={
+                        <FotoTextHint
+                          image={company.logo || "./default.jpg"}
+                          title={company.name}
+                          smallText={company.address || ""}
+                          option="infoMenu"
+                        />
+                      }
+                      menu={
+                        <div>
+                          <PermissionsList
+                            permissions={companyPermissions[company._id] || {}}
+                            onTogglePermission={(permissionKey) =>
+                              handleToggleCompanyPermission(
+                                company._id,
+                                permissionKey,
+                              )
+                            }
+                            isPermissionDisabled={(permissionKey) => {
+                              // Проверяем ограничения из assignedCompanies
+                              const assignedCompany =
+                                assignedCompanies?.data?.find(
+                                  (ac: AssignedCompanyType) =>
+                                    ac._id === company._id,
+                                );
+
+                              if (!assignedCompany?.permissions) return true;
+
+                              return !(
+                                assignedCompany.permissions as unknown as Record<
+                                  string,
+                                  boolean
+                                >
+                              )[permissionKey];
+                            }}
+                            onTooltipToggle={handleTooltipToggle}
+                            activeTooltip={activeTooltip}
+                            disabledTooltipText="Ограничено настройками компании"
+                            showSaveButton={true}
+                            showUnAssignButton={false}
+                            onSave={() =>
+                              handleSaveCompanyPermissions(company._id)
+                            }
+                            isSaving={
+                              isChangingAdmin || isUnAssigning || isLoading
+                            }
+                            hasChanges={hasCompanyPermissionsChanged(
                               company._id,
-                              permissionKey,
-                            )
-                          }
-                          isPermissionDisabled={(permissionKey) => {
-                            // Проверяем ограничения из assignedCompanies
-                            const assignedCompany =
-                              assignedCompanies?.data?.find(
-                                (ac: AssignedCompanyType) =>
-                                  ac._id === company._id,
-                              );
-
-                            if (!assignedCompany?.permissions) return true;
-
-                            return !(
-                              assignedCompany.permissions as unknown as Record<
-                                string,
-                                boolean
-                              >
-                            )[permissionKey];
-                          }}
-                          onTooltipToggle={handleTooltipToggle}
-                          activeTooltip={activeTooltip}
-                          disabledTooltipText="Ограничено настройками компании"
-                          showSaveButton={true}
-                          showUnAssignButton={false}
-                          onSave={() =>
-                            handleSaveCompanyPermissions(company._id)
-                          }
-                          isSaving={
-                            isChangingAdmin || isUnAssigning || isLoading
-                          }
-                          hasChanges={hasCompanyPermissionsChanged(company._id)}
-                          handleUnAssignAdminPower={() =>
-                            handleUnAssignAdminPower(company._id)
-                          }
-                        />
-                      </div>
-                    }
-                  />
-                ))}
+                            )}
+                            handleUnAssignAdminPower={() =>
+                              handleUnAssignAdminPower(company._id)
+                            }
+                          />
+                        </div>
+                      }
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
+            ) : (
+              <h4>Ждем...</h4>
+            )
           }
         />
       </div>
