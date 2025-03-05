@@ -1,4 +1,5 @@
 import { apiSlice } from "../../app/api";
+import { getAssignedCompanyType } from "../company/types";
 
 export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -9,13 +10,16 @@ export const userApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ["Admin"],
     }),
-    getCurrentAdminAssignedCompanys: builder.query({
+    getCurrentAdminAssignedCompanys: builder.query<
+      getAssignedCompanyType,
+      string
+    >({
       query: (id) => ({
         url: `/delivery/admin/admin/assigned-companies?admin_id=${id}`,
         method: "GET",
-        keepUnusedDataFor: 300,
       }),
       providesTags: ["Admin"],
+      keepUnusedDataFor: 300,
     }),
   }),
 });

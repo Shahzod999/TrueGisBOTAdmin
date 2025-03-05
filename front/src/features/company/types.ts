@@ -1,7 +1,12 @@
+export interface getAssignedCompanyType {
+  status: string;
+  data: AssignedCompanyType[];
+}
+
 export interface AssignedCompanyType {
   _id: string;
   name: string;
-  logo: string;
+  logo?: string;
   permissions: PermissionsTypes;
   is_owner: boolean;
   address?: string;

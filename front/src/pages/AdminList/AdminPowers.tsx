@@ -56,7 +56,9 @@ const AdminPowers = () => {
 
   const { data: assignedCompanies } = useGetAssignedCompanyQuery({});
   const { data: currentAdminAssignedCompanys } =
-    useGetCurrentAdminAssignedCompanysQuery(newAdminId, { skip: !newAdminId });
+    useGetCurrentAdminAssignedCompanysQuery(newAdminId || "", {
+      skip: !newAdminId,
+    });
   const [unAssignAdminPower, { isLoading: isUnAssigning }] =
     useUnAssignAdminPowerMutation();
 
@@ -487,6 +489,7 @@ const AdminPowers = () => {
     }
   };
 
+  if (!currentAdminAssignedCompanys) return <Loading />;
   return (
     <div className={`container ${styles.adminPowers}`}>
       {(isLoading || isDeleting || isLoadingAdmin || isChangingAdmin) && (
@@ -567,7 +570,7 @@ const AdminPowers = () => {
                 <h4>Назначенные компании</h4>
                 {currentAdminAssignedCompanys?.data?.length > 0 ? (
                   <>
-                    {currentAdminAssignedCompanys.data.map(
+                    {currentAdminAssignedCompanys?.data.map(
                       (company: AssignedCompanyType) => (
                         <DropDownMenu
                           key={company._id}

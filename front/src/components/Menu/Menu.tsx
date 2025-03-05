@@ -31,7 +31,11 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
   const [switchCompany, { isLoading }] = useSwitchCompanyMutation();
 
   const { data: currentAdminAssignedCompanys } =
-    useGetCurrentAdminAssignedCompanysQuery(user?._id, { skip: !user?._id });
+    useGetCurrentAdminAssignedCompanysQuery(user?._id || "", {
+      skip: !user?._id,
+    });
+
+  console.log(currentAdminAssignedCompanys);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -109,7 +113,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
                           : "./default.jpg"
                       }
                       title={company.name}
-                      smallText={company.address}
+                      smallText={company.address || "address"}
                       option="infoMenu"
                       onClick={() => handleSwitchCompany(company._id)}
                     />
