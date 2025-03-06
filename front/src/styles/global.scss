@@ -108,27 +108,3 @@ input {
 textarea {
     color: var(--text-color);
 }
-
-/* Стили для корректного отображения при открытии клавиатуры */
-.input-focused {
-    position: relative;
-    z-index: 10;
-}
-
-.form-container {
-    padding-bottom: 20px;
-    transition: padding-bottom 0.3s ease;
-}
-
-.form-container-focused {
-    padding-bottom: 250px;
-}
-
-/* Стили для кнопок, чтобы они всегда были видны */
-.fixed-bottom-button {
-    position: sticky;
-    bottom: 20px;
-    z-index: 5;
-    width: 100%;
-    margin-top: 20px;
-}

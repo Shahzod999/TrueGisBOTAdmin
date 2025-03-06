@@ -11,7 +11,6 @@ import { errorToast, succesToast } from "../../features/Toast/toastSlice";
 import Loading from "../../components/Loading/Loading";
 import { FoodBoxType } from "../../types/foodType";
 import Switch from "../../components/Switch/Switch";
-import useVisibleOnFocus from "../../hooks/useVisibleOnFocus";
 
 interface ProductFormData {
   name: string;
@@ -56,8 +55,6 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
     description: product.description || "",
     active: product.active ? "true" : "false",
   });
-
-  const { containerRef, handleFocus, handleBlur } = useVisibleOnFocus();
 
   console.log(product);
 
@@ -231,7 +228,7 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
   };
 
   return (
-    <div className={`container ${styles.addNewProdMain} form-container`} ref={containerRef}>
+    <div className={`container ${styles.addNewProdMain} form-container`}>
       {(isLoading || loadingUploadImg) && <Loading />}
       <DropDownMenu
         toggle={<h4 className={styles.titleAddProd}>Редактировать продукт</h4>}
@@ -248,8 +245,6 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
                 onChange={handleInputChange}
                 placeholder="Введите название"
                 inputMode="text"
-                onFocus={handleFocus}
-                onBlur={handleBlur}
                 className="input-focused"
               />
             </div>
@@ -264,8 +259,6 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
                 placeholder="0 грамм"
                 min={0}
                 inputMode="numeric"
-                onFocus={handleFocus}
-                onBlur={handleBlur}
                 className="input-focused"
               />
             </div>
@@ -282,8 +275,6 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
                 placeholder="0 сум"
                 inputMode="numeric"
                 min={0}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
                 className="input-focused"
               />
             </div>
@@ -297,7 +288,9 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
                 }
                 menu={
                   <div className={styles.currencyHolder}>
-                    <span onClick={() => handleCurrencyChange("SO'M")}>SO'M</span>
+                    <span onClick={() => handleCurrencyChange("SO'M")}>
+                      SO'M
+                    </span>
                     <span onClick={() => handleCurrencyChange("USD")}>USD</span>
                     <span onClick={() => handleCurrencyChange("RUB")}>RUB</span>
                   </div>
@@ -320,8 +313,6 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
                         placeholder="Цена со скидкой"
                         min={0}
                         inputMode="numeric"
-                        onFocus={handleFocus}
-                        onBlur={handleBlur}
                         className="input-focused"
                       />
                     </div>
@@ -333,8 +324,6 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
                         name="start_date"
                         value={discount.start_date}
                         onChange={handleDiscountChange}
-                        onFocus={handleFocus}
-                        onBlur={handleBlur}
                         className="input-focused"
                       />
                     </div>
@@ -346,8 +335,6 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
                         name="end_date"
                         value={discount.end_date}
                         onChange={handleDiscountChange}
-                        onFocus={handleFocus}
-                        onBlur={handleBlur}
                         className="input-focused"
                       />
                     </div>
@@ -385,8 +372,6 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
           value={productData.description}
           onChange={handleInputChange}
           placeholder="Опишите ваш продукт"
-          onFocus={handleFocus}
-          onBlur={handleBlur}
           className="input-focused"
         />
       </div>

@@ -15,7 +15,6 @@ import {
 } from "../../features/company/companySlice";
 import CustomError from "../../utils/customError";
 import Loading from "../../components/Loading/Loading";
-import useVisibleOnFocus from "../../hooks/useVisibleOnFocus";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -37,7 +36,6 @@ const Login = () => {
     signature?: string;
     general?: string;
   }>({});
-  const { containerRef, handleFocus, handleBlur } = useVisibleOnFocus<HTMLFormElement>();
 
   const handleVisible = (key: "password" | "id") => (e: MouseEvent) => {
     e.stopPropagation();
@@ -115,7 +113,7 @@ const Login = () => {
         <h2>Truegis бизнес!</h2>
         <p>Выполните вход в свой аккаунт</p>
 
-        <form className={styles.form} onSubmit={handleSubmit} ref={containerRef}>
+        <form className={styles.form} onSubmit={handleSubmit}>
           {errors.general && (
             <div className={styles.errorMessage}>{errors.general}</div>
           )}
@@ -126,8 +124,6 @@ const Login = () => {
               placeholder="Username"
               value={formData.username}
               onChange={handleChange}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
               className="input-focused"
             />
             <div onClick={handleVisible("id")}>
@@ -144,8 +140,6 @@ const Login = () => {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
               className="input-focused"
             />
             <div onClick={handleVisible("password")}>
@@ -168,8 +162,6 @@ const Login = () => {
               placeholder="Truegis ID"
               value={formData.signature}
               onChange={handleChange}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
               className="input-focused"
             />
             {errors.signature && (

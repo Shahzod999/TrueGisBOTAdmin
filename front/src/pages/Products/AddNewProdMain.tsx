@@ -11,7 +11,6 @@ import { useAppDispatch } from "../../app/hooks";
 import { errorToast, succesToast } from "../../features/Toast/toastSlice";
 import Loading from "../../components/Loading/Loading";
 import { useURLState } from "../../hooks/useURLState";
-import useVisibleOnFocus from "../../hooks/useVisibleOnFocus";
 
 interface ProductFormData {
   name: string;
@@ -55,8 +54,6 @@ const AddNewProdMain = ({
     description: "",
     active: "true",
   });
-
-  const { containerRef, handleFocus, handleBlur } = useVisibleOnFocus();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -219,7 +216,7 @@ const AddNewProdMain = ({
   };
 
   return (
-    <div className={`container ${styles.addNewProdMain} form-container`} ref={containerRef}>
+    <div className={`container ${styles.addNewProdMain} form-container`}>
       {(isLoading || loadingUploadImg) && <Loading />}
       <h2 className={styles.mainTitle}>{category?.name}</h2>
       <DropDownMenu
@@ -237,8 +234,6 @@ const AddNewProdMain = ({
                 onChange={handleInputChange}
                 placeholder="Введите название"
                 inputMode="text"
-                onFocus={handleFocus}
-                onBlur={handleBlur}
                 className="input-focused"
               />
             </div>
@@ -253,8 +248,6 @@ const AddNewProdMain = ({
                 placeholder="0 грамм"
                 min={0}
                 inputMode="numeric"
-                onFocus={handleFocus}
-                onBlur={handleBlur}
                 className="input-focused"
               />
             </div>
@@ -271,8 +264,6 @@ const AddNewProdMain = ({
                 placeholder="0 сум"
                 inputMode="numeric"
                 min={0}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
                 className="input-focused"
               />
             </div>
@@ -286,7 +277,9 @@ const AddNewProdMain = ({
                 }
                 menu={
                   <div className={styles.currencyHolder}>
-                    <span onClick={() => handleCurrencyChange("SO'M")}>SO'M</span>
+                    <span onClick={() => handleCurrencyChange("SO'M")}>
+                      SO'M
+                    </span>
                     <span onClick={() => handleCurrencyChange("USD")}>USD</span>
                     <span onClick={() => handleCurrencyChange("RUB")}>RUB</span>
                   </div>
@@ -356,8 +349,6 @@ const AddNewProdMain = ({
           value={productData.description}
           onChange={handleInputChange}
           placeholder="Опишите ваш продукт"
-          onFocus={handleFocus}
-          onBlur={handleBlur}
           className="input-focused"
         />
       </div>
