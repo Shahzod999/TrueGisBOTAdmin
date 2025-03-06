@@ -24,7 +24,7 @@ const Analytics = () => {
     { date: "1 дек", value: 130 },
   ];
 
-  console.log(initialPage);
+  console.log(analytics?.data);
 
   return (
     <>
@@ -89,7 +89,6 @@ const Analytics = () => {
                 iconText="Маршрут"
                 hintText="Сегодня"
                 mainText={String(analytics?.data.route)}
-                curency="сум"
               />
               <Table
                 icon="./iconsSvg/location.svg"
@@ -114,7 +113,6 @@ const Analytics = () => {
                 iconText="Переслано в чате"
                 hintText="Сегодня"
                 mainText={String(analytics?.data.chat)}
-                curency="сум"
               />
               <Table
                 icon="./iconsSvg/location.svg"
