@@ -274,7 +274,7 @@ const AddNewProdMain = ({
                 }
                 menu={
                   <div className={styles.currencyHolder}>
-                    <span onClick={() => handleCurrencyChange("UZS")}>UZS</span>
+                    <span onClick={() => handleCurrencyChange("SO'M")}>SO'M</span>
                     <span onClick={() => handleCurrencyChange("USD")}>USD</span>
                     <span onClick={() => handleCurrencyChange("RUB")}>RUB</span>
                   </div>

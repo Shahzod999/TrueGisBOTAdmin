@@ -2,6 +2,10 @@ import { Link } from "react-router";
 import { getValidatedUrl } from "../../utils/imgGetValidatedUrl";
 import "./foodBox.scss";
 
+const formatPrice = (price: number) => {
+  return new Intl.NumberFormat("ru-RU").format(price); // Разделение на тысячные
+};
+
 const FoodBox = ({ food }: any) => {
   const { _id, name, price, currency, description, image, discount } = food;
 
@@ -15,14 +19,14 @@ const FoodBox = ({ food }: any) => {
         <p>{description}</p>
         {discount && (
           <strong className="menu__food__box__text__discount">
-            {discount.price} {currency}
+            {formatPrice(discount.price)} {currency}
           </strong>
         )}
         <strong
           className={`menu__food__box__text__price ${
             discount && "menu__food__box__text__oldPrice"
           }`}>
-          {price} {currency}
+          {formatPrice(price)} {currency}
         </strong>
       </div>
     </Link>

@@ -299,13 +299,13 @@
         border-radius: 16px;
         min-width: 105px;
         min-height: 100px;
-
         margin: 4px 0;
+        font-size: 18px;
 
         &::placeholder {
             font-family: var(--font-family);
             font-weight: 400;
-            font-size: 16px;
+            font-size: 18px;
             line-height: 131%;
             letter-spacing: -0.02em;
             color: rgba(60, 60, 67, 0.6);
@@ -358,7 +358,8 @@
     max-width: 400px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
-    h3, h4 {
+    h3,
+    h4 {
         font-family: var(--second-family);
         font-weight: 600;
         font-size: 20px;
