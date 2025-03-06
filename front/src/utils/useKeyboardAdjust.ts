@@ -1,17 +1,28 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const useKeyboardAdjust = () => {
+  const [padding, setPadding] = useState(0);
+
   useEffect(() => {
     const updatePadding = () => {
-      const viewportHeight = window.innerHeight; // Реальная высота окна
-      document.body.style.height = `${viewportHeight}px`; // Подгоняем высоту body
+      const viewportHeight =
+        window.visualViewport?.height || window.innerHeight;
+      const keyboardHeight = window.innerHeight - viewportHeight;
+      setPadding(keyboardHeight);
     };
 
-    updatePadding(); // Вызов сразу при монтировании
-    window.addEventListener("resize", updatePadding);
+    updatePadding();
+    window.visualViewport?.addEventListener("resize", updatePadding);
 
     return () => {
-      window.removeEventListener("resize", updatePadding);
+      window.visualViewport?.removeEventListener("resize", updatePadding);
     };
   }, []);
+
+  useEffect(() => {
+    document.body.style.paddingBottom = `${padding}px`;
+    return () => {
+      document.body.style.paddingBottom = "0px";
+    };
+  }, [padding]);
 };
