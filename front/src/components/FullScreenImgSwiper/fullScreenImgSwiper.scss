@@ -1,0 +1,47 @@
+.fullScreenImg {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 999;
+    height: 100%;
+    background-color: var(--secondary-bg-color);
+
+
+    img {
+        object-fit: contain !important;
+    }
+}
+
+.swiper {
+    width: 100%;
+    height: 100%;
+    // border-radius: 20px;
+    overflow: hidden;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: transparent;
+    // тут
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    // object-fit: cover !important;
+}
+
+.swiper-pagination-bullet {
+    background-color: #ffffff;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: white !important;
+}

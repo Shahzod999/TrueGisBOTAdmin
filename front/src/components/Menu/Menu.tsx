@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Menu.module.scss";
 import { ReactSVG } from "react-svg";
 import FotoTextHint from "../FotoTextHint/FotoTextHint";
@@ -18,6 +18,7 @@ import Loading from "../Loading/Loading";
 import { useGetCurrentAdminAssignedCompanysQuery } from "../../features/users/usersApi";
 import { getValidatedUrl } from "../../utils/imgGetValidatedUrl";
 import { apiSlice } from "../../app/api";
+import FullScreenImgSwiper from "../FullScreenImgSwiper/FullScreenImgSwiper";
 
 interface MenuProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
   const user = useAppSelector(selectCurrentUser);
   const token = useAppSelector(selectedCompanyToken);
   const company = useAppSelector(selectedCompany);
+  const [imgOpen, setImgOpen] = useState(false);
   const [switchCompany, { isLoading }] = useSwitchCompanyMutation();
 
   const { data: currentAdminAssignedCompanys } =
@@ -82,6 +84,13 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
   if (!company) return <Loading />;
   return (
     <>
+      {imgOpen && (
+        <FullScreenImgSwiper
+          imgOpen={imgOpen}
+          setImgOpen={setImgOpen}
+          images={[company?.logo]}
+        />
+      )}
       {isLoading && <Loading />}
       <div
         className={`${styles.overlay} ${
@@ -95,6 +104,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
             src={company?.logo ? getValidatedUrl(company?.logo) : "logo.png"}
             alt=""
             loading="lazy"
+            onClick={() => setImgOpen(true)}
           />
 
           <ReactSVG src="./iconsSvg/bells.svg" className={styles.bells} />

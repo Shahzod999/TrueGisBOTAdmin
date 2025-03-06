@@ -8,7 +8,7 @@ interface FullScreenImgSwiperProps {
   imgOpen: boolean;
   setImgOpen: (open: boolean) => void;
   images: string[];
-  indexImg: number;
+  indexImg?: number;
 }
 
 const FullScreenImgSwiper = ({
