@@ -2,18 +2,16 @@ import { useEffect } from "react";
 
 export const useKeyboardAdjust = () => {
   useEffect(() => {
-    const handleResize = () => {
-      if (window.visualViewport) {
-        document.body.style.paddingBottom =
-          window.innerHeight < window.visualViewport.height
-            ? `${window.visualViewport.height - window.innerHeight}px`
-            : "0px";
-      }
+    const updatePadding = () => {
+      const viewportHeight = window.innerHeight; // Реальная высота окна
+      document.body.style.height = `${viewportHeight}px`; // Подгоняем высоту body
     };
 
-    window.visualViewport?.addEventListener("resize", handleResize);
+    updatePadding(); // Вызов сразу при монтировании
+    window.addEventListener("resize", updatePadding);
+
     return () => {
-      window.visualViewport?.removeEventListener("resize", handleResize);
+      window.removeEventListener("resize", updatePadding);
     };
   }, []);
 };
