@@ -10,14 +10,11 @@ export const authApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     switchCompany: builder.mutation({
-      query: ({ company_id, token }) => ({
+      query: ({ company_id }) => ({
         url: "/admin/auth/switch-company",
         method: "POST",
         body: { company_id },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        providesTags: ["Analytics"],
       }),
     }),
   }),

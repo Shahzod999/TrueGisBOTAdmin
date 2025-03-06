@@ -10,7 +10,6 @@ import { logout, selectCurrentUser } from "../../features/auth/authSlice";
 import { useSwitchCompanyMutation } from "../../features/auth/authApi";
 import {
   selectedCompany,
-  selectedCompanyToken,
   setCompany,
   setCompanyToken,
 } from "../../features/company/companySlice";
@@ -19,6 +18,7 @@ import { useGetCurrentAdminAssignedCompanysQuery } from "../../features/users/us
 import { getValidatedUrl } from "../../utils/imgGetValidatedUrl";
 import { apiSlice } from "../../app/api";
 import FullScreenImgSwiper from "../FullScreenImgSwiper/FullScreenImgSwiper";
+import { useGetAnalyticsQuery } from "../../features/analytics/analiticsSlice";
 
 interface MenuProps {
   isOpen: boolean;
@@ -28,17 +28,15 @@ interface MenuProps {
 const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectCurrentUser);
-  const token = useAppSelector(selectedCompanyToken);
   const company = useAppSelector(selectedCompany);
   const [imgOpen, setImgOpen] = useState(false);
   const [switchCompany, { isLoading }] = useSwitchCompanyMutation();
+  const { refetch } = useGetAnalyticsQuery();
 
   const { data: currentAdminAssignedCompanys } =
     useGetCurrentAdminAssignedCompanysQuery(user?._id || "", {
       skip: !user?._id,
     });
-
-  console.log(currentAdminAssignedCompanys);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -66,10 +64,10 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
     try {
       let res = await switchCompany({
         company_id: companyId,
-        token: token,
       }).unwrap();
       dispatch(setCompanyToken(res.token));
       dispatch(setCompany(res.data.company));
+      refetch();
     } catch (error) {
       console.log(error);
     }

@@ -5,12 +5,13 @@ import LinearDashboard from "../../components/LinearDashboard/LinearDashboard";
 import Menu from "../../components/Menu/Menu";
 import { useState } from "react";
 import LinkButtonWithNotification from "../../components/Button/LinkButtonWithNotification";
-
+import { useGetAnalyticsQuery } from "../../features/analytics/analiticsSlice";
 
 const Dashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { data: analytics } = useGetAnalyticsQuery();
 
-
+  console.log(analytics?.data, "ss");
 
   const data = [
     { date: "26 ноя", value: 100 },
@@ -57,19 +58,19 @@ const Dashboard = () => {
             icon="./iconsSvg/timer.svg"
             iconText="Заказы"
             hintText="Сегодня"
-            mainText="147"
+            mainText="0"
           />
           <Table
             icon="./iconsSvg/thunder.svg"
             iconText="Звонки"
             hintText="Всего"
-            mainText="39"
+            mainText={String(analytics?.data.call)}
           />
           <Table
             icon="./iconsSvg/location.svg"
             iconText="Посещение"
             hintText="Всего"
-            mainText="86"
+            mainText={String(analytics?.data.web_app)}
           />
         </div>
 

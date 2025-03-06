@@ -17,10 +17,12 @@ import OpenFromSide from "../../components/OpenFromSide/OpenFromSide";
 import EditProduct from "./EditProduct";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 import IconButton from "../../components/Button/IconButton";
+import FullScreenImgSwiper from "../../components/FullScreenImgSwiper/FullScreenImgSwiper";
 
 const ProductDetails = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [imgOpen, setImgOpen] = useState(false);
   const dispatch = useAppDispatch();
   const { setParam, getParam } = useURLState();
 
@@ -62,9 +64,17 @@ const ProductDetails = () => {
       ) : (
         <>
           <div className="singleMenu__img">
+            {imgOpen && (
+              <FullScreenImgSwiper
+                imgOpen={imgOpen}
+                setImgOpen={setImgOpen}
+                images={[singleProd.image]}
+              />
+            )}
             <img
               src={getValidatedUrl(singleProd.image)}
               alt={t("productImageAlt")}
+              onClick={() => setImgOpen(true)}
             />
           </div>
           <div className="singleMenu__main">
