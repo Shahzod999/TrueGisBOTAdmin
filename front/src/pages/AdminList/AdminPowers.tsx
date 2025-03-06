@@ -654,7 +654,11 @@ const AdminPowers = () => {
                       key={company._id}
                       toggle={
                         <FotoTextHint
-                          image={company.logo || "./default.jpg"}
+                          image={
+                            company?.logo
+                              ? getValidatedUrl(company.logo)
+                              : "./default.jpg"
+                          }
                           title={company.name}
                           smallText={company.address || ""}
                           option="infoMenu"
