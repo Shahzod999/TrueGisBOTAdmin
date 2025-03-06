@@ -15,6 +15,7 @@ import {
 } from "../../features/company/companySlice";
 import CustomError from "../../utils/customError";
 import Loading from "../../components/Loading/Loading";
+import useVisibleOnFocus from "../../hooks/useVisibleOnFocus";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ const Login = () => {
     signature?: string;
     general?: string;
   }>({});
+  const { containerRef, handleFocus, handleBlur } = useVisibleOnFocus<HTMLFormElement>();
 
   const handleVisible = (key: "password" | "id") => (e: MouseEvent) => {
     e.stopPropagation();
@@ -113,7 +115,7 @@ const Login = () => {
         <h2>Truegis бизнес!</h2>
         <p>Выполните вход в свой аккаунт</p>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit} ref={containerRef}>
           {errors.general && (
             <div className={styles.errorMessage}>{errors.general}</div>
           )}
@@ -124,8 +126,13 @@ const Login = () => {
               placeholder="Username"
               value={formData.username}
               onChange={handleChange}
-              required
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              className="input-focused"
             />
+            <div onClick={handleVisible("id")}>
+              <ReactSVG src="./iconsSvg/eye.svg" />
+            </div>
             {errors.username && (
               <div className={styles.fieldError}>{errors.username}</div>
             )}
@@ -137,32 +144,33 @@ const Login = () => {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              required
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              className="input-focused"
             />
-            <ReactSVG
-              src={
-                visible.password
-                  ? "./Other/unVisible.svg"
-                  : "./Other/visible.svg"
-              }
-              onClick={handleVisible("password")}
-            />
+            <div onClick={handleVisible("password")}>
+              <ReactSVG
+                src={
+                  visible.password
+                    ? "./iconsSvg/eye.svg"
+                    : "./iconsSvg/eye-off.svg"
+                }
+              />
+            </div>
             {errors.password && (
               <div className={styles.fieldError}>{errors.password}</div>
             )}
           </div>
           <div className={styles.inputWrapper}>
             <input
-              type={visible.id ? "text" : "password"}
+              type="text"
               name="signature"
               placeholder="Truegis ID"
               value={formData.signature}
               onChange={handleChange}
-              required
-            />
-            <ReactSVG
-              src={visible.id ? "./Other/unVisible.svg" : "./Other/visible.svg"}
-              onClick={handleVisible("id")}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              className="input-focused"
             />
             {errors.signature && (
               <div className={styles.fieldError}>{errors.signature}</div>

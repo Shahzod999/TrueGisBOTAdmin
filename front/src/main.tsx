@@ -7,11 +7,8 @@ import "./styles/global.scss";
 import { BrowserRouter } from "react-router";
 import "./utils/i18n.ts";
 import Toast from "./components/Toast/Toast.tsx";
-import { useKeyboardAdjust } from "./utils/useKeyboardAdjust.ts";
 
 const App = () => {
-  useKeyboardAdjust(); // Глобальный вызов хука
-
   return (
     <Provider store={store}>
       <BrowserRouter>
