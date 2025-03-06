@@ -64,7 +64,7 @@ const AdminPowers = () => {
 
   const totalCompanies = assignedCompanies?.data?.filter(
     (company: AssignedCompanyType) =>
-      currentAdminAssignedCompanys?.data?.some(
+      !currentAdminAssignedCompanys?.data?.some(
         (assignedCompany: AssignedCompanyType) =>
           assignedCompany._id === company._id,
       ),
@@ -455,7 +455,6 @@ const AdminPowers = () => {
       }
 
       dispatch(succesToast("Данные администратора успешно обновлены"));
-      navigate("/adminList");
     } catch (error) {
       dispatch(
         errorToast(
@@ -488,6 +487,9 @@ const AdminPowers = () => {
       console.log(error);
     }
   };
+
+  console.log(currentAdminAssignedCompanys, "currentAdminAssignedCompanys");
+  console.log(assignedCompanies, "assignedCompanies");
 
   return (
     <div className={`container ${styles.adminPowers}`}>
@@ -567,7 +569,7 @@ const AdminPowers = () => {
             currentAdminAssignedCompanys ? (
               <div className={styles.companiesList}>
                 <div className={styles.connectedCompanies}>
-                  <h4>Назначенные компании</h4>
+                  <h4>Компании, назначенные текущему админу</h4>
                   {currentAdminAssignedCompanys?.data?.length > 0 ? (
                     <>
                       {currentAdminAssignedCompanys?.data.map(
@@ -648,7 +650,7 @@ const AdminPowers = () => {
                     </div>
                   )}
 
-                  <h4>Все компании</h4>
+                  <h4>Компании, доступные для назначения</h4>
                   {totalCompanies?.map((company: AssignedCompanyType) => (
                     <DropDownMenu
                       key={company._id}

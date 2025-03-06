@@ -5,7 +5,6 @@ import OpenFromSide from "../../components/OpenFromSide/OpenFromSide";
 import { useURLState } from "../../hooks/useURLState";
 import Details from "./Details/Details";
 import MoreDetails from "./Details/MoreDetails";
-import LinkButtonWithNotification from "../../components/Button/LinkButtonWithNotification";
 import { useGetAnalyticsQuery } from "../../features/analytics/analiticsSlice";
 
 const Analytics = () => {
@@ -34,24 +33,19 @@ const Analytics = () => {
         </div>
 
         <div className={styles.main}>
-          <LinkButtonWithNotification
-            text="Новые действия админов"
-            notification={12}
-          />
-
           <div className={styles.table}>
             <Table
               icon="./iconsSvg/money.svg"
               iconText="Заработок"
               hintText="Сегодня"
-              mainText="."
+              mainText="0"
               curency="сум"
             />
             <Table
               icon="./iconsSvg/timer.svg"
               iconText="Заказы"
               hintText="Сегодня"
-              mainText="."
+              mainText="0"
             />
           </div>
 
@@ -63,74 +57,74 @@ const Analytics = () => {
                 icon="./iconsSvg/thunder.svg"
                 iconText="Звонки"
                 hintText="Всего"
-                mainText={String(analytics?.data.call)}
+                mainText={String(analytics?.data.call || 0)}
               />
               <Table
                 icon="./iconsSvg/location.svg"
                 iconText="Посещение"
                 hintText="Всего"
-                mainText="."
+                mainText="0"
               />
 
               <Table
                 icon="./iconsSvg/location.svg"
                 iconText="Позвонить"
                 hintText="Всего нажатий"
-                mainText={String(analytics?.data.call)}
+                mainText={String(analytics?.data.call || 0)}
               />
               <Table
                 icon="./iconsSvg/location.svg"
                 iconText="Заказать"
                 hintText="Всего нажатий"
-                mainText="."
+                mainText="0"
               />
               <Table
                 icon="./iconsSvg/location.svg"
                 iconText="Маршрут"
                 hintText="Сегодня"
-                mainText={String(analytics?.data.route)}
+                mainText={String(analytics?.data.route || 0)}
               />
               <Table
                 icon="./iconsSvg/location.svg"
                 iconText="Поделиться"
                 hintText="Сегодня"
-                mainText={String(analytics?.data.share)}
+                mainText={String(analytics?.data.share || 0)}
               />
               <Table
                 icon="./iconsSvg/location.svg"
                 iconText="Поиск"
                 hintText="Всего нажатий"
-                mainText="."
+                mainText="0"
               />
               <Table
                 icon="./iconsSvg/location.svg"
                 iconText="Такси"
                 hintText="Всего нажатий"
-                mainText={String(analytics?.data.taxi)}
+                mainText={String(analytics?.data.taxi || 0)}
               />
               <Table
                 icon="./iconsSvg/location.svg"
                 iconText="Переслано в чате"
                 hintText="Сегодня"
-                mainText={String(analytics?.data.chat)}
+                mainText={String(analytics?.data.chat || 0)}
               />
               <Table
                 icon="./iconsSvg/location.svg"
                 iconText="Переход на сайт"
                 hintText="Всего нажатий"
-                mainText={String(analytics?.data.website)}
+                mainText={String(analytics?.data.website || 0)}
               />
               <Table
                 icon="./iconsSvg/location.svg"
                 iconText="Моб. приложение"
                 hintText="Всего нажатий"
-                mainText={String(analytics?.data.web_app)}
+                mainText={String(analytics?.data.web_app || 0)}
               />
               <Table
                 icon="./iconsSvg/location.svg"
                 iconText="Рабочее время"
                 hintText="Всего нажатий"
-                mainText={String(analytics?.data.working_hours)}
+                mainText={String(analytics?.data.working_hours || 0)}
               />
             </div>
           </div>

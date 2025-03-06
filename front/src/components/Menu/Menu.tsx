@@ -19,6 +19,7 @@ import { getValidatedUrl } from "../../utils/imgGetValidatedUrl";
 import { apiSlice } from "../../app/api";
 import FullScreenImgSwiper from "../FullScreenImgSwiper/FullScreenImgSwiper";
 import { useGetAnalyticsQuery } from "../../features/analytics/analiticsSlice";
+import Bells from "./Bells";
 
 interface MenuProps {
   isOpen: boolean;
@@ -105,7 +106,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
             onClick={() => setImgOpen(true)}
           />
 
-          <ReactSVG src="./iconsSvg/bells.svg" className={styles.bells} />
+          <Bells />
         </div>
 
         {company?._id ? (

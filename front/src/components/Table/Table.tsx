@@ -18,14 +18,6 @@ const Table = ({
   curency,
   onClick,
 }: Props) => {
-  const trimText = mainText.replace(/\s/g, "");
-  const UpperValue = trimText.length / 3;
-  let mainValue = Number(trimText);
-
-  if (UpperValue > 1) {
-    mainValue = Math.round((UpperValue % 1) * 3);
-  }
-
   return (
     <div className={styles.table} onClick={onClick}>
       <div className={styles.icon}>
@@ -36,9 +28,8 @@ const Table = ({
       <span className={styles.hintText}>{hintText}</span>
 
       <div className={styles.mainText}>
-        <h4>{trimText.slice(0, mainValue)}</h4>
+        <h4>{mainText}</h4>
         <strong>
-          {trimText.slice(mainValue)}
           <span>{curency}</span>
         </strong>
       </div>

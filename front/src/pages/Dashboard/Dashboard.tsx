@@ -4,14 +4,14 @@ import Table from "../../components/Table/Table";
 import LinearDashboard from "../../components/LinearDashboard/LinearDashboard";
 import Menu from "../../components/Menu/Menu";
 import { useState } from "react";
-import LinkButtonWithNotification from "../../components/Button/LinkButtonWithNotification";
 import { useGetAnalyticsQuery } from "../../features/analytics/analiticsSlice";
 
 const Dashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { data: analytics } = useGetAnalyticsQuery();
-
-  console.log(analytics?.data, "ss");
+  const day = new Date().toLocaleDateString("ru-RU", { day: "2-digit" });
+  const month = new Date().toLocaleDateString("ru-RU", { month: "2-digit" });
+  const year = new Date().toLocaleDateString("ru-RU", { year: "2-digit" });
 
   const data = [
     { date: "26 ноя", value: 100 },
@@ -35,23 +35,20 @@ const Dashboard = () => {
         <h2>Статистика</h2>
 
         <div className={styles.right}>
-          <span>12.12.24</span>
+          <span>
+            {day}.{month}.{year}
+          </span>
           <ReactSVG src="./iconsSvg/calendar.svg" />
         </div>
       </div>
 
       <div className={styles.main}>
-        <LinkButtonWithNotification
-          text="Новые действия админов"
-          notification={12}
-        />
-
         <div className={styles.table}>
           <Table
             icon="./iconsSvg/money.svg"
             iconText="Заработок"
             hintText="Сегодня"
-            mainText="12 000 000 "
+            mainText="0"
             curency="сум"
           />
           <Table
@@ -64,13 +61,13 @@ const Dashboard = () => {
             icon="./iconsSvg/thunder.svg"
             iconText="Звонки"
             hintText="Всего"
-            mainText={String(analytics?.data.call)}
+            mainText={String(analytics?.data.call || 0)}
           />
           <Table
             icon="./iconsSvg/location.svg"
             iconText="Посещение"
             hintText="Всего"
-            mainText={String(analytics?.data.web_app)}
+            mainText={String(analytics?.data.web_app || 0)}
           />
         </div>
 
