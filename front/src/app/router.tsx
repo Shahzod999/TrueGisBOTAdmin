@@ -10,7 +10,6 @@ import { useAppDispatch } from "./hooks";
 import { setTelegramId } from "../features/telegram/telegramSlice";
 import useTelegramBackButton from "../features/users/useTelegramBackButton";
 import CategoryDetails from "../pages/Products/CategoryDetails";
-import { useKeyboardAdjust } from "../utils/useKeyboardAdjust";
 
 const Login = lazy(() => import("../pages/Login/Login"));
 const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard"));
@@ -25,7 +24,6 @@ declare global {
 }
 
 const Router = () => {
-  useKeyboardAdjust();
   const dispatch = useAppDispatch();
   useTelegramBackButton();
   const tg = window.Telegram.WebApp;
