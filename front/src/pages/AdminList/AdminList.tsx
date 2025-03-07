@@ -46,6 +46,7 @@ const AdminList = () => {
           onClick={() => setParam("addNewAdmin", true)}
         />
       </div>
+
       <OpenFromSide
         isOpen={initialPage}
         onClose={() => setParam("addNewAdmin", false)}>

@@ -1,7 +1,8 @@
 .categoryDetails {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    // min-height: 100vh;
+    height: 100%;
     background-color: var(--secondary-bg-color);
 
     h2 {
@@ -55,6 +56,7 @@
     padding-left: max(16px, var(--tg-safe-area-inset-left, 16px));
     padding-right: max(16px, var(--tg-safe-area-inset-right, 16px));
 }
+
 
 .addCategory {
     width: 44px;
@@ -237,7 +239,7 @@
 .addNewProdMain {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    // min-height: 100vh;
     height: 100%;
     background-color: var(--bg-color);
 

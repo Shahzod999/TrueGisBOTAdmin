@@ -25,6 +25,9 @@
     --font7: "Visby CF", sans-serif;
     --font8: "Roboto", sans-serif;
     --font9: "Lato", sans-serif;
+    --total-height: var(--tg-viewport-height);
+    // --total-height: 500px;
+
 }
 
 * {
@@ -62,7 +65,8 @@ body {
 body {
     background: var(--secondary-bg-color) !important;
     color: var(--text-color);
-    height: var(--tg-viewport-height);
+    // height: var(--tg-viewport-height);
+    height: var(--total-height);
     border: solid;
     overflow: hidden;
 }
@@ -79,7 +83,8 @@ html {
 #root {
     position: relative;
     width: 100%;
-    height: var(--tg-viewport-height);
+    // height: var(--tg-viewport-height);
+    height: var(--total-height);
     overflow: scroll;
 }
 
@@ -112,11 +117,4 @@ input {
 
 textarea {
     color: var(--text-color);
-}
-
-.alwaysBottom {
-    position: sticky;
-    bottom: 0;
-    left: 0;
-    right: 0;
 }

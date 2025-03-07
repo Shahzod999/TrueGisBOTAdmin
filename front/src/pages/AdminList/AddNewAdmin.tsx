@@ -135,13 +135,11 @@ const AddNewAdmin = () => {
           </label>
         </form>
 
-        <div className="alwaysBottom">
-          <IconButton
-            text="Далее"
-            styleName="linkColor"
-            onClick={() => handleSubmit({ preventDefault: () => {} } as any)}
-          />
-        </div>
+        <IconButton
+          text="Далее"
+          styleName="linkColor"
+          onClick={() => handleSubmit({ preventDefault: () => {} } as any)}
+        />
       </div>
     </>
   );

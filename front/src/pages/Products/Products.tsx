@@ -148,33 +148,31 @@ const Products = () => {
 
         <div className={styles.addCategoryButton}>
           {category?.data.length > 0 && (
-            <div className="alwaysBottom">
-              <IconButton
-                text="Добавить свою категорию"
-                styleName="linkColor"
-                onClick={() => setParam("addNewCategory", true)}
-              />
-            </div>
+            <IconButton
+              text="Добавить свою категорию"
+              styleName="linkColor"
+              onClick={() => setParam("addNewCategory", true)}
+            />
           )}
         </div>
+
+        {/* Модальные окна */}
+        <AddNewCategory onClick={handleAddCategory} state="addNewCategory" />
+
+        <AddNewCategory
+          onClick={handleSaveCategory}
+          state="editCategory"
+          category={selectedCategory}
+          isEdit={true}
+        />
+
+        <DeleteConfirmModal
+          isOpen={deleteModalOpen}
+          onClose={() => setDeleteModalOpen(false)}
+          onConfirm={handleDeleteCategory}
+          itemName={selectedCategory?.name || ""}
+        />
       </div>
-
-      {/* Модальные окна */}
-      <AddNewCategory onClick={handleAddCategory} state="addNewCategory" />
-
-      <AddNewCategory
-        onClick={handleSaveCategory}
-        state="editCategory"
-        category={selectedCategory}
-        isEdit={true}
-      />
-
-      <DeleteConfirmModal
-        isOpen={deleteModalOpen}
-        onClose={() => setDeleteModalOpen(false)}
-        onConfirm={handleDeleteCategory}
-        itemName={selectedCategory?.name || ""}
-      />
     </>
   );
 };

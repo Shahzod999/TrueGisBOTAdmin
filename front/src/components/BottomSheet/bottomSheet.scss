@@ -34,7 +34,7 @@
     max-height: 100%;
 
     &--open {
-        transform: translateY(0);
+        transform: translateY(calc(var(--total-height) - 100vh));
         // max-height: 100%;
         // overflow: scroll;
     }
