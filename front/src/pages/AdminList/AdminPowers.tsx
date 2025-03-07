@@ -455,6 +455,7 @@ const AdminPowers = () => {
       }
 
       dispatch(succesToast("Данные администратора успешно обновлены"));
+      navigate("/adminList");
     } catch (error) {
       dispatch(
         errorToast(
@@ -464,6 +465,7 @@ const AdminPowers = () => {
       );
     }
   };
+  console.log(newAdminId, "newAdminId");
 
   const handleDeleteAdmin = async () => {
     try {

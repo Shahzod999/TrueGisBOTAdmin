@@ -1,4 +1,4 @@
-import { FormEvent, MouseEvent, useRef, useState } from "react";
+import { FormEvent, MouseEvent, useState } from "react";
 import { ReactSVG } from "react-svg";
 import styles from "./adminStyle.module.scss";
 import IconButton from "../../components/Button/IconButton";
@@ -15,7 +15,6 @@ interface AdminFormData {
 }
 
 const AddNewAdmin = () => {
-  const inputsRef = useRef<Record<string, HTMLInputElement | null>>({});
   const dispatch = useAppDispatch();
   const { setParam } = useURLState();
   const [addNewAdmin, { isLoading }] = useAddNewAdminMutation();
@@ -46,6 +45,14 @@ const AddNewAdmin = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (
+      formData.full_name === "" ||
+      formData.username === "" ||
+      formData.password === ""
+    ) {
+      dispatch(errorToast("Поля не могут быть пустыми"));
+      return;
+    }
     try {
       // Токен будет добавлен автоматически через baseQuery
       const res = await addNewAdmin(formData).unwrap();
@@ -66,82 +73,55 @@ const AddNewAdmin = () => {
     }
   };
 
-  const handleFocus = (name: string) => {
-    setTimeout(() => {
-      inputsRef.current[name]?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }, 100);
-  };
-
-  const setInputRef = (name: string) => (el: HTMLInputElement | null) => {
-    inputsRef.current[name] = el;
-  };
-
   return (
-    <>
+    <div className={`container ${styles.addNewAdmin}`}>
       {isLoading && <Loading />}
-      <div className={`container ${styles.addNewAdmin}`}>
-        <div className={styles.title}>
-          <h2>Новый Админ</h2>
-          <span>Придумайте логин и пароль для этого роля. </span>
-        </div>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <label className={styles.inputWrapper}>
-            <input
-              ref={setInputRef("full_name")}
-              type="text"
-              placeholder="ФИО"
-              name="full_name"
-              value={formData.full_name}
-              onChange={handleChange}
-              onFocus={() => handleFocus("full_name")}
-              required
-            />
-          </label>
-          <label className={styles.inputWrapper}>
-            <input
-              ref={setInputRef("username")}
-              type="text"
-              placeholder="Login"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              onFocus={() => handleFocus("username")}
-              required
-            />
-          </label>
-          <label className={styles.inputWrapper}>
-            <input
-              ref={setInputRef("password")}
-              type={visible.password ? "text" : "password"}
-              placeholder="Password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              onFocus={() => handleFocus("password")}
-              required
-            />
-            <ReactSVG
-              src={
-                visible.password
-                  ? "./Other/unVisible.svg"
-                  : "./Other/visible.svg"
-              }
-              onClick={handleVisible("password")}
-            />
-          </label>
-        </form>
-
-        <IconButton
-          text="Далее"
-          styleName="linkColor"
-          onClick={() => handleSubmit({ preventDefault: () => {} } as any)}
-        />
+      <div className={styles.title}>
+        <h2>Новый Админ</h2>
+        <span>Придумайте логин и пароль для этого роля. </span>
       </div>
-    </>
+
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <label className={styles.inputWrapper}>
+          <input
+            type="text"
+            placeholder="ФИО"
+            name="full_name"
+            value={formData.full_name}
+            onChange={handleChange}
+            required
+          />
+        </label>
+        <label className={styles.inputWrapper}>
+          <input
+            type="text"
+            placeholder="Login"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            required
+          />
+        </label>
+        <label className={styles.inputWrapper}>
+          <input
+            type={visible.password ? "text" : "password"}
+            placeholder="Password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          <ReactSVG
+            src={
+              visible.password ? "./Other/unVisible.svg" : "./Other/visible.svg"
+            }
+            onClick={handleVisible("password")}
+          />
+        </label>
+        <IconButton text="Далее" styleName="linkColor" />
+      </form>
+    </div>
   );
 };
 

@@ -27,7 +27,6 @@
     --font9: "Lato", sans-serif;
     --total-height: var(--tg-viewport-height);
     // --total-height: 500px;
-
 }
 
 * {
@@ -65,9 +64,8 @@ body {
 body {
     background: var(--secondary-bg-color) !important;
     color: var(--text-color);
-    // height: var(--tg-viewport-height);
     height: var(--total-height);
-    border: solid;
+    // border: solid;
     overflow: hidden;
 }
 
@@ -83,7 +81,6 @@ html {
 #root {
     position: relative;
     width: 100%;
-    // height: var(--tg-viewport-height);
     height: var(--total-height);
     overflow: scroll;
 }

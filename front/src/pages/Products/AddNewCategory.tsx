@@ -12,7 +12,12 @@ interface Props {
   isEdit?: boolean;
 }
 
-const AddNewCategory = ({ onClick, state, category, isEdit = false }: Props) => {
+const AddNewCategory = ({
+  onClick,
+  state,
+  category,
+  isEdit = false,
+}: Props) => {
   const { getParam, setParam } = useURLState();
   const [itemName, setItemName] = useState("");
   const initialPage = Boolean(getParam(state));
@@ -46,7 +51,7 @@ const AddNewCategory = ({ onClick, state, category, isEdit = false }: Props) => 
         <div>
           <input
             type="text"
-            placeholder="Название категории"
+            placeholder="Введите категорию"
             value={itemName}
             onChange={(e) => setItemName(e.target.value)}
             autoFocus
