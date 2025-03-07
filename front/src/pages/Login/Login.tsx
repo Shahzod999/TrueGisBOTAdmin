@@ -1,7 +1,7 @@
 import { ReactSVG } from "react-svg";
 import styles from "./Login.module.scss";
 import BottomSheet from "../../components/BottomSheet/BottomSheet";
-import { FormEvent, MouseEvent, useRef, useState } from "react";
+import { FormEvent, MouseEvent, useEffect, useRef, useState } from "react";
 import IconButton from "../../components/Button/IconButton";
 import Lottie from "lottie-react";
 import utya from "../../../public/utya/technical.json";
@@ -21,6 +21,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [loginUser, { isLoading }] = useLoginUserMutation();
+
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
@@ -37,6 +38,10 @@ const Login = () => {
     signature?: string;
     general?: string;
   }>({});
+
+  useEffect(() => {
+    window.Telegram.WebApp.BackButton.hide();
+  }, []);
 
   const handleVisible = (key: "password" | "id") => (e: MouseEvent) => {
     e.stopPropagation();
