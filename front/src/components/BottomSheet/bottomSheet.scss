@@ -44,6 +44,7 @@
     min-width: 290px;
     margin: auto;
     max-height: 100%;
+    pointer-events: all;
 
     &--open {
         transform: translateY(0);
