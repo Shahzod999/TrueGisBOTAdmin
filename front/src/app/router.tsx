@@ -36,6 +36,7 @@ const Router = () => {
 
       if (parseFloat(tg.version || "0.0") >= 8.0) {
         tg.requestFullscreen();
+        tg.setBackgroundColor(tg.themeParams.bg_color);
       } else {
         console.warn(
           "requestFullscreen не поддерживается в этой версии Telegram",
