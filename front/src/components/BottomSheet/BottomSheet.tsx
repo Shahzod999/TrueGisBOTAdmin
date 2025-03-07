@@ -72,20 +72,21 @@ const BottomSheet = memo(({ isOpen, onClose, children }: BottomSheetProps) => {
       <div
         className={`bottom__wrapper ${isOpen ? "bottom__wrapper--active" : ""}`}
         onClick={handleClose}></div>
-
-      <div
-        className={`bottom-sheet ${isOpen ? "bottom-sheet--open" : ""} ${
-          isDragging ? "bottom-sheet--dragging" : ""
-        }`}
-        draggable={false}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}>
-        <div className="bottom-sheet__content">
-          <div className="bottom-sheet__close" onClick={handleClose}>
-            <div></div>
+      <div className="bottomSheetSize">
+        <div
+          className={`bottom-sheet ${isOpen ? "bottom-sheet--open" : ""} ${
+            isDragging ? "bottom-sheet--dragging" : ""
+          }`}
+          draggable={false}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}>
+          <div className="bottom-sheet__content">
+            <div className="bottom-sheet__close" onClick={handleClose}>
+              <div></div>
+            </div>
+            {children}
           </div>
-          {children}
         </div>
       </div>
     </>
