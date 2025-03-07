@@ -124,11 +124,8 @@ const Login = () => {
               placeholder="Username"
               value={formData.username}
               onChange={handleChange}
-              className="input-focused"
+              required
             />
-            <div onClick={handleVisible("id")}>
-              <ReactSVG src="./iconsSvg/eye.svg" />
-            </div>
             {errors.username && (
               <div className={styles.fieldError}>{errors.username}</div>
             )}
@@ -140,29 +137,32 @@ const Login = () => {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="input-focused"
+              required
             />
-            <div onClick={handleVisible("password")}>
-              <ReactSVG
-                src={
-                  visible.password
-                    ? "./iconsSvg/eye.svg"
-                    : "./iconsSvg/eye-off.svg"
-                }
-              />
-            </div>
+            <ReactSVG
+              src={
+                visible.password
+                  ? "./Other/unVisible.svg"
+                  : "./Other/visible.svg"
+              }
+              onClick={handleVisible("password")}
+            />
             {errors.password && (
               <div className={styles.fieldError}>{errors.password}</div>
             )}
           </div>
           <div className={styles.inputWrapper}>
             <input
-              type="text"
+              type={visible.id ? "text" : "password"}
               name="signature"
               placeholder="Truegis ID"
               value={formData.signature}
               onChange={handleChange}
-              className="input-focused"
+              required
+            />
+            <ReactSVG
+              src={visible.id ? "./Other/unVisible.svg" : "./Other/visible.svg"}
+              onClick={handleVisible("id")}
             />
             {errors.signature && (
               <div className={styles.fieldError}>{errors.signature}</div>

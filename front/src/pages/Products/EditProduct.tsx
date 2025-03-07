@@ -228,7 +228,7 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
   };
 
   return (
-    <div className={`container ${styles.addNewProdMain} form-container`}>
+    <div className={`container ${styles.addNewProdMain}`}>
       {(isLoading || loadingUploadImg) && <Loading />}
       <DropDownMenu
         toggle={<h4 className={styles.titleAddProd}>Редактировать продукт</h4>}
@@ -245,7 +245,6 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
                 onChange={handleInputChange}
                 placeholder="Введите название"
                 inputMode="text"
-                className="input-focused"
               />
             </div>
 
@@ -259,7 +258,6 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
                 placeholder="0 грамм"
                 min={0}
                 inputMode="numeric"
-                className="input-focused"
               />
             </div>
 
@@ -275,7 +273,6 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
                 placeholder="0 сум"
                 inputMode="numeric"
                 min={0}
-                className="input-focused"
               />
             </div>
             <div className={styles.formGroup}>
@@ -288,9 +285,7 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
                 }
                 menu={
                   <div className={styles.currencyHolder}>
-                    <span onClick={() => handleCurrencyChange("SO'M")}>
-                      SO'M
-                    </span>
+                    <span onClick={() => handleCurrencyChange("SO'M")}>SO'M</span>
                     <span onClick={() => handleCurrencyChange("USD")}>USD</span>
                     <span onClick={() => handleCurrencyChange("RUB")}>RUB</span>
                   </div>
@@ -313,7 +308,6 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
                         placeholder="Цена со скидкой"
                         min={0}
                         inputMode="numeric"
-                        className="input-focused"
                       />
                     </div>
 
@@ -324,7 +318,6 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
                         name="start_date"
                         value={discount.start_date}
                         onChange={handleDiscountChange}
-                        className="input-focused"
                       />
                     </div>
 
@@ -335,7 +328,6 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
                         name="end_date"
                         value={discount.end_date}
                         onChange={handleDiscountChange}
-                        className="input-focused"
                       />
                     </div>
                   </div>
@@ -348,7 +340,7 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
               <Switch
                 isOn={isSwipEnabled}
                 handleToggle={() => setIsSwipEnabled(!isSwipEnabled)}
-                id="editProductSwitch"
+                id="editProduct"
               />
             </div>
           </div>
@@ -359,7 +351,7 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
         <AddFoto
           imagesArray={imagesArray}
           setimagesArray={setimagesArray}
-          id="editProduct"
+          id="editProductPhoto"
         />
       </div>
       <div className={styles.textAreaProd}>
@@ -372,13 +364,12 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
           value={productData.description}
           onChange={handleInputChange}
           placeholder="Опишите ваш продукт"
-          className="input-focused"
         />
       </div>
       <IconButton
         text="Сохранить изменения"
         onClick={handleSubmit}
-        styleName="linkColor fixed-bottom-button"
+        styleName="linkColor"
       />
     </div>
   );

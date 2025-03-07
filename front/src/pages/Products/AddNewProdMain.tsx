@@ -216,8 +216,8 @@ const AddNewProdMain = ({
   };
 
   return (
-    <div className={`container ${styles.addNewProdMain} form-container`}>
-      {(isLoading || loadingUploadImg) && <Loading />}
+    <div className={`container ${styles.addNewProdMain}`}>
+      {isLoading || (loadingUploadImg && <Loading />)}
       <h2 className={styles.mainTitle}>{category?.name}</h2>
       <DropDownMenu
         toggle={<h4 className={styles.titleAddProd}>Новый продукт</h4>}
@@ -234,7 +234,6 @@ const AddNewProdMain = ({
                 onChange={handleInputChange}
                 placeholder="Введите название"
                 inputMode="text"
-                className="input-focused"
               />
             </div>
 
@@ -248,7 +247,6 @@ const AddNewProdMain = ({
                 placeholder="0 грамм"
                 min={0}
                 inputMode="numeric"
-                className="input-focused"
               />
             </div>
 
@@ -264,7 +262,6 @@ const AddNewProdMain = ({
                 placeholder="0 сум"
                 inputMode="numeric"
                 min={0}
-                className="input-focused"
               />
             </div>
             <div className={styles.formGroup}>
@@ -277,9 +274,7 @@ const AddNewProdMain = ({
                 }
                 menu={
                   <div className={styles.currencyHolder}>
-                    <span onClick={() => handleCurrencyChange("SO'M")}>
-                      SO'M
-                    </span>
+                    <span onClick={() => handleCurrencyChange("SO'M")}>SO'M</span>
                     <span onClick={() => handleCurrencyChange("USD")}>USD</span>
                     <span onClick={() => handleCurrencyChange("RUB")}>RUB</span>
                   </div>
@@ -349,13 +344,12 @@ const AddNewProdMain = ({
           value={productData.description}
           onChange={handleInputChange}
           placeholder="Опишите ваш продукт"
-          className="input-focused"
         />
       </div>
       <IconButton
         text="Добавить"
         onClick={handleSubmit}
-        styleName="linkColor fixed-bottom-button"
+        styleName="linkColor"
       />
     </div>
   );
