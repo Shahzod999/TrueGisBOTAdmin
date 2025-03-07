@@ -10,6 +10,8 @@ import { useAppDispatch } from "./hooks";
 import { setTelegramId } from "../features/telegram/telegramSlice";
 import useTelegramBackButton from "../features/users/useTelegramBackButton";
 import CategoryDetails from "../pages/Products/CategoryDetails";
+import eruda from "eruda";
+import OrientationLock from "../utils/OrientationLock";
 
 const Login = lazy(() => import("../pages/Login/Login"));
 const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard"));
@@ -28,11 +30,15 @@ const Router = () => {
   useTelegramBackButton();
   const tg = window.Telegram.WebApp;
 
+  const orientation = OrientationLock();
+
   useEffect(() => {
+    eruda.init();
     if (tg) {
       tg.ready();
       tg.expand();
       tg.disableVerticalSwipes();
+      orientation.init();
 
       if (parseFloat(tg.version || "0.0") >= 8.0) {
         tg.requestFullscreen();

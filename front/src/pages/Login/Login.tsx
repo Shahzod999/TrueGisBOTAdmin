@@ -183,6 +183,7 @@ const Login = () => {
               value={formData.signature}
               onChange={handleChange}
               onFocus={() => handleFocus("signature")}
+              inputMode="numeric"
               required
             />
             <ReactSVG
