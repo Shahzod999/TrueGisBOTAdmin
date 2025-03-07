@@ -269,12 +269,14 @@ const AddNewProdMain = ({
                 toggle={
                   <h5>
                     Выберите валюту <span className={styles.required}>*</span>
-                    {choosenCurrency}
+                    {choosenCurrency == "UZS" ? "SO'M" : choosenCurrency}
                   </h5>
                 }
                 menu={
                   <div className={styles.currencyHolder}>
-                    <span onClick={() => handleCurrencyChange("SO'M")}>SO'M</span>
+                    <span onClick={() => handleCurrencyChange("UZS")}>
+                      SO'M
+                    </span>
                     <span onClick={() => handleCurrencyChange("USD")}>USD</span>
                     <span onClick={() => handleCurrencyChange("RUB")}>RUB</span>
                   </div>

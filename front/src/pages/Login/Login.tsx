@@ -1,7 +1,7 @@
 import { ReactSVG } from "react-svg";
 import styles from "./Login.module.scss";
 import BottomSheet from "../../components/BottomSheet/BottomSheet";
-import { FormEvent, MouseEvent, useState } from "react";
+import { FormEvent, MouseEvent, useRef, useState } from "react";
 import IconButton from "../../components/Button/IconButton";
 import Lottie from "lottie-react";
 import utya from "../../../public/utya/technical.json";
@@ -17,6 +17,7 @@ import CustomError from "../../utils/customError";
 import Loading from "../../components/Loading/Loading";
 
 const Login = () => {
+  const inputsRef = useRef<Record<string, HTMLInputElement | null>>({});
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [loginUser, { isLoading }] = useLoginUserMutation();
@@ -99,6 +100,19 @@ const Login = () => {
     }
   };
 
+  const handleFocus = (name: string) => {
+    setTimeout(() => {
+      inputsRef.current[name]?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }, 100);
+  };
+
+  const setInputRef = (name: string) => (el: HTMLInputElement | null) => {
+    inputsRef.current[name] = el;
+  };
+
   return (
     <>
       {isLoading && <Loading />}
@@ -117,26 +131,30 @@ const Login = () => {
           {errors.general && (
             <div className={styles.errorMessage}>{errors.general}</div>
           )}
-          <div className={styles.inputWrapper}>
+          <label className={styles.inputWrapper}>
             <input
+              ref={setInputRef("username")}
               type="text"
               name="username"
               placeholder="Username"
               value={formData.username}
               onChange={handleChange}
+              onFocus={() => handleFocus("username")}
               required
             />
             {errors.username && (
               <div className={styles.fieldError}>{errors.username}</div>
             )}
-          </div>
-          <div className={styles.inputWrapper}>
+          </label>
+          <label className={styles.inputWrapper}>
             <input
+              ref={setInputRef("password")}
               type={visible.password ? "text" : "password"}
               name="password"
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
+              onFocus={() => handleFocus("password")}
               required
             />
             <ReactSVG
@@ -150,14 +168,16 @@ const Login = () => {
             {errors.password && (
               <div className={styles.fieldError}>{errors.password}</div>
             )}
-          </div>
-          <div className={styles.inputWrapper}>
+          </label>
+          <label className={styles.inputWrapper}>
             <input
+              ref={setInputRef("signature")}
               type={visible.id ? "text" : "password"}
               name="signature"
               placeholder="Truegis ID"
               value={formData.signature}
               onChange={handleChange}
+              onFocus={() => handleFocus("signature")}
               required
             />
             <ReactSVG
@@ -167,7 +187,7 @@ const Login = () => {
             {errors.signature && (
               <div className={styles.fieldError}>{errors.signature}</div>
             )}
-          </div>
+          </label>
           <button type="submit" disabled={isLoading}>
             {isLoading ? "Загрузка..." : "Войти"}
           </button>

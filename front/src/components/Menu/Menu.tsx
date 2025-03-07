@@ -98,64 +98,71 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
         onClick={onClose}></div>
 
       <div className={`${styles.menu} ${isOpen ? styles.open : ""}`}>
-        <div className={styles.logo}>
-          <img
-            src={company?.logo ? getValidatedUrl(company?.logo) : "logo.png"}
-            alt=""
-            loading="lazy"
-            onClick={() => setImgOpen(true)}
-          />
-
-          <Bells />
-        </div>
-
-        {company?._id ? (
-          <div className={styles.dropMenu}>
-            <DropDownMenu
-              toggle={
-                <div className={styles.companyInfo}>
-                  <h2 className={styles.companyName}>{company?.name}</h2>
-                  <span>{company?.address}</span>
-                </div>
-              }
-              menu={
-                <>
-                  {currentAdminAssignedCompanys?.data.map((company, index) => (
-                    <FotoTextHint
-                      key={index}
-                      image={
-                        company?.logo
-                          ? getValidatedUrl(company?.logo)
-                          : "./default.jpg"
-                      }
-                      title={company.name}
-                      smallText={company.address || "address"}
-                      option="infoMenu"
-                      onClick={() => handleSwitchCompany(company._id)}
-                    />
-                  ))}
-                </>
-              }
+        <div className={styles.menu__wrapper}>
+          <div className={styles.logo}>
+            <img
+              src={company?.logo ? getValidatedUrl(company?.logo) : "logo.png"}
+              alt=""
+              loading="lazy"
+              onClick={() => setImgOpen(true)}
             />
-          </div>
-        ) : (
-          <div className={styles.companyInfo}>
-            <h2 className={styles.companyName}>{user?.full_name}</h2>
-            <span>Нет связанных компаний</span>
-          </div>
-        )}
 
-        <div className={styles.menuList}>
-          {menuItems.map((item, index) => (
-            <Link to={item.link} key={index}>
-              <IconTextArrow icon={item.icon} text={item.text} />
-            </Link>
-          ))}
-        </div>
+            <Bells />
+          </div>
 
-        <div className={styles.logOut} onClick={() => navigate("/login")}>
-          <ReactSVG src="./iconsSvg/logOut.svg" className={styles.logOutIcon} />
-          <span onClick={handleLogOut}>Выйти</span>
+          {company?._id ? (
+            <div className={styles.dropMenu}>
+              <DropDownMenu
+                toggle={
+                  <div className={styles.companyInfo}>
+                    <h2 className={styles.companyName}>{company?.name}</h2>
+                    <span>{company?.address}</span>
+                  </div>
+                }
+                menu={
+                  <>
+                    {currentAdminAssignedCompanys?.data.map(
+                      (company, index) => (
+                        <FotoTextHint
+                          key={index}
+                          image={
+                            company?.logo
+                              ? getValidatedUrl(company?.logo)
+                              : "./default.jpg"
+                          }
+                          title={company.name}
+                          smallText={company.address || "address"}
+                          option="infoMenu"
+                          onClick={() => handleSwitchCompany(company._id)}
+                        />
+                      ),
+                    )}
+                  </>
+                }
+              />
+            </div>
+          ) : (
+            <div className={styles.companyInfo}>
+              <h2 className={styles.companyName}>{user?.full_name}</h2>
+              <span>Нет связанных компаний</span>
+            </div>
+          )}
+
+          <div className={styles.menuList}>
+            {menuItems.map((item, index) => (
+              <Link to={item.link} key={index}>
+                <IconTextArrow icon={item.icon} text={item.text} />
+              </Link>
+            ))}
+          </div>
+
+          <div className={styles.logOut} onClick={() => navigate("/login")}>
+            <ReactSVG
+              src="./iconsSvg/logOut.svg"
+              className={styles.logOutIcon}
+            />
+            <span onClick={handleLogOut}>Выйти</span>
+          </div>
         </div>
       </div>
     </>

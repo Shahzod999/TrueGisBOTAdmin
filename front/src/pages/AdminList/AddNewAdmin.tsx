@@ -1,4 +1,4 @@
-import { FormEvent, MouseEvent, useState } from "react";
+import { FormEvent, MouseEvent, useRef, useState } from "react";
 import { ReactSVG } from "react-svg";
 import styles from "./adminStyle.module.scss";
 import IconButton from "../../components/Button/IconButton";
@@ -15,6 +15,7 @@ interface AdminFormData {
 }
 
 const AddNewAdmin = () => {
+  const inputsRef = useRef<Record<string, HTMLInputElement | null>>({});
   const dispatch = useAppDispatch();
   const { setParam } = useURLState();
   const [addNewAdmin, { isLoading }] = useAddNewAdminMutation();
@@ -65,6 +66,19 @@ const AddNewAdmin = () => {
     }
   };
 
+  const handleFocus = (name: string) => {
+    setTimeout(() => {
+      inputsRef.current[name]?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }, 100);
+  };
+
+  const setInputRef = (name: string) => (el: HTMLInputElement | null) => {
+    inputsRef.current[name] = el;
+  };
+
   return (
     <>
       {isLoading && <Loading />}
@@ -75,33 +89,39 @@ const AddNewAdmin = () => {
         </div>
 
         <form className={styles.form} onSubmit={handleSubmit}>
-          <div className={styles.inputWrapper}>
+          <label className={styles.inputWrapper}>
             <input
+              ref={setInputRef("full_name")}
               type="text"
               placeholder="ФИО"
               name="full_name"
               value={formData.full_name}
               onChange={handleChange}
+              onFocus={() => handleFocus("full_name")}
               required
             />
-          </div>
-          <div className={styles.inputWrapper}>
+          </label>
+          <label className={styles.inputWrapper}>
             <input
+              ref={setInputRef("username")}
               type="text"
               placeholder="Login"
               name="username"
               value={formData.username}
               onChange={handleChange}
+              onFocus={() => handleFocus("username")}
               required
             />
-          </div>
-          <div className={styles.inputWrapper}>
+          </label>
+          <label className={styles.inputWrapper}>
             <input
+              ref={setInputRef("password")}
               type={visible.password ? "text" : "password"}
               placeholder="Password"
               name="password"
               value={formData.password}
               onChange={handleChange}
+              onFocus={() => handleFocus("password")}
               required
             />
             <ReactSVG
@@ -112,14 +132,16 @@ const AddNewAdmin = () => {
               }
               onClick={handleVisible("password")}
             />
-          </div>
+          </label>
         </form>
 
-        <IconButton
-          text="Далее"
-          styleName="linkColor"
-          onClick={() => handleSubmit({ preventDefault: () => {} } as any)}
-        />
+        <div className="alwaysBottom">
+          <IconButton
+            text="Далее"
+            styleName="linkColor"
+            onClick={() => handleSubmit({ preventDefault: () => {} } as any)}
+          />
+        </div>
       </div>
     </>
   );

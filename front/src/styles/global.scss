@@ -62,7 +62,8 @@ body {
 body {
     background: var(--secondary-bg-color) !important;
     color: var(--text-color);
-    height: var(--tg-viewport-height);
+    // height: var(--tg-viewport-height);
+    border: solid;
 }
 
 html {
@@ -108,4 +109,11 @@ input {
 
 textarea {
     color: var(--text-color);
+}
+
+.alwaysBottom {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }

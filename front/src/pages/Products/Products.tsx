@@ -148,11 +148,13 @@ const Products = () => {
 
         <div className={styles.addCategoryButton}>
           {category?.data.length > 0 && (
-            <IconButton
-              text="Добавить свою категорию"
-              styleName="linkColor"
-              onClick={() => setParam("addNewCategory", true)}
-            />
+            <div className="alwaysBottom">
+              <IconButton
+                text="Добавить свою категорию"
+                styleName="linkColor"
+                onClick={() => setParam("addNewCategory", true)}
+              />
+            </div>
           )}
         </div>
       </div>
