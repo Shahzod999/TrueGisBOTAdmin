@@ -1,7 +1,6 @@
 import BottomSheet from "../../components/BottomSheet/BottomSheet";
 import { useURLState } from "../../hooks/useURLState";
 import styles from "./Products.module.scss";
-import IconButton from "../../components/Button/IconButton";
 import { useState, useEffect } from "react";
 import { singleCategoryType } from "../../types/categoryTypes";
 
@@ -22,16 +21,6 @@ const AddNewCategory = ({
   const [itemName, setItemName] = useState("");
   const initialPage = Boolean(getParam(state));
 
-  // Устанавливаем имя категории при редактировании
-  useEffect(() => {
-    if (category && isEdit && initialPage) {
-      setItemName(category.name);
-    } else if (!initialPage) {
-      // Сбрасываем имя при закрытии
-      setItemName("");
-    }
-  }, [category, isEdit, initialPage]);
-
   const handleSubmit = () => {
     if (itemName.trim()) {
       if (isEdit && category) {
@@ -43,6 +32,37 @@ const AddNewCategory = ({
       setParam(state, false);
     }
   };
+
+  // Устанавливаем имя категории при редактировании
+  const mainButton = Telegram.WebApp.MainButton;
+
+  useEffect(() => {
+    if (initialPage) {
+      mainButton
+        .setParams({
+          text: isEdit ? "Сохранить изменения" : "Создать категорию",
+          has_shine_effect: true,
+        })
+        .onClick(handleSubmit);
+    }
+
+    return () => {
+      mainButton.offClick(handleSubmit);
+    };
+  }, [category, isEdit, initialPage, handleSubmit]);
+
+  useEffect(() => {
+    if (category && isEdit && initialPage) {
+      setItemName(category.name);
+    } else if (!initialPage) {
+      mainButton.setParams({
+        text: "Добавить категорию",
+        has_shine_effect: true,
+      });
+      // Сбрасываем имя при закрытии
+      setItemName("");
+    }
+  }, [category, isEdit, initialPage]);
 
   return (
     <BottomSheet isOpen={initialPage} onClose={() => setParam(state, false)}>
@@ -57,11 +77,11 @@ const AddNewCategory = ({
             autoFocus
           />
         </div>
-        <IconButton
+        {/* <IconButton
           text={isEdit ? "Сохранить изменения" : "Добавить категорию"}
           styleName="linkColor"
           onClick={handleSubmit}
-        />
+        /> */}
       </div>
     </BottomSheet>
   );

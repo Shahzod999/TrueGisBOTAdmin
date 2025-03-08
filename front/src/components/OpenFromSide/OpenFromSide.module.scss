@@ -19,6 +19,7 @@
 .panel {
     position: fixed;
     top: 0;
+    z-index: 2;
     right: -100%;
     width: 100%;
     height: var(--total-height);

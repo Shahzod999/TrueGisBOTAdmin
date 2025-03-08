@@ -14,6 +14,7 @@ import { useAppSelector } from "../../app/hooks";
 import { selectedCompany } from "../../features/company/companySlice";
 import FoodBox from "./FoodBox";
 import { FoodBoxType } from "../../types/foodType";
+import { useEffect } from "react";
 
 const CategoryDetails = () => {
   const { categoryId } = useParams();
@@ -33,6 +34,26 @@ const CategoryDetails = () => {
   );
 
   const { data: category } = useGetOneCategoryQuery(categoryId);
+
+  useEffect(() => {
+    const mainButton = Telegram.WebApp.MainButton;
+
+    const toggleParam = () => {
+      setParam("addNewProductByCategory", true);
+    };
+
+    mainButton
+      .setParams({
+        text: "Добавить продукт",
+      })
+      .onClick(toggleParam);
+
+    mainButton.show();
+    return () => {
+      mainButton.hide();
+      mainButton.offClick(toggleParam);
+    };
+  }, [category, initialPage]);
 
   if (!company) return <Loading />;
   return (

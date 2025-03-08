@@ -11,6 +11,7 @@ import { errorToast, succesToast } from "../../features/Toast/toastSlice";
 import Loading from "../../components/Loading/Loading";
 import { FoodBoxType } from "../../types/foodType";
 import Switch from "../../components/Switch/Switch";
+import { useURLState } from "../../hooks/useURLState";
 
 interface ProductFormData {
   name: string;
@@ -32,6 +33,7 @@ interface EditProductProps {
 }
 
 const EditProduct = ({ product, onClose }: EditProductProps) => {
+  const { getParam } = useURLState();
   const dispatch = useAppDispatch();
   const [imagesArray, setimagesArray] = useState<
     (PhotosSample & { file?: File })[]
@@ -226,6 +228,43 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
   const handleCurrencyChange = (currency: string) => {
     setChoosenCurrency(currency);
   };
+  const initialEditPage = Boolean(getParam("editProduct"));
+
+  useEffect(() => {
+    if (!window.Telegram || !window.Telegram.WebApp) return;
+    const mainButton = Telegram.WebApp.MainButton;
+
+    try {
+      const emptyFunc = () => {};
+      mainButton.offClick(emptyFunc);
+    } catch (e) {
+      console.warn("Ошибка при очистке обработчиков:", e);
+    }
+
+    if (initialEditPage) {
+      try {
+        mainButton.setText("Сохранить");
+        mainButton.onClick(handleSubmit);
+        mainButton.show();
+
+        // Для отладки
+        console.log(
+          "Установлен обработчик MainButton, текущее количество фотографий:",
+          imagesArray.length,
+        );
+      } catch (e) {
+        console.error("Ошибка при настройке MainButton:", e);
+      }
+    }
+
+    return () => {
+      try {
+        mainButton.offClick(handleSubmit);
+      } catch (e) {
+        console.warn("Ошибка при отключении обработчика:", e);
+      }
+    };
+  }, [handleSubmit, product]);
 
   return (
     <div className={`container ${styles.addNewProdMain}`}>
@@ -285,7 +324,9 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
                 }
                 menu={
                   <div className={styles.currencyHolder}>
-                    <span onClick={() => handleCurrencyChange("SO'M")}>SO'M</span>
+                    <span onClick={() => handleCurrencyChange("SO'M")}>
+                      SO'M
+                    </span>
                     <span onClick={() => handleCurrencyChange("USD")}>USD</span>
                     <span onClick={() => handleCurrencyChange("RUB")}>RUB</span>
                   </div>
@@ -366,11 +407,11 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
           placeholder="Опишите ваш продукт"
         />
       </div>
-      <IconButton
+      {/* <IconButton
         text="Сохранить изменения"
         onClick={handleSubmit}
         styleName="linkColor"
-      />
+      /> */}
     </div>
   );
 };

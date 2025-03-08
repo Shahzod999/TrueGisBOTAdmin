@@ -16,8 +16,8 @@ import { errorToast, succesToast } from "../../features/Toast/toastSlice";
 import OpenFromSide from "../../components/OpenFromSide/OpenFromSide";
 import EditProduct from "./EditProduct";
 import DeleteConfirmModal from "./DeleteConfirmModal";
-import IconButton from "../../components/Button/IconButton";
 import FullScreenImgSwiper from "../../components/FullScreenImgSwiper/FullScreenImgSwiper";
+import NotFoundPage from "../404/NotFoundPage";
 
 const ProductDetails = () => {
   const { t } = useTranslation();
@@ -27,16 +27,49 @@ const ProductDetails = () => {
   const { setParam, getParam } = useURLState();
 
   const { id } = useParams();
-  const { data, isLoading, isFetching } = useGetSingleProductQuery(id);
+  const { data, isLoading, isFetching, isError } = useGetSingleProductQuery(id);
   const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
 
   const singleProd = data?.data;
+
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const initialEditPage = Boolean(getParam("editProduct"));
 
   useEffect(() => {
+    const mainButton = Telegram.WebApp.MainButton;
+    const secondaryButton = Telegram.WebApp.SecondaryButton;
+
+    const toggleParam = () => {
+      setParam("editProduct", true);
+    };
+    const toggleDeleteModal = () => {
+      setDeleteModalOpen(true);
+    };
+
+    mainButton
+      .setParams({
+        text: "Изменить",
+      })
+      .onClick(toggleParam);
+
+    secondaryButton
+      .setParams({
+        text: "Удалить",
+        color: "#fff",
+        text_color: "#eb4034",
+      })
+      .onClick(toggleDeleteModal);
+
+    mainButton.show();
+    secondaryButton.show();
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [singleProd]);
+    return () => {
+      mainButton.hide();
+      secondaryButton.hide();
+      mainButton.offClick(toggleParam);
+      secondaryButton.offClick(toggleDeleteModal);
+    };
+  }, [singleProd, initialEditPage]);
 
   // Обработчик для удаления продукта
   const handleDeleteProduct = async () => {
@@ -56,7 +89,8 @@ const ProductDetails = () => {
     }
   };
 
-  if (!singleProd) return null;
+  if (isFetching || isDeleting || isLoading) return <Loading />;
+  if (!singleProd || isError) return <NotFoundPage />;
   return (
     <div className="singleMenu">
       {isFetching || isDeleting || isLoading ? (
@@ -103,7 +137,7 @@ const ProductDetails = () => {
       </div>
 
       {/* Кнопки для редактирования и удаления */}
-      <div className="singleMenu__actions">
+      {/* <div className="singleMenu__actions">
         <IconButton
           text="Изменить"
           onClick={() => setParam("editProduct", true)}
@@ -114,7 +148,7 @@ const ProductDetails = () => {
           onClick={() => setDeleteModalOpen(true)}
           styleName="deleteButton"
         />
-      </div>
+      </div> */}
 
       {/* Модальное окно для редактирования продукта */}
       <OpenFromSide

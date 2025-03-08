@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
-import IconButton from "../../components/Button/IconButton";
 import styles from "./adminStyle.module.scss";
 import {
   useAssignAdminPowerMutation,
@@ -32,7 +31,7 @@ import PermissionsList, {
   PERMISSION_NAMES,
 } from "../../components/PermissionsList";
 import { getValidatedUrl } from "../../utils/imgGetValidatedUrl";
-
+import { useURLState } from "../../hooks/useURLState";
 interface AdminFormData {
   full_name: string;
   password: string;
@@ -42,9 +41,12 @@ interface AdminFormData {
 const AdminPowers = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
   const [searchParams] = useSearchParams();
   const newAdminId = searchParams.get("adminPower");
+
+  const { getParam } = useURLState();
+  const adminPowerState = Boolean(getParam("adminPower"));
+
   const company = useSelector(selectedCompany);
   const [changeAdmin, { isLoading: isChangingAdmin }] =
     useChangeAdminMutation();
@@ -465,7 +467,6 @@ const AdminPowers = () => {
       );
     }
   };
-  console.log(newAdminId, "newAdminId");
 
   const handleDeleteAdmin = async () => {
     try {
@@ -490,8 +491,33 @@ const AdminPowers = () => {
     }
   };
 
-  console.log(currentAdminAssignedCompanys, "currentAdminAssignedCompanys");
-  console.log(assignedCompanies, "assignedCompanies");
+  const mainButton = Telegram.WebApp.MainButton;
+  const secondaryButton = Telegram.WebApp.SecondaryButton;
+
+  useEffect(() => {
+    const emptyFunc = () => {};
+    mainButton.offClick(emptyFunc);
+    secondaryButton.offClick(emptyFunc);
+
+    if (adminPowerState) {
+      mainButton.setText("Сохранить").onClick(handleSubmit).show();
+
+      secondaryButton
+        .setParams({
+          text: "Удалить",
+          color: "#fff",
+          text_color: "#eb4034",
+        })
+        .onClick(handleDeleteAdmin)
+        .show();
+    }
+
+    return () => {
+      secondaryButton.hide();
+      mainButton.offClick(handleSubmit);
+      secondaryButton.offClick(handleDeleteAdmin);
+    };
+  }, [adminPowerState, admin]);
 
   return (
     <div className={`container ${styles.adminPowers}`}>
@@ -726,7 +752,7 @@ const AdminPowers = () => {
         />
       </div>
 
-      <IconButton
+      {/* <IconButton
         text="Удалить эту роль"
         styleName="deleteButton"
         onClick={handleDeleteAdmin}
@@ -735,7 +761,7 @@ const AdminPowers = () => {
         text="Подтвердить"
         styleName="linkColor"
         onClick={() => handleSubmit()}
-      />
+      /> */}
     </div>
   );
 };

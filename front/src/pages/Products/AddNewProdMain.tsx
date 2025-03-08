@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddFoto from "../../components/AddFoto/AddFoto";
 import { PhotosSample } from "../../types/companyType";
 import styles from "./Products.module.scss";
 import DropDownMenu from "../../components/DropDownMenu/DropDownMenu";
-import IconButton from "../../components/Button/IconButton";
 import { useAddNewProductsMutation } from "../../features/products/productsApi";
 import { singleCategoryType } from "../../types/categoryTypes";
 import useUploadImage from "../../hooks/useUploadImage";
@@ -33,7 +32,7 @@ const AddNewProdMain = ({
   category: singleCategoryType;
   companyId: string;
 }) => {
-  const { setParam } = useURLState();
+  const { getParam, setParam } = useURLState();
   const dispatch = useAppDispatch();
   const [imagesArray, setimagesArray] = useState<
     (PhotosSample & { file?: File })[]
@@ -49,8 +48,8 @@ const AddNewProdMain = ({
 
   const [productData, setProductData] = useState<ProductFormData>({
     name: "",
-    weight: "0",
-    price: "0",
+    weight: "",
+    price: "",
     description: "",
     active: "true",
   });
@@ -210,10 +209,48 @@ const AddNewProdMain = ({
     }
   };
 
+  const initialPage = Boolean(getParam("addNewProductByCategory"));
+
   // Обработчик изменения валюты
   const handleCurrencyChange = (currency: string) => {
     setChoosenCurrency(currency);
   };
+
+  useEffect(() => {
+    if (!window.Telegram || !window.Telegram.WebApp) return;
+    const mainButton = Telegram.WebApp.MainButton;
+
+    try {
+      const emptyFunc = () => {};
+      mainButton.offClick(emptyFunc);
+    } catch (e) {
+      console.warn("Ошибка при очистке обработчиков:", e);
+    }
+
+    if (initialPage) {
+      try {
+        mainButton.setText("Добавить");
+        mainButton.onClick(handleSubmit);
+        mainButton.show();
+
+        // Для отладки
+        console.log(
+          "Установлен обработчик MainButton, текущее количество фотографий:",
+          imagesArray.length,
+        );
+      } catch (e) {
+        console.error("Ошибка при настройке MainButton:", e);
+      }
+    }
+
+    return () => {
+      try {
+        mainButton.offClick(handleSubmit);
+      } catch (e) {
+        console.warn("Ошибка при отключении обработчика:", e);
+      }
+    };
+  }, [handleSubmit]);
 
   return (
     <div className={`container ${styles.addNewProdMain}`}>
@@ -348,11 +385,11 @@ const AddNewProdMain = ({
           placeholder="Опишите ваш продукт"
         />
       </div>
-      <IconButton
+      {/* <IconButton
         text="Добавить"
         onClick={handleSubmit}
         styleName="linkColor"
-      />
+      /> */}
     </div>
   );
 };

@@ -1,7 +1,6 @@
-import { FormEvent, MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import { ReactSVG } from "react-svg";
 import styles from "./adminStyle.module.scss";
-import IconButton from "../../components/Button/IconButton";
 import { useURLState } from "../../hooks/useURLState";
 import { useAddNewAdminMutation } from "../../features/admins/adminApi";
 import Loading from "../../components/Loading/Loading";
@@ -16,8 +15,11 @@ interface AdminFormData {
 
 const AddNewAdmin = () => {
   const dispatch = useAppDispatch();
-  const { setParam } = useURLState();
-  const [addNewAdmin, { isLoading }] = useAddNewAdminMutation();
+  const { setParam, getParam } = useURLState();
+  const [addNewAdmin, { isLoading, isSuccess }] = useAddNewAdminMutation();
+  const initialPage = Boolean(getParam("addNewAdmin"));
+
+  console.log(initialPage, "initialPage");
 
   const [visible, setVisible] = useState({
     id: false,
@@ -43,8 +45,7 @@ const AddNewAdmin = () => {
     }));
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (
       formData.full_name === "" ||
       formData.username === "" ||
@@ -62,6 +63,11 @@ const AddNewAdmin = () => {
       dispatch(succesToast("Администратор успешно создан"));
       setParam("adminPower", res.id);
       // Можно добавить уведомление об успешном создании
+      setFormData({
+        full_name: "",
+        password: "",
+        username: "",
+      });
     } catch (error) {
       console.error("Ошибка при создании администратора:", error);
       // Можно добавить уведомление об ошибке
@@ -72,6 +78,23 @@ const AddNewAdmin = () => {
       );
     }
   };
+  const adminPowerState = Boolean(getParam("adminPower"));
+  const mainButton = Telegram.WebApp.MainButton;
+
+  useEffect(() => {
+    const emptyFunc = () => {};
+    mainButton.offClick(emptyFunc);
+
+    if (initialPage && !adminPowerState) {
+      mainButton.setText("Далее");
+      mainButton.onClick(handleSubmit);
+      mainButton.show();
+    }
+
+    return () => {
+      mainButton.offClick(handleSubmit);
+    };
+  }, [formData, initialPage, isSuccess, handleSubmit, adminPowerState]);
 
   return (
     <div className={`container ${styles.addNewAdmin}`}>
@@ -82,7 +105,7 @@ const AddNewAdmin = () => {
         <span>Придумайте логин и пароль для этого роля. </span>
       </div>
 
-      <form className={styles.form} onSubmit={handleSubmit}>
+      <div className={styles.form}>
         <label className={styles.inputWrapper}>
           <input
             type="text"
@@ -119,8 +142,8 @@ const AddNewAdmin = () => {
             onClick={handleVisible("password")}
           />
         </label>
-        <IconButton text="Далее" styleName="linkColor" />
-      </form>
+        {/* <IconButton text="Далее" styleName="linkColor" /> */}
+      </div>
     </div>
   );
 };

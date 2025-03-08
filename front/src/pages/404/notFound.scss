@@ -1,0 +1,19 @@
+.notFound {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+    .holder {
+        max-width: 300px;
+        max-height: 400px;
+        text-align: center;
+
+        h1 {
+            margin-top: 25px;
+            font-weight: 900;
+        }
+    }
+}

@@ -1,6 +1,5 @@
 import Lottie from "lottie-react";
 import search from "../../../public/utya/search.json";
-import IconButton from "../../components/Button/IconButton";
 import { useURLState } from "../../hooks/useURLState";
 import styles from "./Products.module.scss";
 import {
@@ -18,7 +17,7 @@ import AddNewCategory from "./AddNewCategory";
 import { singleCategoryType } from "../../types/categoryTypes";
 import { selectedCompany } from "../../features/company/companySlice";
 import SwipeableItem from "../../components/SwipeableItem/SwipeableItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 
 const Products = () => {
@@ -108,6 +107,31 @@ const Products = () => {
       dispatch(errorToast("Ошибка при обновлении категории"));
     }
   };
+  // const initialPage = Boolean(getParam(state));
+
+  useEffect(() => {
+    const mainButton = Telegram.WebApp.MainButton;
+
+    const toggleParam = () => {
+      setParam("addNewCategory", true);
+    };
+
+    if (category?.data.length > 0) {
+      mainButton
+        .setParams({
+          text: "Добавить свою категорию",
+          has_shine_effect: true,
+        })
+        .onClick(toggleParam);
+
+      mainButton.show();
+    }
+
+    return () => {
+      mainButton.hide();
+      mainButton.offClick(toggleParam);
+    };
+  }, [category]);
 
   return (
     <>
@@ -146,7 +170,7 @@ const Products = () => {
           </div>
         )}
 
-        <div className={styles.addCategoryButton}>
+        {/* <div className={styles.addCategoryButton}>
           {category?.data.length > 0 && (
             <IconButton
               text="Добавить свою категорию"
@@ -154,7 +178,7 @@ const Products = () => {
               onClick={() => setParam("addNewCategory", true)}
             />
           )}
-        </div>
+        </div> */}
 
         {/* Модальные окна */}
         <AddNewCategory onClick={handleAddCategory} state="addNewCategory" />
