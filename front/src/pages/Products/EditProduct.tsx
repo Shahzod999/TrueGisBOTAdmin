@@ -3,7 +3,6 @@ import AddFoto from "../../components/AddFoto/AddFoto";
 import { PhotosSample } from "../../types/companyType";
 import styles from "./Products.module.scss";
 import DropDownMenu from "../../components/DropDownMenu/DropDownMenu";
-import IconButton from "../../components/Button/IconButton";
 import { useUpdateProductMutation } from "../../features/products/productsApi";
 import useUploadImage from "../../hooks/useUploadImage";
 import { useAppDispatch } from "../../app/hooks";
