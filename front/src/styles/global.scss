@@ -62,10 +62,14 @@ body {
 }
 
 body {
-    background: var(--secondary-bg-color) !important;
-    color: var(--text-color);
-    height: var(--total-height);
-    overflow: hidden;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 0;
+    height: 100dvh;
+    overflow-x: hidden;
 }
 
 html {
@@ -77,10 +81,20 @@ html {
     scroll-behavior: smooth;
 }
 
+#fixed {
+    background: var(--secondary-bg-color) !important;
+    color: var(--text-color);
+    // height: var(--total-height);
+    min-height: 100dvh;
+    overflow: hidden;
+    padding-bottom: max(50px, var(--tg-safe-area-inset-bottom, 50px));
+}
+
 #root {
     position: relative;
     width: 100%;
-    height: var(--total-height);
+    // height: var(--total-height);
+    // min-height: 100dvh;
     overflow: scroll;
 }
 

@@ -23,8 +23,6 @@ const Analytics = () => {
     { date: "1 дек", value: 130 },
   ];
 
-  console.log(analytics?.data);
-
   return (
     <>
       <div className={`container ${styles.analitiycs}`}>

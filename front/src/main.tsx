@@ -9,7 +9,6 @@ import "./utils/i18n.ts";
 import Toast from "./components/Toast/Toast.tsx";
 
 const App = () => {
-  
   return (
     <Provider store={store}>
       <BrowserRouter>

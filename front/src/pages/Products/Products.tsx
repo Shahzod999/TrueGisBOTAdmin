@@ -42,10 +42,9 @@ const Products = () => {
 
   const handleAddCategory = async (itemName: string) => {
     try {
-      let res = await addNewCategory({
+      await addNewCategory({
         name: itemName,
       }).unwrap();
-      console.log(res);
       dispatch(succesToast("Категория успешно добавлена"));
       setParam("addNewCategory", false);
     } catch (error) {
@@ -116,16 +115,14 @@ const Products = () => {
       setParam("addNewCategory", true);
     };
 
-    if (category?.data.length > 0) {
-      mainButton
-        .setParams({
-          text: "Добавить свою категорию",
-          has_shine_effect: true,
-        })
-        .onClick(toggleParam);
+    mainButton
+      .setParams({
+        text: "Добавить категорию",
+        has_shine_effect: true,
+      })
+      .onClick(toggleParam);
 
-      mainButton.show();
-    }
+    mainButton.show();
 
     return () => {
       mainButton.hide();

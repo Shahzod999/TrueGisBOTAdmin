@@ -57,8 +57,6 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
     active: product.active ? "true" : "false",
   });
 
-  console.log(product);
-
   // Инициализация массива изображений при загрузке компонента
   useEffect(() => {
     if (product.image) {

@@ -2,14 +2,10 @@
 import { Routes, Route, Navigate } from "react-router";
 import { lazy, Suspense, useEffect } from "react";
 import ProtectedRoute from "./ProtectedRoute";
-import AdminList from "../pages/AdminList/AdminList";
-import Analytics from "../pages/Analytics/Analytics";
-import Settings from "../pages/Settings/Settings";
 import { Telegram } from "@twa-dev/types";
 import { useAppDispatch } from "./hooks";
 import { setTelegramId } from "../features/telegram/telegramSlice";
 import useTelegramBackButton from "../features/users/useTelegramBackButton";
-import CategoryDetails from "../pages/Products/CategoryDetails";
 import eruda from "eruda";
 import OrientationLock from "../utils/OrientationLock";
 
@@ -18,6 +14,10 @@ const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard"));
 const Users = lazy(() => import("../pages/Users/Users"));
 const Products = lazy(() => import("../pages/Products/Products"));
 const ProductDetails = lazy(() => import("../pages/Products/ProductDetails"));
+const AdminList = lazy(() => import("../pages/AdminList/AdminList"));
+const CategoryDetails = lazy(() => import("../pages/Products/CategoryDetails"));
+const Analytics = lazy(() => import("../pages/Analytics/Analytics"));
+const Settings = lazy(() => import("../pages/Settings/Settings"));
 
 declare global {
   interface Window {

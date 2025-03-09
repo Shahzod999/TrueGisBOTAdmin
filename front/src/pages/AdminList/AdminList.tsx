@@ -17,7 +17,8 @@ import { useEffect } from "react";
 import SwipeableItem from "../../components/SwipeableItem/SwipeableItem";
 import { succesToast } from "../../features/Toast/toastSlice";
 import { useAppDispatch } from "../../app/hooks";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import IconButton from "../../components/Button/IconButton";
 
 const AdminList = () => {
   const dispatch = useAppDispatch();
@@ -27,6 +28,7 @@ const AdminList = () => {
   const adminPowerState = Boolean(getParam("adminPower"));
   const { data: admins, isLoading } = useGetAdminsQuery({});
   const [deleteAdmin, { isLoading: isDeleting }] = useDeleteAdminMutation();
+  const { search, pathname } = useLocation();
 
   useEffect(() => {
     const mainButton = Telegram.WebApp.MainButton;
@@ -35,7 +37,7 @@ const AdminList = () => {
       setParam("addNewAdmin", true);
     };
 
-    if (!initialPage && !adminPowerState) {
+    if (search === "" && pathname === "/adminList") {
       mainButton
         .setParams({
           text: "Добавить админа",
@@ -50,7 +52,7 @@ const AdminList = () => {
       mainButton.hide();
       mainButton.offClick(toggleParam);
     };
-  }, [admins, adminPowerState, initialPage, adminPowerState]);
+  }, [search]);
 
   const handleDeleteAdmin = async (newAdminId: string) => {
     try {

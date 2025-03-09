@@ -1,0 +1,35 @@
+.companyLink {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 5px;
+  padding-bottom: 25px;
+  gap: 8px;
+
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background-color: var(--secondary-bg-color);
+
+  p {
+    text-align: center;
+    font-family: var(--second-family);
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 129%;
+    letter-spacing: -0.01em;
+    color: var(--hint-color);
+  }
+
+
+  span {
+    font-size: 11px;
+
+    cursor: pointer;
+    color: var(--link-color);
+  }
+
+
+}

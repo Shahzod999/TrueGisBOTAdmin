@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import { ReactSVG } from "react-svg";
 import styles from "./adminStyle.module.scss";
 import { useURLState } from "../../hooks/useURLState";
@@ -6,6 +6,8 @@ import { useAddNewAdminMutation } from "../../features/admins/adminApi";
 import Loading from "../../components/Loading/Loading";
 import { useAppDispatch } from "../../app/hooks";
 import { errorToast, succesToast } from "../../features/Toast/toastSlice";
+import IconButton from "../../components/Button/IconButton";
+import { useLocation, useNavigate } from "react-router";
 
 interface AdminFormData {
   full_name: string;
@@ -14,12 +16,13 @@ interface AdminFormData {
 }
 
 const AddNewAdmin = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { setParam, getParam } = useURLState();
-  const [addNewAdmin, { isLoading, isSuccess }] = useAddNewAdminMutation();
-  const initialPage = Boolean(getParam("addNewAdmin"));
 
-  console.log(initialPage, "initialPage");
+  const { search, pathname } = useLocation();
+  console.log(pathname, search);
+
+  const [addNewAdmin, { isLoading }] = useAddNewAdminMutation();
 
   const [visible, setVisible] = useState({
     id: false,
@@ -31,6 +34,11 @@ const AddNewAdmin = () => {
     password: "",
     username: "",
   });
+  const formDataRef = useRef(formData);
+
+  useEffect(() => {
+    formDataRef.current = formData;
+  }, [formData]);
 
   const handleVisible = (key: "password" | "id") => (e: MouseEvent) => {
     e.stopPropagation();
@@ -45,23 +53,24 @@ const AddNewAdmin = () => {
     }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
+    // Используем актуальное состояние формы из ref
+    const currentFormData = formDataRef.current;
+
     if (
-      formData.full_name === "" ||
-      formData.username === "" ||
-      formData.password === ""
+      currentFormData.full_name === "" ||
+      currentFormData.username === "" ||
+      currentFormData.password === ""
     ) {
       dispatch(errorToast("Поля не могут быть пустыми"));
       return;
     }
     try {
       // Токен будет добавлен автоматически через baseQuery
-      const res = await addNewAdmin(formData).unwrap();
-      console.log(res);
-
-      setParam("addNewAdmin", "false");
+      const res = await addNewAdmin(currentFormData).unwrap();
+      console.log("Администратор успешно создан:", res);
       dispatch(succesToast("Администратор успешно создан"));
-      setParam("adminPower", res.id);
+      navigate(`/adminList?adminPower=${res.id}`);
       // Можно добавить уведомление об успешном создании
       setFormData({
         full_name: "",
@@ -73,28 +82,53 @@ const AddNewAdmin = () => {
       // Можно добавить уведомление об ошибке
       dispatch(
         errorToast(
-          (error as any).data.message || "Администратор успешно создан",
+          (error as any).data?.message || "Ошибка при создании администратора",
         ),
       );
     }
-  };
-  const adminPowerState = Boolean(getParam("adminPower"));
-  const mainButton = Telegram.WebApp.MainButton;
+  }, [addNewAdmin, dispatch, navigate, setFormData]);
 
-  useEffect(() => {
-    const emptyFunc = () => {};
-    mainButton.offClick(emptyFunc);
+  // useEffect(() => {
+  //   // Проверяем доступность Telegram WebApp API
+  //   if (!window.Telegram || !window.Telegram.WebApp) {
+  //     console.warn("Telegram WebApp API не доступен");
+  //     return;
+  //   }
 
-    if (initialPage && !adminPowerState) {
-      mainButton.setText("Далее");
-      mainButton.onClick(handleSubmit);
-      mainButton.show();
-    }
+  //   const mainButton = window.Telegram.WebApp.MainButton;
 
-    return () => {
-      mainButton.offClick(handleSubmit);
-    };
-  }, [formData, initialPage, isSuccess, handleSubmit, adminPowerState]);
+  //   try {
+  //     // Полностью очищаем предыдущие обработчики
+  //     // @ts-ignore
+  //     mainButton.offClick();
+
+  //     if (search === "?addNewAdmin=true" && pathname === "/adminList") {
+  //       console.log("Настраиваем MainButton для AddNewAdmin");
+  //       // @ts-ignore
+  //       mainButton.setParams({ text: "Далее" });
+  //       // @ts-ignore
+  //       mainButton.onClick(handleSubmit);
+  //       // @ts-ignore
+  //       mainButton.show();
+  //     }
+  //   } catch (e) {
+  //     console.error("Ошибка при настройке MainButton:", e);
+  //   }
+
+  //   return () => {
+  //     if (!window.Telegram || !window.Telegram.WebApp) return;
+
+  //     try {
+  //       // @ts-ignore
+  //       mainButton.hide();
+  //       // @ts-ignore
+  //       mainButton.offClick();
+  //       console.log("MainButton очищен при размонтировании");
+  //     } catch (e) {
+  //       console.warn("Ошибка при очистке MainButton:", e);
+  //     }
+  //   };
+  // }, [search, pathname, handleSubmit]);
 
   return (
     <div className={`container ${styles.addNewAdmin}`}>
@@ -142,7 +176,13 @@ const AddNewAdmin = () => {
             onClick={handleVisible("password")}
           />
         </label>
-        {/* <IconButton text="Далее" styleName="linkColor" /> */}
+        <div>
+          <IconButton
+            text="Далее"
+            styleName="linkColor"
+            onClick={handleSubmit}
+          />
+        </div>
       </div>
     </div>
   );

@@ -14,8 +14,8 @@ export const authApiSlice = apiSlice.injectEndpoints({
         url: "/admin/auth/switch-company",
         method: "POST",
         body: { company_id },
-        providesTags: ["Analytics"],
       }),
+      invalidatesTags: ["Admin"],
     }),
   }),
 });

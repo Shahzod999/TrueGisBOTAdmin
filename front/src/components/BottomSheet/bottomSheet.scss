@@ -12,24 +12,13 @@
     }
 }
 
-.bottomSheetSize {
-    position: absolute;
-    height: var(--total-height);
-    width: 100%;
-    // border: solid;
-    pointer-events: none;
-    z-index: 99;
-    top: 0;
-    bottom: 0;
-    contain: paint;
-}
 
 .bottom-sheet {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    min-height: 150px;
+    min-height: 120px;
     transform: translateY(100%);
     transition: all 0.3s ease-in-out;
     background-color: var(--bg-color);

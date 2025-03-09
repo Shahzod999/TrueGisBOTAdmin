@@ -26,7 +26,6 @@ const Toast = () => {
     dispatch(removeToast());
   };
 
-  console.log(message);
 
   if (!message) return null;
   return (

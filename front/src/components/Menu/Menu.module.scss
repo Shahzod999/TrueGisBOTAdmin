@@ -11,6 +11,7 @@
     transition: left 0.3s ease-in-out;
     z-index: 100;
     overflow: scroll;
+    padding-bottom: max(50px, var(--tg-content-safe-area-inset-bottom, 50px));
 
 
     &__wrapper {

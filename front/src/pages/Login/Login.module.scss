@@ -1,7 +1,7 @@
 .login {
-    background-color: var(--bg-color);
-     // min-height: 100vh;
-     height: 100%;
+    background-color: var(--secondary-bg-color);
+    height: 100%;
+    border: solid yellow;
 
 
     .logo {
@@ -50,7 +50,7 @@
             display: flex;
             align-items: center;
             border-radius: 10px;
-            background: rgba(116, 116, 128, 0.08);
+            background: var(--bg-color);
             padding: 16px;
             font-family: var(--font-family);
             font-weight: 400;

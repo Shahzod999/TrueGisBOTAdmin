@@ -32,6 +32,7 @@ import PermissionsList, {
 } from "../../components/PermissionsList";
 import { getValidatedUrl } from "../../utils/imgGetValidatedUrl";
 import { useURLState } from "../../hooks/useURLState";
+import IconButton from "../../components/Button/IconButton";
 interface AdminFormData {
   full_name: string;
   password: string;
@@ -44,16 +45,14 @@ const AdminPowers = () => {
   const [searchParams] = useSearchParams();
   const newAdminId = searchParams.get("adminPower");
 
-  const { getParam } = useURLState();
-  const adminPowerState = Boolean(getParam("adminPower"));
-
   const company = useSelector(selectedCompany);
   const [changeAdmin, { isLoading: isChangingAdmin }] =
     useChangeAdminMutation();
-  const { data: admin, isLoading: isLoadingAdmin } = useGetAdminByIdQuery(
-    newAdminId,
-    { skip: !newAdminId },
-  );
+  const {
+    data: admin,
+    isLoading: isLoadingAdmin,
+    isFetching,
+  } = useGetAdminByIdQuery(newAdminId, { skip: !newAdminId });
   const [deleteAdmin, { isLoading: isDeleting }] = useDeleteAdminMutation();
 
   const { data: assignedCompanies } = useGetAssignedCompanyQuery({});
@@ -491,39 +490,46 @@ const AdminPowers = () => {
     }
   };
 
-  const mainButton = Telegram.WebApp.MainButton;
-  const secondaryButton = Telegram.WebApp.SecondaryButton;
+  // const mainButton = Telegram.WebApp.MainButton;
+  // const secondaryButton = Telegram.WebApp.SecondaryButton;
+  // const { getParam } = useURLState();
+  // const adminPowerState = Boolean(getParam("adminPower"));
 
-  useEffect(() => {
-    const emptyFunc = () => {};
-    mainButton.offClick(emptyFunc);
-    secondaryButton.offClick(emptyFunc);
+  // useEffect(() => {
+  //   if (admin && adminPowerState) {
+  //     const emptyFunc = () => {};
+  //     mainButton.offClick(emptyFunc);
+  //     secondaryButton.offClick(emptyFunc);
 
-    if (adminPowerState) {
-      mainButton.setText("Сохранить").onClick(handleSubmit).show();
+  //     mainButton
+  //       .setText("Сохранить")
+  //       .onClick(() => handleSubmit())
+  //       .show();
 
-      secondaryButton
-        .setParams({
-          text: "Удалить",
-          color: "#fff",
-          text_color: "#eb4034",
-        })
-        .onClick(handleDeleteAdmin)
-        .show();
-    }
+  //     secondaryButton
+  //       .setParams({
+  //         text: "Удалить",
+  //         color: "#fff",
+  //         text_color: "#eb4034",
+  //       })
+  //       .onClick(handleDeleteAdmin)
+  //       .show();
+  //   }
 
-    return () => {
-      secondaryButton.hide();
-      mainButton.offClick(handleSubmit);
-      secondaryButton.offClick(handleDeleteAdmin);
-    };
-  }, [adminPowerState, admin]);
+  //   return () => {
+  //     secondaryButton.hide();
+  //     mainButton.offClick(() => handleSubmit());
+  //     secondaryButton.offClick(handleDeleteAdmin);
+  //   };
+  // }, [admin, adminPowerState, company]);
 
   return (
     <div className={`container ${styles.adminPowers}`}>
-      {(isLoading || isDeleting || isLoadingAdmin || isChangingAdmin) && (
-        <Loading />
-      )}
+      {(isLoading ||
+        isDeleting ||
+        isLoadingAdmin ||
+        isChangingAdmin ||
+        isFetching) && <Loading />}
       <div className="adminList__List">
         <div className="adminList__list-main">
           <UserCard name={admin?.data?.full_name} />
@@ -752,16 +758,18 @@ const AdminPowers = () => {
         />
       </div>
 
-      {/* <IconButton
-        text="Удалить эту роль"
-        styleName="deleteButton"
-        onClick={handleDeleteAdmin}
-      />
-      <IconButton
-        text="Подтвердить"
-        styleName="linkColor"
-        onClick={() => handleSubmit()}
-      /> */}
+      <div className={styles.adminPowers__buttons}>
+        <IconButton
+          text="Удалить эту роль"
+          styleName="deleteButton"
+          onClick={handleDeleteAdmin}
+        />
+        <IconButton
+          text="Подтвердить"
+          styleName="linkColor"
+          onClick={() => handleSubmit()}
+        />
+      </div>
     </div>
   );
 };
