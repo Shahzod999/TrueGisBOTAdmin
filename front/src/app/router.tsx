@@ -1,6 +1,6 @@
 // # React Router (все маршруты приложения)
 import { Routes, Route, Navigate } from "react-router";
-import { lazy, Suspense, useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import { Telegram } from "@twa-dev/types";
 import { useAppDispatch } from "./hooks";
@@ -8,16 +8,25 @@ import { setTelegramId } from "../features/telegram/telegramSlice";
 import useTelegramBackButton from "../features/users/useTelegramBackButton";
 import eruda from "eruda";
 import OrientationLock from "../utils/OrientationLock";
+import AdminList from "../pages/AdminList/AdminList";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import Login from "../pages/Login/Login";
+import Settings from "../pages/Settings/Settings";
+import Users from "../pages/Users/Users";
+import Analytics from "../pages/Analytics/Analytics";
+import Products from "../pages/Products/Products";
+import ProductDetails from "../pages/Products/ProductDetails";
+import CategoryDetails from "../pages/Products/CategoryDetails";
 
-const Login = lazy(() => import("../pages/Login/Login"));
-const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard"));
-const Users = lazy(() => import("../pages/Users/Users"));
-const Products = lazy(() => import("../pages/Products/Products"));
-const ProductDetails = lazy(() => import("../pages/Products/ProductDetails"));
-const AdminList = lazy(() => import("../pages/AdminList/AdminList"));
-const CategoryDetails = lazy(() => import("../pages/Products/CategoryDetails"));
-const Analytics = lazy(() => import("../pages/Analytics/Analytics"));
-const Settings = lazy(() => import("../pages/Settings/Settings"));
+// const Login = lazy(() => import("../pages/Login/Login"));
+// const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard"));
+// const Users = lazy(() => import("../pages/Users/Users"));
+// const Products = lazy(() => import("../pages/Products/Products"));
+// const ProductDetails = lazy(() => import("../pages/Products/ProductDetails"));
+// // const AdminList = lazy(() => import("../pages/AdminList/AdminList"));
+// const CategoryDetails = lazy(() => import("../pages/Products/CategoryDetails"));
+// const Analytics = lazy(() => import("../pages/Analytics/Analytics"));
+// const Settings = lazy(() => import("../pages/Settings/Settings"));
 
 declare global {
   interface Window {

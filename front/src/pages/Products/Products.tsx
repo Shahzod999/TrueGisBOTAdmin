@@ -133,7 +133,7 @@ const Products = () => {
   return (
     <>
       {(isLoading || isLoadingDelete || isLoadingUpdate) && <Loading />}
-      <div className={`${styles.categoryContainer} adminList`}>
+      <div className={styles.categoryContainer}>
         <div className={styles.productsHeader}>
           <h2>Категории</h2>
           {category?.data.length == 0 && (
@@ -162,7 +162,7 @@ const Products = () => {
             ))}
           </div>
         ) : (
-          <div className="adminList__main">
+          <div className={styles.categoryPending}>
             <Lottie animationData={search} />
           </div>
         )}

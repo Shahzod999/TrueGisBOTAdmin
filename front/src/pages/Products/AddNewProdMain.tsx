@@ -258,6 +258,7 @@ const AddNewProdMain = ({
       <h2 className={styles.mainTitle}>{category?.name}</h2>
       <DropDownMenu
         toggle={<h4 className={styles.titleAddProd}>Новый продукт</h4>}
+        noNeedToClose
         menu={
           <div className={styles.productForm}>
             <div className={styles.formGroup}>
@@ -324,6 +325,7 @@ const AddNewProdMain = ({
             <div className={styles.formGroup}>
               <DropDownMenu
                 toggle={<h5>Скидка на продукт</h5>}
+                noNeedToClose
                 menu={
                   <div className={styles.discountForm}>
                     <div className={styles.formGroup}>

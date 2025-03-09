@@ -6,8 +6,14 @@ interface DropDownMenuProps {
   toggle: ReactNode;
   menu: ReactNode;
   notAwalible?: boolean;
+  noNeedToClose?: boolean;
 }
-const DropDownMenu = ({ toggle, menu, notAwalible }: DropDownMenuProps) => {
+const DropDownMenu = ({
+  toggle,
+  menu,
+  notAwalible,
+  noNeedToClose,
+}: DropDownMenuProps) => {
   const [open, setOpen] = useState(false);
   const toggleRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -18,6 +24,7 @@ const DropDownMenu = ({ toggle, menu, notAwalible }: DropDownMenuProps) => {
   };
 
   const handleBlur = (event: FocusEvent<HTMLDivElement>) => {
+    if (noNeedToClose) return;
     if (
       toggleRef.current &&
       !toggleRef.current.contains(event.relatedTarget as Node) &&
@@ -29,6 +36,7 @@ const DropDownMenu = ({ toggle, menu, notAwalible }: DropDownMenuProps) => {
   };
 
   useEffect(() => {
+    if (noNeedToClose) return;
     const handleClickOutside = (event: MouseEvent) => {
       if (
         toggleRef.current &&

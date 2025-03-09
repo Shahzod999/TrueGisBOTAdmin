@@ -78,6 +78,23 @@ export const productsApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Products"],
     }),
+
+    addCompanyLink: builder.mutation({
+      query: ({ data }) => ({
+        url: "/delivery/root/product/remove-company-link",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Products"],
+    }),
+    removeCompanyLink: builder.mutation({
+      query: ({ data }) => ({
+        url: "/delivery/root/product/remove-company-link",
+        method: "DELETE",
+        body: data,
+      }),
+      invalidatesTags: ["Products"],
+    }),
   }),
 });
 
@@ -92,4 +109,6 @@ export const {
   useGetSingleProductQuery,
   useDeleteProductMutation,
   useUpdateProductMutation,
+  useAddCompanyLinkMutation,
+  useRemoveCompanyLinkMutation,
 } = productsApi;

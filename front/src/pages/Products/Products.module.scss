@@ -31,6 +31,13 @@
 }
 
 .categoryContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-height: 100vh;
+    height: 100%;
+    background-color: var(--secondary-bg-color);
+
     padding-top: max(110px, calc(var(--tg-content-safe-area-inset-top, 50px) + 20px));
     padding-bottom: max(50px, var(--tg-content-safe-area-inset-bottom, 50px));
 }
@@ -86,6 +93,12 @@
         padding-left: max(16px, var(--tg-content-safe-area-inset-left, 16px));
         padding-right: max(16px, var(--tg-content-safe-area-inset-right, 16px));
     }
+}
+
+.categoryPending {
+    width: 180px;
+    height: 180px;
+    margin: auto;
 }
 
 .addCategorySheet {

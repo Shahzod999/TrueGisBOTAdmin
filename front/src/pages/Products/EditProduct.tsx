@@ -268,6 +268,7 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
       {(isLoading || loadingUploadImg) && <Loading />}
       <DropDownMenu
         toggle={<h4 className={styles.titleAddProd}>Редактировать продукт</h4>}
+        noNeedToClose
         menu={
           <div className={styles.productForm}>
             <div className={styles.formGroup}>
@@ -334,6 +335,7 @@ const EditProduct = ({ product, onClose }: EditProductProps) => {
             <div className={styles.formGroup}>
               <DropDownMenu
                 toggle={<h5>Скидка на продукт</h5>}
+                noNeedToClose
                 menu={
                   <div className={styles.discountForm}>
                     <div className={styles.formGroup}>
