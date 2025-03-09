@@ -18,8 +18,6 @@ import SwipeableItem from "../../components/SwipeableItem/SwipeableItem";
 import { succesToast } from "../../features/Toast/toastSlice";
 import { useAppDispatch } from "../../app/hooks";
 import { useLocation, useNavigate } from "react-router";
-import IconButton from "../../components/Button/IconButton";
-
 const AdminList = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -38,6 +36,7 @@ const AdminList = () => {
     };
 
     if (search === "" && pathname === "/adminList") {
+      mainButton.offClick(() => {});
       mainButton
         .setParams({
           text: "Добавить админа",
@@ -52,7 +51,7 @@ const AdminList = () => {
       mainButton.hide();
       mainButton.offClick(toggleParam);
     };
-  }, [search]);
+  }, [search, pathname]);
 
   const handleDeleteAdmin = async (newAdminId: string) => {
     try {

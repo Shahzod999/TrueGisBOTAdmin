@@ -1,12 +1,10 @@
 import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import { ReactSVG } from "react-svg";
 import styles from "./adminStyle.module.scss";
-import { useURLState } from "../../hooks/useURLState";
 import { useAddNewAdminMutation } from "../../features/admins/adminApi";
 import Loading from "../../components/Loading/Loading";
 import { useAppDispatch } from "../../app/hooks";
 import { errorToast, succesToast } from "../../features/Toast/toastSlice";
-import IconButton from "../../components/Button/IconButton";
 import { useLocation, useNavigate } from "react-router";
 
 interface AdminFormData {
@@ -88,47 +86,21 @@ const AddNewAdmin = () => {
     }
   }, [addNewAdmin, dispatch, navigate, setFormData]);
 
-  // useEffect(() => {
-  //   // Проверяем доступность Telegram WebApp API
-  //   if (!window.Telegram || !window.Telegram.WebApp) {
-  //     console.warn("Telegram WebApp API не доступен");
-  //     return;
-  //   }
+  useEffect(() => {
+    const mainButton = Telegram.WebApp.MainButton;
 
-  //   const mainButton = window.Telegram.WebApp.MainButton;
+    if (search === "?addNewAdmin=true" && pathname === "/adminList") {
+      mainButton.offClick(() => {});
+      mainButton.setParams({ text: "Далее" });
+      mainButton.onClick(handleSubmit);
+      mainButton.show();
 
-  //   try {
-  //     // Полностью очищаем предыдущие обработчики
-  //     // @ts-ignore
-  //     mainButton.offClick();
-
-  //     if (search === "?addNewAdmin=true" && pathname === "/adminList") {
-  //       console.log("Настраиваем MainButton для AddNewAdmin");
-  //       // @ts-ignore
-  //       mainButton.setParams({ text: "Далее" });
-  //       // @ts-ignore
-  //       mainButton.onClick(handleSubmit);
-  //       // @ts-ignore
-  //       mainButton.show();
-  //     }
-  //   } catch (e) {
-  //     console.error("Ошибка при настройке MainButton:", e);
-  //   }
-
-  //   return () => {
-  //     if (!window.Telegram || !window.Telegram.WebApp) return;
-
-  //     try {
-  //       // @ts-ignore
-  //       mainButton.hide();
-  //       // @ts-ignore
-  //       mainButton.offClick();
-  //       console.log("MainButton очищен при размонтировании");
-  //     } catch (e) {
-  //       console.warn("Ошибка при очистке MainButton:", e);
-  //     }
-  //   };
-  // }, [search, pathname, handleSubmit]);
+      return () => {
+        mainButton.hide();
+        mainButton.offClick(handleSubmit);
+      };
+    }
+  }, [search, pathname, handleSubmit]);
 
   return (
     <div className={`container ${styles.addNewAdmin}`}>
@@ -176,13 +148,13 @@ const AddNewAdmin = () => {
             onClick={handleVisible("password")}
           />
         </label>
-        <div>
+        {/* <div>
           <IconButton
             text="Далее"
             styleName="linkColor"
             onClick={handleSubmit}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

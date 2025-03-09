@@ -31,7 +31,6 @@ import PermissionsList, {
   PERMISSION_NAMES,
 } from "../../components/PermissionsList";
 import { getValidatedUrl } from "../../utils/imgGetValidatedUrl";
-import { useURLState } from "../../hooks/useURLState";
 import IconButton from "../../components/Button/IconButton";
 interface AdminFormData {
   full_name: string;
@@ -492,19 +491,16 @@ const AdminPowers = () => {
 
   // const mainButton = Telegram.WebApp.MainButton;
   // const secondaryButton = Telegram.WebApp.SecondaryButton;
-  // const { getParam } = useURLState();
-  // const adminPowerState = Boolean(getParam("adminPower"));
 
+  // const { search, pathname } = useLocation();
+  // const hasAdminPower = new URLSearchParams(search).has("adminPower");
+  // надо завернуть функции сохранения и удаления в useCallback
   // useEffect(() => {
-  //   if (admin && adminPowerState) {
-  //     const emptyFunc = () => {};
-  //     mainButton.offClick(emptyFunc);
-  //     secondaryButton.offClick(emptyFunc);
+  //   if (hasAdminPower && pathname === "/adminList") {
+  //     mainButton.offClick(() => {});
+  //     secondaryButton.offClick(() => {});
 
-  //     mainButton
-  //       .setText("Сохранить")
-  //       .onClick(() => handleSubmit())
-  //       .show();
+  //     mainButton.setText("Сохранить").onClick(handleSubmit).show();
 
   //     secondaryButton
   //       .setParams({
@@ -514,14 +510,15 @@ const AdminPowers = () => {
   //       })
   //       .onClick(handleDeleteAdmin)
   //       .show();
-  //   }
 
-  //   return () => {
-  //     secondaryButton.hide();
-  //     mainButton.offClick(() => handleSubmit());
-  //     secondaryButton.offClick(handleDeleteAdmin);
-  //   };
-  // }, [admin, adminPowerState, company]);
+  //     return () => {
+  //       secondaryButton.hide();
+  //       mainButton.hide();
+  //       mainButton.offClick(handleSubmit);
+  //       secondaryButton.offClick(handleDeleteAdmin);
+  //     };
+  //   }
+  // }, [search, pathname, company, handleSubmit, handleDeleteAdmin]);
 
   return (
     <div className={`container ${styles.adminPowers}`}>
@@ -758,18 +755,16 @@ const AdminPowers = () => {
         />
       </div>
 
-      <div className={styles.adminPowers__buttons}>
-        <IconButton
-          text="Удалить эту роль"
-          styleName="deleteButton"
-          onClick={handleDeleteAdmin}
-        />
-        <IconButton
-          text="Подтвердить"
-          styleName="linkColor"
-          onClick={() => handleSubmit()}
-        />
-      </div>
+      <IconButton
+        text="Удалить эту роль"
+        styleName="deleteButton"
+        onClick={handleDeleteAdmin}
+      />
+      <IconButton
+        text="Подтвердить"
+        styleName="linkColor"
+        onClick={() => handleSubmit()}
+      />
     </div>
   );
 };
