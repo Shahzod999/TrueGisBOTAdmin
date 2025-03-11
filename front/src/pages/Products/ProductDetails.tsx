@@ -72,11 +72,21 @@ const ProductDetails = () => {
         },
       }).unwrap();
 
+      console.log({
+        product_id: id,
+        company_ids: selectedCompanies,
+      });
+
       dispatch(succesToast("Компании успешно привязаны к продукту"));
       setSelectedCompanies([]);
     } catch (error) {
       console.error("Ошибка при привязке компаний:", error);
-      dispatch(errorToast("Произошла ошибка при привязке компаний"));
+      dispatch(
+        errorToast(
+          (error as any).data.error_name ||
+            "Произошла ошибка при привязке компаний",
+        ),
+      );
     }
   };
 
@@ -103,7 +113,12 @@ const ProductDetails = () => {
       setSelectedCompanies([]);
     } catch (error) {
       console.error("Ошибка при удалении связей:", error);
-      dispatch(errorToast("Произошла ошибка при удалении связей с компаниями"));
+      dispatch(
+        errorToast(
+          (error as any).data.message ||
+            "Произошла ошибка при удалении связей с компаниями",
+        ),
+      );
     }
   };
 
@@ -164,20 +179,10 @@ const ProductDetails = () => {
     }
   };
 
-  if (
-    isFetching ||
-    isDeleting ||
-    isLoading ||
-    isAdding ||
-    isRemoving ||
-    isLoadingCompanies
-  )
-    return <Loading />;
   if (!singleProd || isError) return <NotFoundPage />;
-
   return (
     <div className="singleMenu">
-      {isFetching || isDeleting || isLoading ? (
+      {isLoading ? (
         <Loading />
       ) : (
         <>
@@ -225,6 +230,7 @@ const ProductDetails = () => {
             }}>
             Добавить связь
           </button>
+
           <button
             className={`tab-button ${activeTab === "remove" ? "active" : ""}`}
             onClick={() => {
@@ -317,6 +323,13 @@ const ProductDetails = () => {
         onConfirm={handleDeleteProduct}
         itemName={singleProd.name}
       />
+
+      {(isFetching ||
+        isDeleting ||
+        isLoading ||
+        isAdding ||
+        isRemoving ||
+        isLoadingCompanies) && <Loading />}
     </div>
   );
 };

@@ -81,7 +81,7 @@ export const productsApi = apiSlice.injectEndpoints({
 
     addCompanyLink: builder.mutation({
       query: ({ data }) => ({
-        url: "/delivery/root/product/remove-company-link",
+        url: "/delivery/admin/product/add-company-link",
         method: "POST",
         body: data,
       }),
@@ -89,7 +89,7 @@ export const productsApi = apiSlice.injectEndpoints({
     }),
     removeCompanyLink: builder.mutation({
       query: ({ data }) => ({
-        url: "/delivery/root/product/remove-company-link",
+        url: "/delivery/admin/product/remove-company-link",
         method: "DELETE",
         body: data,
       }),
