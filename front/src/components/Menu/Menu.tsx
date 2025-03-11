@@ -68,7 +68,10 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
       }).unwrap();
       dispatch(setCompanyToken(res.token));
       dispatch(setCompany(res.data.company));
-      refetch();
+
+      //очистка кеша в Analytics
+      dispatch(apiSlice.util.invalidateTags(["Analytics"]));
+      await refetch();
     } catch (error) {
       console.log(error);
     }

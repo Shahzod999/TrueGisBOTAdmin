@@ -9,7 +9,9 @@ import CompanyLink from "../../components/CompanyLink/CompanyLink";
 
 const Dashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { data: analytics } = useGetAnalyticsQuery();
+  const { data: analytics } = useGetAnalyticsQuery(undefined, {
+    pollingInterval: 10000, // Запрос каждые 10 секунд
+  });
   const day = new Date().toLocaleDateString("ru-RU", { day: "2-digit" });
   const month = new Date().toLocaleDateString("ru-RU", { month: "2-digit" });
   const year = new Date().toLocaleDateString("ru-RU", { year: "2-digit" });

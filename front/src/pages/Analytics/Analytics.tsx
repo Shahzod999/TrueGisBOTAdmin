@@ -9,7 +9,9 @@ import { useGetAnalyticsQuery } from "../../features/analytics/analiticsSlice";
 
 const Analytics = () => {
   const { getParam, setParam } = useURLState();
-  const { data: analytics } = useGetAnalyticsQuery();
+  const { data: analytics } = useGetAnalyticsQuery(undefined, {
+    pollingInterval: 10000, // Запрос каждые 10 секунд
+  });
 
   const initialPage = Boolean(getParam("details"));
   const moreDetalsPage = Boolean(getParam("moreDetails"));

@@ -15,7 +15,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: { company_id },
       }),
-      invalidatesTags: ["Admin"],
+      invalidatesTags: ["Admin", "Analytics"],
     }),
   }),
 });
