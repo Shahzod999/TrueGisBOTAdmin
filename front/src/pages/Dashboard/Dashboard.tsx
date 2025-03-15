@@ -5,7 +5,6 @@ import LinearDashboard from "../../components/LinearDashboard/LinearDashboard";
 import Menu from "../../components/Menu/Menu";
 import { useState } from "react";
 import { useGetAnalyticsQuery } from "../../features/analytics/analiticsSlice";
-import CompanyLink from "../../components/CompanyLink/CompanyLink";
 
 const Dashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -76,8 +75,6 @@ const Dashboard = () => {
 
         <LinearDashboard data={data} />
       </div>
-
-      {/* <CompanyLink /> */}
     </div>
   );
 };
