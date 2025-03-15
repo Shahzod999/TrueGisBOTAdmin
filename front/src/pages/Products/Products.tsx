@@ -167,16 +167,6 @@ const Products = () => {
           </div>
         )}
 
-        {/* <div className={styles.addCategoryButton}>
-          {category?.data.length > 0 && (
-            <IconButton
-              text="Добавить свою категорию"
-              styleName="linkColor"
-              onClick={() => setParam("addNewCategory", true)}
-            />
-          )}
-        </div> */}
-
         {/* Модальные окна */}
         <AddNewCategory onClick={handleAddCategory} state="addNewCategory" />
 

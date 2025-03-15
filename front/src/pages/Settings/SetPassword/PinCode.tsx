@@ -65,13 +65,12 @@ const PinCode = ({ onComplete }: PincodeProps) => {
         ))}
       </div>
       <div className={styles.grid}>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, "", 0, "⌫"].map((num, i) => (
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, "<", 0].map((num, i) => (
           <button
             key={i}
             className={styles.button}
-            onClick={() => (num === "⌫" ? handleDelete() : handlePress(num))}
-            disabled={num === ""}>
-            {num}
+            onClick={() => (num === "<" ? handleDelete() : handlePress(num))}>
+            <strong className={styles.number}>{num}</strong>
             {typeof num === "number" && (
               <span className={styles.letters}>{getLetters(num)}</span>
             )}

@@ -17,7 +17,7 @@ const Toast = () => {
     if (message) {
       const timer = setTimeout(() => {
         dispatch(removeToast());
-      }, 1500); // Убираем тост через 3 секунды
+      }, 15000); // Убираем тост через 3 секунды
       return () => clearTimeout(timer);
     }
   }, [message, dispatch]);

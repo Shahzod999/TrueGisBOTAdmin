@@ -1,5 +1,6 @@
 .settings {
     padding: 16px;
+    height: 100vh;
 
     .title {
         font-family: var(--second-family);
@@ -24,6 +25,14 @@
             position: relative;
             cursor: pointer;
 
+            span {
+                font-family: var(--font-family);
+                font-weight: 400;
+                font-size: 17px;
+                line-height: 129%;
+                letter-spacing: -0.02em;
+                color: var(--text-color);
+            }
 
 
             &:not(:last-child):after {

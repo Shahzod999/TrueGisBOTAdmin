@@ -77,7 +77,7 @@ const Dashboard = () => {
         <LinearDashboard data={data} />
       </div>
 
-      <CompanyLink />
+      {/* <CompanyLink /> */}
     </div>
   );
 };

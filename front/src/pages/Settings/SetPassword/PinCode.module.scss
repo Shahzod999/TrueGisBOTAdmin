@@ -5,24 +5,32 @@
     align-items: center;
     min-height: 100vh;
     height: 100%;
-    background-color: var(--bg-color);
+    overflow: hidden !important;
+    background-color: var(--secondary-bg-color);
 }
 
 .title {
-    font-size: 18px;
     margin-bottom: 20px;
+
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 129%;
+    letter-spacing: -0.02em;
+    text-align: center;
+    color: var(--text-color);
 }
 
 .dots {
     display: flex;
-    gap: 10px;
-    margin-bottom: 30px;
+    gap: 21px;
+    margin-bottom: 60px;
 }
 
 .dots span {
     width: 12px;
     height: 12px;
-    border: 0.5px solid var(--hint-color);
+    border: 1px solid var(--hint-color);
     border-radius: 50%;
     background: var(--bg-color);
     transition: background 0.3s;
@@ -35,26 +43,63 @@
 .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
+    column-gap: 27px;
+    row-gap: 14px;
+
+
+    button {
+        width: 77px;
+        height: 77px;
+        border-radius: 50%;
+        border: none;
+
+
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .letters {
+            font-family: var(--font-family);
+            font-weight: 600;
+            font-size: 9px;
+            letter-spacing: 0.27em;
+            text-align: center;
+            color: var(--text-color);
+        }
+
+        .number {
+            font-family: var(--second-family);
+            font-weight: 400;
+            font-size: 35px;
+            letter-spacing: 0.01em;
+            color: var(--text-color);
+        }
+    }
 }
 
 .button {
-    width: 77px;
-    height: 77px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(118, 118, 128, 0.12);
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
+    background: var(--bg-color);
 }
 
-.letters {
-    display: block;
-    font-size: 12px;
-    color: #888;
-    margin-top: 3px;
+.biometricButton {
+    background-color: transparent;
+
+    div {
+        display: flex;
+    }
+
+    svg {
+        width: 40px;
+        height: 40px;
+
+        path {
+            fill: var(--text-color);
+        }
+    }
 }
+
 
 .button:active {
     background: #ddd;

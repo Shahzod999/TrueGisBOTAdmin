@@ -3,12 +3,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #3C3C4366;
+    background-color: color-mix(in srgb, var(--secondary-bg-color), transparent 80%);
     top: 0;
     bottom: 0;
     right: 0;
     left: 0;
     z-index: 999;
+
 
 
     &__box {
@@ -21,7 +22,7 @@
 
         border-radius: 14px;
         backdrop-filter: blur(80px);
-        background: rgb(255 255 255 / 50%);
+        background: color-mix(in srgb, var(--secondary-bg-color), transparent 90%);
 
         &__text {
             display: flex;
@@ -38,8 +39,8 @@
                 line-height: 129%;
                 letter-spacing: -0.02em;
                 text-align: center;
-                // color: var(--text-color);
-                color: black;
+                color: var(--text-color);
+                // color: black;
             }
 
             p {
@@ -49,9 +50,8 @@
                 line-height: 138%;
                 letter-spacing: -0.03em;
                 text-align: center;
-                // color: var(--text-color);
-                color: black;
-
+                color: var(--text-color);
+                // color: black;
             }
         }
 

@@ -64,6 +64,10 @@ const AddNewCategory = ({
     }
   }, [category, isEdit, initialPage]);
 
+  const handleScroll = () => {
+    window.scrollTo(0, 0);
+  };
+
   return (
     <BottomSheet isOpen={initialPage} onClose={() => setParam(state, false)}>
       <div className={styles.addCategorySheet}>
@@ -74,14 +78,10 @@ const AddNewCategory = ({
             placeholder="Введите категорию"
             value={itemName}
             onChange={(e) => setItemName(e.target.value)}
+            onFocus={handleScroll}
             autoFocus
           />
         </div>
-        {/* <IconButton
-          text={isEdit ? "Сохранить изменения" : "Добавить категорию"}
-          styleName="linkColor"
-          onClick={handleSubmit}
-        /> */}
       </div>
     </BottomSheet>
   );

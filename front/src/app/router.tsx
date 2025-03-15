@@ -42,7 +42,6 @@ const Router = () => {
   const orientation = OrientationLock();
 
   useEffect(() => {
-    eruda.init();
     if (tg) {
       tg.ready();
       tg.expand();
@@ -63,6 +62,7 @@ const Router = () => {
     if (userId) {
       dispatch(setTelegramId(userId.toString()));
     }
+    eruda.init();
   }, [dispatch, tg]);
 
   return (

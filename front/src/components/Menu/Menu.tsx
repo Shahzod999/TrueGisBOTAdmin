@@ -90,7 +90,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
         <FullScreenImgSwiper
           imgOpen={imgOpen}
           setImgOpen={setImgOpen}
-          images={[company?.logo]}
+          images={[company?.logo || "httpslogo.png"]}
         />
       )}
       {isLoading && <Loading />}
@@ -104,7 +104,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
         <div className={styles.menu__wrapper}>
           <div className={styles.logo}>
             <img
-              src={company?.logo ? getValidatedUrl(company?.logo) : "logo.png"}
+              src={company?.logo ? getValidatedUrl(company?.logo) : "httpslogo.png"}
               alt=""
               loading="lazy"
               onClick={() => setImgOpen(true)}

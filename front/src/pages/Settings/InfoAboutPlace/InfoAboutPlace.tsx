@@ -84,8 +84,8 @@ const InfoAboutPlace = () => {
       </div>
 
       <div className={styles.infoBox}>
-        {options.map((item) => (
-          <div className={styles.infoBoxCard}>
+        {options.map((item, index) => (
+          <div className={styles.infoBoxCard} key={index}>
             <EditableIconTextHint
               svg={item.icon}
               arrowRight={item.arrowRight}

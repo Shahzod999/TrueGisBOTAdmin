@@ -4,6 +4,7 @@ import { initReactI18next } from "react-i18next";
 const resources = {
   en: {
     translation: {
+      languages: "Languages",
       errorGeolocation: "Error obtaining geolocation.",
 
       error: "Error",
@@ -181,6 +182,7 @@ const resources = {
   },
   ru: {
     translation: {
+      languages: "Языки",
       errorGeolocation: "Ошибка получения геолокации.",
 
       error: "Ошибка",
@@ -357,6 +359,7 @@ const resources = {
   },
   uz: {
     translation: {
+      languages: "Til",
       errorGeolocation: "Geolokatsiyani olishda xatolik.",
 
       error: "Xato",
@@ -536,6 +539,7 @@ const resources = {
   },
   cyrl: {
     translation: {
+      languages: "Тил",
       errorGeolocation: "Геолокацияни олишда хатолик.",
       error: "Хато",
       attention: "Диққат",

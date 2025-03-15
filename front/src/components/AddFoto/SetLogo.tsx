@@ -9,13 +9,11 @@ const SetLogo = () => {
 
   return (
     <div>
-      <h3 className="second__title">
-        Логотип заведения
-      </h3>
+      <h3 className="second__title">Логотип заведения</h3>
 
       <div className="fotoLogoEdit">
         <div className="fotoLogoEdit__img">
-          <img src="./logo.png" alt="" />
+          <img src="./httpslogo.png" alt="" />
         </div>
 
         <label htmlFor="addFoto__logo__img">
